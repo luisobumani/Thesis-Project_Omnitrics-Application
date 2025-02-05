@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "1032258584893",
+    "project_id": "omnitrics-9f148",
+    "storage_bucket": "omnitrics-9f148.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1032258584893:android:ce6ccee79c29cce8564554",
+        "android_client_info": {
+          "package_name": "com.example.omnitrics_thesis"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDlUcHzmGjh60ESKskzydoDci7Y2eLftsI"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

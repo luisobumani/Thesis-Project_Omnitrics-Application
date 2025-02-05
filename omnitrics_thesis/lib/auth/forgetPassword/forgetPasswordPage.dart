@@ -39,7 +39,6 @@ class HomePage extends StatelessWidget {
           child: ListTile(
             title: Text('Adjust color settings',
             style: TextStyle(
-              fontSize: 16,
               fontWeight: FontWeight.bold,
             )
             ),

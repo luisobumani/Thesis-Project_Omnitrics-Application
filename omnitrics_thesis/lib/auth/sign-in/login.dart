@@ -1,173 +1,85 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/flutter_svg.dart';
+import 'package:omnitrics_thesis/auth/sign-in/Widget/login_button.dart';
+import 'package:omnitrics_thesis/auth/sign-in/Widget/text_field.dart';
+import 'package:omnitrics_thesis/auth/sign-in/sign_up.dart';
 
-class HomePage extends StatelessWidget {
-  const HomePage({super.key});
+class LoginScreen extends StatefulWidget {
+  const LoginScreen({super.key});
 
   @override
+  State<LoginScreen> createState() => _SignupScreenState();
+}
+
+class _SignupScreenState extends State<LoginScreen> { // Class for the Sign up screen
+// For the controller
+  final TextEditingController emailController = TextEditingController();
+  final TextEditingController passwordController = TextEditingController();
+  @override
   Widget build(BuildContext context) {
+    double height = MediaQuery.of(context).size.height;
     return Scaffold(
-      appBar: appBar(),
-      body: SafeArea( 
-      child: Column(
-        children: [
-          colorSettingsText(),
-          adjustColorTiles1(),
-          adjustColorTiles2(),
-          
-        ]
-      ),
-      ),
-    );
-  }
-
-  Container adjustColorTiles1() {
-    return Container(
-          margin: const EdgeInsets.all(10), 
-          decoration: BoxDecoration(
-            color: Colors.white,
-            borderRadius: BorderRadius.circular(10), 
-            boxShadow: [
-              BoxShadow(
-              color: Colors.grey, 
-              spreadRadius: 2, 
-              blurRadius: 5,
-              offset: const Offset(0, 3), 
+      backgroundColor: Colors.white,
+      body: SafeArea(
+          child: SizedBox(
+        child: Column(
+          children: [
+            SizedBox(
+                height: height / 2.7, 
+                child: Image.asset("assets/images/login.jpg"),
+              ), 
+              TextFieldInput(
+                textEditingController: emailController, 
+                hintText: "Enter your email", 
+                icon: Icons.email
+                ),
+                TextFieldInput(
+                textEditingController: passwordController, 
+                hintText: "Enter your password", 
+                icon: Icons.lock
+                ),
+                const Padding(
+                    padding: EdgeInsets.symmetric(horizontal: 35),
+                    child: Align(
+                    alignment: Alignment.centerRight,
+                    child: Text("Forgot password?", 
+                    style: TextStyle(
+                      fontWeight: FontWeight.bold,
+                      fontSize: 16,
+                      color: Colors.blue
+                    ),
+                  ),
+                ),
               ),
+              LoginButton(onTab: () {}, text: "Log In"),
+              SizedBox(height: height / 15),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  const Text("Don't have an account?", style: TextStyle(fontSize: 16),),
+                  GestureDetector(
+                    onTap: () {
+                      Navigator.push(context, 
+                      MaterialPageRoute(
+                        builder: (context)=> const SignUpScreen(),
+                        ),
+                      );
+                    },
+                    child: const Text(" Sign Up ", 
+                    style: TextStyle(
+                      fontWeight: FontWeight.bold,
+                      fontSize: 16,                      
+                      ),
+                    ),
+                  )
+                ],
+              )
             ],
           ),
-          child: ListTile(
-            title: Text('Adjust color settings',
-            style: TextStyle(
-              fontSize: 16,
-              fontWeight: FontWeight.bold,
-            )
-            ),
-            leading: Container(
-              margin: EdgeInsets.all(10),
-              alignment: Alignment.center,
-              width: 40,
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(10),
-              ),
-              child: SvgPicture.asset(
-                'assets/icons/Camera.svg',
-                width: 30,
-                height: 30,),
-            ),
-            trailing: ElevatedButton(
-              style: ElevatedButton.styleFrom(
-                backgroundColor: Colors.purple,
-              ),
-              onPressed: () {},
-              child: Text(
-                'Apply',
-                style: TextStyle(
-                  color: Colors.black,
-                  fontWeight: FontWeight.bold,
-                )
-              ),
-            )
-          ),
-        );
-  }
-
-  Container adjustColorTiles2() {
-    return Container(
-          margin: const EdgeInsets.all(10), 
-          decoration: BoxDecoration(
-            color: Colors.white,
-            borderRadius: BorderRadius.circular(10), 
-            boxShadow: [
-              BoxShadow(
-              color: Colors.grey, 
-              spreadRadius: 2, 
-              blurRadius: 5,
-              offset: const Offset(0, 3), 
-              ),
-            ],
-          ),
-          child: ListTile(
-            title: Text('Color Contrast',
-            style: TextStyle(
-              fontSize: 16,
-              fontWeight: FontWeight.bold,
-            )
-            ),
-            leading: Container(
-              margin: EdgeInsets.all(10),
-              alignment: Alignment.center,
-              width: 40,
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(10),
-              ),
-              child: SvgPicture.asset(
-                'assets/icons/821826-200 4.svg',
-                width: 30,
-                height: 30,),
-              ),
-            trailing: ElevatedButton(
-              style: ElevatedButton.styleFrom(
-                backgroundColor: Colors.purple,
-              ),
-              onPressed: () {},
-              child: Text(
-                'Apply',
-                style: TextStyle(
-                  color: Colors.black,
-                  fontWeight: FontWeight.bold,
-                )
-              ),
-            )
-          ),
-        );
-  }
-
-  Container colorSettingsText() {
-    return Container(
-          margin: EdgeInsets.only(top: 30, left: 20),
-          alignment: Alignment.centerLeft,
-          child: Text(
-            'Color Settings',
-            style: TextStyle(
-            fontSize: 20,
-            color: Colors.black,
-            fontWeight: FontWeight.bold,
-            ),
-          ),
-        );
-  }
-
-  AppBar appBar() {
-    return AppBar(
-      title: Text('OmniTrics',
-        style: TextStyle(
-          color: Colors.black,
-          fontSize: 38,
-          fontWeight: FontWeight.bold,
         )
       ),
-      centerTitle: true,
-      backgroundColor: Colors.white,
-      elevation: 6.0,
-      shadowColor: Colors.grey,
-      actions: [
-        GestureDetector(
-          onTap: () {
-        },
-        child: Container(
-          margin: EdgeInsets.all(10),
-          alignment: Alignment.center,
-          width: 40,
-          decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(10),
-          ),
-          child: SvgPicture.asset(
-            'assets/icons/Display Picture Variants.svg',
-          ),
-        ),
-        ),
-      ],
     );
   }
-}
+}    
+        
+      
+   
