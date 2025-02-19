@@ -1,16 +1,13 @@
   import 'package:flutter/material.dart';
   
-  class button extends StatelessWidget {
-  const button({
-    super.key,
-  });
+  class getStartedButton extends StatelessWidget {
+    final VoidCallback onPressed;
+    const getStartedButton({super.key, required this.onPressed});
 
   @override
   Widget build(BuildContext context) {
     return ElevatedButton(
-      onPressed: () {
-        // Add your button action here
-      },
+      onPressed: onPressed, //Call the function when pressed
       style: ElevatedButton.styleFrom(
         backgroundColor: Colors.deepPurple,
         padding: const EdgeInsets.symmetric(

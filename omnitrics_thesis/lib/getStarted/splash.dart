@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:omnitrics_thesis/getStarted/Widget/button.dart';
 import 'package:omnitrics_thesis/getStarted/Widget/dotIndicator.dart';
+import '../auth/sign-in/login.dart';
 
 class SplashScreen extends StatelessWidget {
   const SplashScreen({super.key});
@@ -30,7 +31,12 @@ class SplashScreen extends StatelessWidget {
               const Spacer(),
 
               // Button
-              button(),
+              getStartedButton(
+                onPressed: (){
+                  Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => LoginScreen()),
+                  );
+                },
+              ),
 
               const SizedBox(height: 32),
 
