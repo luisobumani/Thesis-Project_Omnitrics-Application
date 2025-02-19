@@ -2,6 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:omnitrics_thesis/auth/sign-in/Widget/login_button.dart';
 import 'package:omnitrics_thesis/auth/sign-in/Widget/text_field.dart';
 import 'package:omnitrics_thesis/auth/sign-in/sign_up.dart';
+import 'package:omnitrics_thesis/home/homepage.dart';
+import '../services/authentication.dart';
+import 'Widget/snack_bar.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
@@ -14,7 +17,43 @@ class _SignupScreenState extends State<LoginScreen> { // Class for the Sign up s
 // For the controller
   final TextEditingController emailController = TextEditingController();
   final TextEditingController passwordController = TextEditingController();
+  bool isLoading = false;
   @override
+  void dispose(){
+    super.dispose();
+    emailController.dispose();
+    passwordController.dispose();
+  }
+  void userLogin() async {
+    // Error handling to make sure that the values are not empty
+    if (emailController.text.isEmpty || passwordController.text.isEmpty) {
+      showSnackBar(context, "Please fill all the fields.");
+    }
+    // Signup process
+    String res = await AuthServices().userLogin(
+    email: emailController.text, 
+    password: passwordController.text, 
+    );
+
+    if (res == "Login successful!"){
+      //MESSAGE
+      showSnackBar(context, "Successfully logged in!");
+      setState(() {
+      isLoading = true;
+      });
+      Future.delayed(const Duration(seconds: 2),() {
+      Navigator.of(context)
+        .pushReplacement(MaterialPageRoute(
+        builder: (context)=> const HomePage()),
+      );
+      });
+    } else {
+      setState(() {
+      isLoading = false;
+      });
+      showSnackBar(context, res);
+    }
+  }
   Widget build(BuildContext context) {
     double height = MediaQuery.of(context).size.height;
     return Scaffold(
@@ -50,7 +89,7 @@ class _SignupScreenState extends State<LoginScreen> { // Class for the Sign up s
                   ),
                 ),
               ),
-              LoginButton(onTab: () {}, text: "Log In"),
+              LoginButton(onTab: userLogin, text: "Log In"),
               SizedBox(height: height / 15),
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
