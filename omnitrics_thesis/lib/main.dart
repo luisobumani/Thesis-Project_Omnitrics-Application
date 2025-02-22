@@ -4,7 +4,6 @@ import 'package:flutter/material.dart';
 import 'package:omnitrics_thesis/getStarted/splash.dart';
 
 
-
 void main() async {
   // Initialize Firebase
   WidgetsFlutterBinding.ensureInitialized();

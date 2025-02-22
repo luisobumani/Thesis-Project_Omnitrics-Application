@@ -1,31 +1,19 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'tritanopia_camera_page.dart';
-import 'protanopia_camera_page.dart';
-import 'deuteranopia_camera_page.dart'; 
 
-Center colorModesTiles(BuildContext context) {
+Center colorModesTiles() {
   return Center(
     child: Row(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
         _buildColorModeTile('Deuteranopia', 'assets/icons/821826-200 4.svg', () {
-          Navigator.push(
-            context,
-            MaterialPageRoute(builder: (context) => DeuteranopiaCameraPage()),
-          );
+          // Handle Deuteranopia tile tap
         }),
         _buildColorModeTile('Protanopia', 'assets/icons/821826-200 4.svg', () {
-          Navigator.push(
-            context,
-            MaterialPageRoute(builder: (context) => ProtanopiaCameraPage()),
-          );
+          // Handle Protanopia tile tap
         }),
         _buildColorModeTile('Tritanopia', 'assets/icons/821826-200 4.svg', () {
-          Navigator.push(
-            context,
-            MaterialPageRoute(builder: (context) => TritanopiaCameraPage()),
-          );
+          // Handle Tritanopia tile tap
         }),
       ],
     ),
