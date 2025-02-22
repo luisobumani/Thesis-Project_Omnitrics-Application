@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 // import 'package:omnitrics_thesis/auth/sign-in/login.dart';
 import 'package:omnitrics_thesis/getStarted/splash.dart';
 
+
 void main() async {
   // Initialize Firebase
   WidgetsFlutterBinding.ensureInitialized();
@@ -21,7 +22,7 @@ class MyApp extends StatelessWidget {
       title: 'OmniTrics',
       debugShowCheckedModeBanner: false,
       theme: ThemeData(fontFamily: 'Inter'),
-      home: const HomePage(),
+      home: const SplashScreen(),
     );
   }
 }
