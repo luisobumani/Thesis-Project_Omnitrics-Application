@@ -1,8 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:omnitrics_thesis/profile/profileTemporary.dart';
 
-AppBar appBar(BuildContext context) {
+AppBar appBar() {
     return AppBar(
       title: Text('OmniTrics',
         style: TextStyle(
@@ -18,10 +17,6 @@ AppBar appBar(BuildContext context) {
       actions: [
         GestureDetector(
           onTap: () {
-            Navigator.push(
-              context,
-              MaterialPageRoute(builder: (context) => const ProfilePageTemp())
-            );
         },
         child: Container(
           margin: EdgeInsets.all(10),
