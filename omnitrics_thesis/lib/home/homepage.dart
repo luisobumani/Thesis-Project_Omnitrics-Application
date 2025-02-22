@@ -18,10 +18,10 @@ class HomePage extends StatelessWidget {
           child: Column(
             children: [
               colorSettingsText(),
-              adjustColorTiles(),
+              adjustColorTiles(context),
               colorContrast(),
               colorModesText(),
-              colorModesTiles(),
+              colorModesTiles(context),
               configurationText(),
               configurationTile(),
               generalCamBtn(context),
