@@ -1,6 +1,8 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
-import 'package:omnitrics_thesis/home/homepage.dart';
+// import 'package:omnitrics_thesis/auth/sign-in/login.dart';
+import 'package:omnitrics_thesis/getStarted/splash.dart';
+
 
 void main() async {
   // Initialize Firebase
@@ -20,7 +22,7 @@ class MyApp extends StatelessWidget {
       title: 'OmniTrics',
       debugShowCheckedModeBanner: false,
       theme: ThemeData(fontFamily: 'Inter'),
-      home: const HomePage(),
+      home: const SplashScreen(),
     );
   }
 }
