@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:omnitrics_thesis/auth/googleSignIn/google_auth.dart';
+import 'package:omnitrics_thesis/auth/services/authentication.dart';
+import 'package:omnitrics_thesis/auth/sign-in/login.dart';
 
 class ProfilePageTemp extends StatelessWidget {
   const ProfilePageTemp({super.key});
@@ -12,44 +15,51 @@ class ProfilePageTemp extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             tempPlaceholder(),
-            logoutBtn(),
+            logoutBtn(context),
           ],
         ),
       ),
     );
   }
 
-  Padding logoutBtn() {
+  Padding logoutBtn(BuildContext context) {
     return Padding(
-            padding: const EdgeInsets.all(16.0),
-            child: ElevatedButton(
-              onPressed: () {
-                // Dito mo ilagay jb
-                
-              },
-              style: ElevatedButton.styleFrom(
-                foregroundColor: Colors.white, backgroundColor: Colors.blue, // Text color
-                padding: EdgeInsets.symmetric(horizontal: 32, vertical: 16),
-              ),
-              child: Text(
-                'Logout',
-                style: TextStyle(
-                  fontSize: 18,
-                ),
-              ),
+      padding: const EdgeInsets.all(16.0),
+      child: ElevatedButton(
+        onPressed: () async {
+          await FirebaseServices().googleSignOut();
+          await AuthServices()
+              .signOut(); // Ensure AuthServices is correctly instantiated
+          Navigator.of(context).pushReplacement(
+            MaterialPageRoute(
+              builder: (context) => LoginScreen(),
             ),
           );
+        },
+        style: ElevatedButton.styleFrom(
+          foregroundColor: Colors.white,
+          backgroundColor: Colors.blue, // Text color
+          padding: EdgeInsets.symmetric(horizontal: 32, vertical: 16),
+        ),
+        child: Text(
+          'Logout',
+          style: TextStyle(
+            fontSize: 18,
+          ),
+        ),
+      ),
+    );
   }
 
   Expanded tempPlaceholder() {
     return Expanded(
-            child: Center(
-              child: Text(
-                'Profile Page Content Here',
-                style: TextStyle(fontSize: 24, color: Colors.black),
-              ),
-            ),
-          );
+      child: Center(
+        child: Text(
+          'Profile Page Content Here',
+          style: TextStyle(fontSize: 24, color: Colors.black),
+        ),
+      ),
+    );
   }
 
   AppBar appBar() {

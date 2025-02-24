@@ -12,7 +12,20 @@
           "package_name": "com.example.omnitrics_thesis"
         }
       },
-      "oauth_client": [],
+      "oauth_client": [
+        {
+          "client_id": "1032258584893-8o90cs5pged1uv5ohfkc1vse38fj2nlo.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.omnitrics_thesis",
+            "certificate_hash": "991b59d73d28a266934863a39bfa67ed48a65a61"
+          }
+        },
+        {
+          "client_id": "1032258584893-l4j7fp6p89q07mecl57j79erpb1b9170.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
       "api_key": [
         {
           "current_key": "AIzaSyDlUcHzmGjh60ESKskzydoDci7Y2eLftsI"
@@ -20,7 +33,12 @@
       ],
       "services": {
         "appinvite_service": {
-          "other_platform_oauth_client": []
+          "other_platform_oauth_client": [
+            {
+              "client_id": "1032258584893-l4j7fp6p89q07mecl57j79erpb1b9170.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
         }
       }
     }
