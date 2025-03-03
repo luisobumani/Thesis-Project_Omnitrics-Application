@@ -1,19 +1,33 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:omnitrics_thesis/home/filtered_camera/deuteranopia_camera_page.dart';
+import 'package:omnitrics_thesis/home/filtered_camera/protanopia_camera_page.dart';
+import 'package:omnitrics_thesis/home/filtered_camera/tritanopia_camera_page.dart';
 
-Center colorModesTiles() {
+
+
+Center colorModesTiles(BuildContext context) {
   return Center(
     child: Row(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
         _buildColorModeTile('Deuteranopia', 'assets/icons/821826-200 4.svg', () {
-          // Handle Deuteranopia tile tap
+          Navigator.push(
+            context,
+            MaterialPageRoute(builder: (context) => DeuteranopiaCameraPage()),
+          );
         }),
         _buildColorModeTile('Protanopia', 'assets/icons/821826-200 4.svg', () {
-          // Handle Protanopia tile tap
+         Navigator.push(
+            context,
+            MaterialPageRoute(builder: (context) => ProtanopiaCameraPage()),
+          );
         }),
         _buildColorModeTile('Tritanopia', 'assets/icons/821826-200 4.svg', () {
-          // Handle Tritanopia tile tap
+         Navigator.push(
+            context,
+            MaterialPageRoute(builder: (context) => TritanopiaCameraPage()),
+          );
         }),
       ],
     ),

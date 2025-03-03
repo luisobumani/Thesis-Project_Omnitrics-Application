@@ -1,14 +1,17 @@
 import 'dart:io';
 import 'dart:typed_data';
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:http/http.dart' as http;
 import 'package:image_picker/image_picker.dart';
+import 'package:omnitrics_thesis/auth/forgetPassword/Widget/email_field.dart';
 import 'package:path_provider/path_provider.dart';
 
 class FilteredImagePage extends StatefulWidget {
-  const FilteredImagePage({Key? key}) : super(key: key);
+  const FilteredImagePage({super.key});
 
   @override
+  // ignore: library_private_types_in_public_api
   _FilteredImagePageState createState() => _FilteredImagePageState();
 }
 
@@ -31,7 +34,8 @@ class _FilteredImagePageState extends State<FilteredImagePage> {
   /// 1) Let the user select an image from the gallery
   /// 2) Display that image as the "original"
   Future<void> _pickImage() async {
-    final XFile? pickedFile = await _picker.pickImage(source: ImageSource.gallery);
+    final XFile? pickedFile =
+        await _picker.pickImage(source: ImageSource.gallery);
     if (pickedFile != null) {
       setState(() {
         _originalImage = File(pickedFile.path);
@@ -88,6 +92,17 @@ class _FilteredImagePageState extends State<FilteredImagePage> {
     return Scaffold(
       appBar: AppBar(
         title: const Text('Color Blindness Filter'),
+        leading: GestureDetector(
+          child: SvgPicture.asset(
+          'assets/icons/agbnakolbn;aslnm 1.svg',
+        ),
+          onTap: () {
+             Navigator.pop(
+            context,
+            MaterialPageRoute(builder: (context) => HomePage()),
+          );
+          },
+        ),
       ),
       body: Center(
         child: _originalImage == null
@@ -99,9 +114,7 @@ class _FilteredImagePageState extends State<FilteredImagePage> {
                   _filteredImage == null
                       ? Image.file(_originalImage!)
                       : Image.file(_filteredImage!),
-
                   const SizedBox(height: 20),
-
                   // Row of filter buttons: Deuteranopia, Protanopia, Tritanopia
                   Row(
                     mainAxisAlignment: MainAxisAlignment.center,
@@ -122,9 +135,7 @@ class _FilteredImagePageState extends State<FilteredImagePage> {
                       ),
                     ],
                   ),
-
                   const SizedBox(height: 20),
-
                   // A button to let user pick a new image if desired
                   ElevatedButton(
                     onPressed: _pickImage,
