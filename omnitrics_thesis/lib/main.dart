@@ -21,7 +21,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'OmniTrics',
-      home: const AuthRedirect(),  // Use AuthRedirect to handle initial login state
+      home: const AuthRedirect(), 
       debugShowCheckedModeBanner: false,
     );
   }
