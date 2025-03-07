@@ -1,6 +1,6 @@
   import 'package:flutter/material.dart';
   
-  class getStartedButton extends StatelessWidget {
+    class getStartedButton extends StatelessWidget {
     final VoidCallback onPressed;
     const getStartedButton({super.key, required this.onPressed});
 
@@ -19,7 +19,7 @@
         ),
       ),
       child: const Text(
-        'Log In',
+        'Get Started',
         style: TextStyle(
           fontSize: 16,
           color: Colors.white,

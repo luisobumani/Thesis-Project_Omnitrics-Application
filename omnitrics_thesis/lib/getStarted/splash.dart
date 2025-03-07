@@ -17,32 +17,29 @@ class SplashScreen extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.center,
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-              // Title
+              // TITLE
               const Text(
                 'OmniTrics',
                 style: TextStyle(
-                  fontSize: 32,
+                  fontSize: 60,
                   fontWeight: FontWeight.bold,
-                  height: 5,
+                  height: 3,
                 ),
               ),
               const SizedBox(height: 200),
 
               const Spacer(),
 
-              // Button
+              // BUTTON
               getStartedButton(
                 onPressed: (){
                   Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => LoginScreen()),
                   );
                 },
               ),
-
               const SizedBox(height: 32),
-
-              // Dot Indicator
+              // DOT INDICATOR
               dotIndicator(),
-
               const SizedBox(height: 32), // Bottom padding
             ],
           ),
