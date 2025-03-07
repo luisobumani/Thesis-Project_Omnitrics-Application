@@ -1,64 +1,67 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:omnitrics_thesis/home/image_adj/filtered_image_page.dart';
 
-Container adjustColorTiles(BuildContext context) {
-  return Container(
-    margin: const EdgeInsets.all(10),
-    decoration: BoxDecoration(
-      color: Colors.white,
-      borderRadius: BorderRadius.circular(10),
-      boxShadow: [
-        BoxShadow(
-          color: Colors.grey,
-          spreadRadius: 2,
-          blurRadius: 5,
-          offset: const Offset(0, 3),
-        ),
-      ],
-    ),
-    child: ListTile(
-      title: const Text(
-        'Adjust Color Settings',
-        style: TextStyle(
-          fontSize: 14,
-          fontWeight: FontWeight.bold,
-        ),
-      ),
-      leading: Container(
-        margin: const EdgeInsets.all(10),
-        alignment: Alignment.center,
-        width: 40,
-        decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(10),
-        ),
-        child: SvgPicture.asset(
-          'assets/icons/Camera.svg',
-          width: 30,
-          height: 30,
-        ),
-      ),
-      trailing: ElevatedButton(
-        style: ElevatedButton.styleFrom(
-          backgroundColor: Colors.purple,
-        ),
-        onPressed: () {
-          // Navigate to the FilteredImagePage when the button is pressed.
-          Navigator.push(
-            context,
-            MaterialPageRoute(
-              builder: (context) => const FilteredImagePage(),
+Center adjustColorTiles(BuildContext context) {
+  // Retrieve the current screen width.
+  final double screenWidth = MediaQuery.of(context).size.width;
+  // Define a scale factor to enlarge the widget.
+  final double scaleFactor = 1.5; // Increase size by 50%
+
+  // Scaling factors based on a reference width of 375, multiplied by the scale factor.
+  final double tileWidth = screenWidth * (100 / 375) * scaleFactor;
+  final double tileHeight = screenWidth * (125 / 375) * scaleFactor;
+  final double marginValue = screenWidth * (15 / 375) * scaleFactor;
+  final double iconSize = screenWidth * (60 / 375) * scaleFactor;
+  final double fontSize = screenWidth * (12 / 375) * scaleFactor;
+
+  return Center(
+    child: Row(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        GestureDetector(
+          onTap: () {
+            // Add your onTap functionality here.
+          },
+          child: Container(
+            width: tileWidth,
+            height: tileHeight,
+            margin: EdgeInsets.all(marginValue),
+            decoration: BoxDecoration(
+              color: Colors.white,
+              borderRadius: BorderRadius.circular(10),
+              boxShadow: [
+                BoxShadow(
+                  color: Colors.grey,
+                  spreadRadius: 2,
+                  blurRadius: 5,
+                  offset: const Offset(0, 3),
+                ),
+              ],
             ),
-          );
-        },
-        child: const Text(
-          'Apply',
-          style: TextStyle(
-            color: Colors.black,
-            fontWeight: FontWeight.bold,
+            child: Center(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  SvgPicture.asset(
+                    'assets/icons/adjustcolor.svg',
+                    width: iconSize,
+                    height: iconSize,
+                  ),
+                  SizedBox(height: marginValue / 3),
+                  Text(
+                    'Adjust Colors',
+                    style: TextStyle(
+                      color: Colors.black,
+                      fontSize: fontSize,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                ],
+              ),
+            ),
           ),
         ),
-      ),
+      ],
     ),
   );
 }

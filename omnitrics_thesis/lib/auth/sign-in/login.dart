@@ -93,6 +93,7 @@ class _SignupScreenState extends State<LoginScreen> {
               TextFieldInput(
                   textEditingController: passwordController,
                   hintText: "Enter your password",
+                  isPass: true,
                   icon: Icons.lock),
               const ForgotPassword(),
               LoginButton(onTab: userLogin, text: "Log In"),

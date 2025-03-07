@@ -1,9 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:omnitrics_thesis/home/Widget/adjustcolorWidget.dart';
 import 'package:omnitrics_thesis/home/Widget/appBar.dart';
-import 'package:omnitrics_thesis/home/Widget/colorContrast.dart';
 import 'package:omnitrics_thesis/home/Widget/colormodesWidget.dart';
-import 'package:omnitrics_thesis/home/Widget/configurationWidget.dart';
 import 'package:omnitrics_thesis/home/Widget/generalcamBtn.dart';
 
 class HomePage extends StatelessWidget {
@@ -11,21 +9,23 @@ class HomePage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    // Get screen dimensions to adjust layout dynamically.
+    final screenWidth = MediaQuery.of(context).size.width;
+    final screenHeight = MediaQuery.of(context).size.height;
+
     return Scaffold(
-      appBar: appBar(context),
+      appBar: appBarHome(context),
       body: SafeArea(
         child: SingleChildScrollView(
-          // Adding bottom padding to prevent overflow
-          padding: const EdgeInsets.only(bottom: 16.0),
+          // Use a relative bottom padding based on screen height.
+          padding: EdgeInsets.only(bottom: screenHeight * 0.02),
           child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              colorSettingsText(),
-              adjustColorTiles(context),
-              colorContrast(),
-              colorModesText(),
+              colorModesText(context),
               colorModesTiles(context),
-              configurationText(),
-              configurationTile(),
+              colorSettingsText(context),
+              adjustColorTiles(context),
               generalCamBtn(context),
             ],
           ),
@@ -34,14 +34,17 @@ class HomePage extends StatelessWidget {
     );
   }
 
-  Container colorSettingsText() {
+  // This method now accepts the BuildContext to compute sizes dynamically.
+  Widget colorSettingsText(BuildContext context) {
+    final screenWidth = MediaQuery.of(context).size.width;
     return Container(
-      margin: const EdgeInsets.only(top: 30, left: 20),
+      margin: EdgeInsets.only(top: screenWidth * 0.08, left: screenWidth * 0.05),
       alignment: Alignment.centerLeft,
-      child: const Text(
+      child: Text(
         'Color Settings',
         style: TextStyle(
-          fontSize: 20,
+          // Font size is relative to screen width.
+          fontSize: screenWidth * 0.05,
           color: Colors.black,
           fontWeight: FontWeight.bold,
         ),
@@ -49,14 +52,15 @@ class HomePage extends StatelessWidget {
     );
   }
 
-  Container colorModesText() {
+  Widget colorModesText(BuildContext context) {
+    final screenWidth = MediaQuery.of(context).size.width;
     return Container(
-      margin: const EdgeInsets.only(top: 30, left: 20),
+      margin: EdgeInsets.only(top: screenWidth * 0.08, left: screenWidth * 0.05),
       alignment: Alignment.centerLeft,
-      child: const Text(
+      child: Text(
         'Color Modes',
         style: TextStyle(
-          fontSize: 20,
+          fontSize: screenWidth * 0.05,
           color: Colors.black,
           fontWeight: FontWeight.bold,
         ),
@@ -64,18 +68,4 @@ class HomePage extends StatelessWidget {
     );
   }
 
-  Container configurationText() {
-    return Container(
-      margin: const EdgeInsets.only(top: 30, left: 20),
-      alignment: Alignment.centerLeft,
-      child: const Text(
-        'Configuration',
-        style: TextStyle(
-          fontSize: 20,
-          color: Colors.black,
-          fontWeight: FontWeight.bold,
-        ),
-      ),
-    );
-  }
 }
