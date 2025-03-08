@@ -9,15 +9,12 @@ class HomePage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // Get screen dimensions to adjust layout dynamically.
-    final screenWidth = MediaQuery.of(context).size.width;
     final screenHeight = MediaQuery.of(context).size.height;
 
     return Scaffold(
       appBar: appBarHome(context),
       body: SafeArea(
         child: SingleChildScrollView(
-          // Use a relative bottom padding based on screen height.
           padding: EdgeInsets.only(bottom: screenHeight * 0.02),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
