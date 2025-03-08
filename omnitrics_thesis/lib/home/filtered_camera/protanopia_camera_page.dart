@@ -12,7 +12,6 @@ class ProtanopiaCameraPage extends StatefulWidget {
   const ProtanopiaCameraPage({super.key});
 
   @override
-  // ignore: library_private_types_in_public_api
   _ProtanopiaCameraPageState createState() => _ProtanopiaCameraPageState();
 }
 
@@ -32,6 +31,8 @@ class _ProtanopiaCameraPageState extends State<ProtanopiaCameraPage> with Widget
     0,        0,         0,        1, 0,
   ];
 
+  ColorFilter get _currentColorFilter => ColorFilter.matrix(_protanopiaMatrix);
+
   @override
   void initState() {
     super.initState();
@@ -46,39 +47,54 @@ class _ProtanopiaCameraPageState extends State<ProtanopiaCameraPage> with Widget
     super.dispose();
   }
 
-  Future<void> _initializeCamera() async {
-    _cameras = await availableCameras();
-    if (_cameras!.isEmpty) {
-      throw Exception('No cameras found');
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) async {
+    if (_controller == null || !_controller!.value.isInitialized) return;
+    if (state == AppLifecycleState.inactive || state == AppLifecycleState.paused) {
+      await _controller?.dispose();
+    } else if (state == AppLifecycleState.resumed) {
+      _initializeCamera();
     }
-    _controller = CameraController(
-      _cameras![_selectedCameraIndex],
-      ResolutionPreset.medium,
-    );
+  }
 
-    await _controller!.initialize();
-    if (!mounted) return;
-    setState(() {
-      _isCameraReady = true;
-    });
+  Future<void> _initializeCamera() async {
+    try {
+      _cameras = await availableCameras();
+      if (_cameras!.isEmpty) throw Exception('No cameras found');
+
+      _controller = CameraController(
+        _cameras![_selectedCameraIndex],
+        ResolutionPreset.medium,
+      );
+
+      await _controller!.initialize();
+      if (!mounted) return;
+      setState(() {
+        _isCameraReady = true;
+      });
+    } catch (e) {
+      print('Error initializing camera: $e');
+    }
   }
 
   Future<void> _toggleFlash() async {
     if (!_isCameraReady || _controller == null) return;
-    setState(() {
-      _isFlashOn = !_isFlashOn;
-    });
-    await _controller!.setFlashMode(_isFlashOn ? FlashMode.torch : FlashMode.off);
+    try {
+      await _controller!.setFlashMode(_isFlashOn ? FlashMode.off : FlashMode.torch);
+      setState(() {
+        _isFlashOn = !_isFlashOn;
+      });
+    } catch (e) {
+      print('Error toggling flash: $e');
+    }
   }
 
   Future<void> _takePicture() async {
-    if (!_controller!.value.isInitialized) return;
+    if (!_controller!.value.isInitialized || _controller!.value.isTakingPicture) return;
 
     final Directory appDir = await getApplicationDocumentsDirectory();
     final String fileName = 'photo_${DateTime.now().millisecondsSinceEpoch}.png';
     final String filePath = path.join(appDir.path, fileName);
-
-    if (_controller!.value.isTakingPicture) return;
 
     try {
       final XFile rawFile = await _controller!.takePicture();
@@ -94,30 +110,43 @@ class _ProtanopiaCameraPageState extends State<ProtanopiaCameraPage> with Widget
   }
 
   Future<File> _applyFilterToImage(File imageFile) async {
-    final bytes = await imageFile.readAsBytes();
-    final decodedImage = img.decodeImage(bytes);
-    if (decodedImage == null) return imageFile;
+    try {
+      final bytes = await imageFile.readAsBytes();
+      final decodedImage = img.decodeImage(bytes);
+      if (decodedImage == null) return imageFile;
 
-    final filtered = _applyColorMatrix(decodedImage, _protanopiaMatrix);
-    final filteredBytes = img.encodePng(filtered);
-    final String newPath = imageFile.path.replaceAll('.png', '_filtered.png');
-    return File(newPath)..writeAsBytesSync(filteredBytes);
+      final filtered = _applyColorMatrix(decodedImage);
+      final filteredBytes = img.encodePng(filtered);
+      final String newPath = imageFile.path.replaceAll('.png', '_filtered.png');
+      final File newFile = File(newPath)..writeAsBytesSync(filteredBytes);
+      return newFile;
+    } catch (e) {
+      print('Error applying filter: $e');
+      return imageFile;
+    }
   }
 
-  img.Image _applyColorMatrix(img.Image src, List<double> mat) {
-    for (int y = 0; y < src.height; y++) {
-      for (int x = 0; x < src.width; x++) {
+   img.Image _applyColorMatrix(img.Image src) {
+    final w = src.width;
+    final h = src.height;
+
+    for (int y = 0; y < h; y++) {
+      for (int x = 0; x < w; x++) {
         int pixel = src.getPixel(x, y) as int;
         int a = (pixel >> 24) & 0xFF;
         int r = (pixel >> 16) & 0xFF;
         int g = (pixel >> 8) & 0xFF;
         int b = pixel & 0xFF;
 
-        double nr = (r * mat[0] + g * mat[1] + b * mat[2]);
-        double ng = (r * mat[5] + g * mat[6] + b * mat[7]);
-        double nb = (r * mat[10] + g * mat[11] + b * mat[12]);
+        double nr = (r * _protanopiaMatrix[0] + g * _protanopiaMatrix[1] + b * _protanopiaMatrix[2]);
+        double ng = (r * _protanopiaMatrix[5] + g * _protanopiaMatrix[6] + b * _protanopiaMatrix[7]);
+        double nb = (r * _protanopiaMatrix[10] + g * _protanopiaMatrix[11] + b * _protanopiaMatrix[12]);
 
-        src.setPixelRgba(x, y, nr.round().clamp(0, 255), ng.round().clamp(0, 255), nb.round().clamp(0, 255), a);
+        int fr = nr.round().clamp(0, 255);
+        int fg = ng.round().clamp(0, 255);
+        int fb = nb.round().clamp(0, 255);
+
+        src.setPixelRgba(x, y, fr, fg, fb, a);
       }
     }
     return src;
@@ -126,21 +155,18 @@ class _ProtanopiaCameraPageState extends State<ProtanopiaCameraPage> with Widget
   Future<void> _switchCamera() async {
     if (_cameras == null || _cameras!.length < 2) return;
     _selectedCameraIndex = _selectedCameraIndex == 0 ? 1 : 0;
-    await _controller?.dispose();
+    await _controller!.dispose();
     setState(() {
       _isCameraReady = false;
     });
-    _initializeCamera();
+    await _initializeCamera();
   }
 
   Widget _thumbnailPreview() {
     return GestureDetector(
       onTap: () async {
-        if (_capturedImage != null) {
-          final file = File(_capturedImage!.path);
-          if (file.existsSync()) {
-            await OpenFile.open(_capturedImage!.path);
-          }
+        if (_capturedImage != null && File(_capturedImage!.path).existsSync()) {
+          await OpenFile.open(_capturedImage!.path);
         }
       },
       child: Container(
@@ -160,16 +186,17 @@ class _ProtanopiaCameraPageState extends State<ProtanopiaCameraPage> with Widget
   }
 
   Widget _cameraControlButtons() {
-    Color shutterColor = Colors.red.withOpacity(0.4);
+    // Shutter button tinted in green to indicate deuteranopia filter.
+    Color shutterColor = Colors.green.withOpacity(0.4);
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
-        // Thumbnail preview on the left
+        // Thumbnail preview on the left.
         Padding(
           padding: const EdgeInsets.all(20.0),
           child: _thumbnailPreview(),
         ),
-        // Capture button in the middle
+        // Shutter button in the middle.
         Container(
           width: 70,
           height: 70,
@@ -183,7 +210,7 @@ class _ProtanopiaCameraPageState extends State<ProtanopiaCameraPage> with Widget
             onPressed: _takePicture,
           ),
         ),
-        // Switch camera button on the right
+        // Switch camera button on the right.
         Padding(
           padding: const EdgeInsets.all(20.0),
           child: IconButton(
@@ -214,7 +241,7 @@ class _ProtanopiaCameraPageState extends State<ProtanopiaCameraPage> with Widget
       return const Center(child: CircularProgressIndicator());
     }
     return ColorFiltered(
-      colorFilter: ColorFilter.matrix(_protanopiaMatrix),
+      colorFilter: _currentColorFilter,
       child: CameraPreview(_controller!),
     );
   }
@@ -228,11 +255,17 @@ class _ProtanopiaCameraPageState extends State<ProtanopiaCameraPage> with Widget
           children: [
             Column(
               children: [
-                Expanded(flex: 5, child: _cameraPreviewWithFilter()),
-                Expanded(flex: 1, child: _cameraControlArea()),
+                Expanded(
+                  flex: 5,
+                  child: _cameraPreviewWithFilter(),
+                ),
+                Expanded(
+                  flex: 1,
+                  child: _cameraControlArea(),
+                ),
               ],
             ),
-            // Close button in the top-left
+            // Back button ("X") in the top-left corner.
             Positioned(
               top: 16,
               left: 16,
@@ -242,12 +275,15 @@ class _ProtanopiaCameraPageState extends State<ProtanopiaCameraPage> with Widget
                 onPressed: () => Navigator.of(context).pop(),
               ),
             ),
-            // Flash toggle in the top-right
+            // Flash toggle in the top-right corner.
             Positioned(
               top: 16,
               right: 16,
               child: IconButton(
-                icon: Icon(_isFlashOn ? Icons.flash_on : Icons.flash_off, color: Colors.white),
+                icon: Icon(
+                  _isFlashOn ? Icons.flash_on : Icons.flash_off,
+                  color: Colors.white,
+                ),
                 iconSize: 32,
                 onPressed: _toggleFlash,
               ),
