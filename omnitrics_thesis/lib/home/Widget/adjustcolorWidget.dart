@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:omnitrics_thesis/home/image_adj/filtered_image_page.dart';
 
 Center adjustColorTiles(BuildContext context) {
   // Retrieve the current screen width.
@@ -20,7 +21,10 @@ Center adjustColorTiles(BuildContext context) {
       children: [
         GestureDetector(
           onTap: () {
-            // Add your onTap functionality here.
+            Navigator.push(
+            context,
+            MaterialPageRoute(builder: (ctx) => const FilteredImagePage()),
+          );
           },
           child: Container(
             width: tileWidth,
