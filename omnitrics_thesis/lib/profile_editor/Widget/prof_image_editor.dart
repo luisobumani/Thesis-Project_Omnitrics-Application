@@ -3,7 +3,7 @@ import 'package:flutter_svg/svg.dart';
 
 Container profileImageEditor() {
   return Container(
-    margin: const EdgeInsets.only(top: 30, bottom: 50),
+    margin: const EdgeInsets.only(top: 30, bottom: 20),
     alignment: Alignment.center,
     child: Stack(
       children: [
