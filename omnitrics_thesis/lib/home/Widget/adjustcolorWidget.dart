@@ -43,7 +43,7 @@ Center adjustColorTiles(BuildContext context) {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   SvgPicture.asset(
-                    'assets/icons/adjustcolor.svg',
+                    'assets/icons/adjust_color.svg',
                     width: iconSize,
                     height: iconSize,
                   ),
