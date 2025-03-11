@@ -2,31 +2,35 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
 class AuthServices {
-  // Storing data in cloud firestore
+  // Firestore instance
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
-  // For authentication
+  // Firebase Auth instance
   final FirebaseAuth _auth = FirebaseAuth.instance;
 
-  Future<String> userSignup(
-      {required String email,
-       required String password,         
-       required String name}) 
-      async {
-    String res = " Some error occured ";
+  Future<String> userSignup({
+    required String email,
+    required String password,
+    required String name,
+  }) async {
+    String res = "Some error occurred";
     try {
-      if (email.isNotEmpty || password.isNotEmpty || name.isNotEmpty) { 
-      UserCredential credential = await _auth.createUserWithEmailAndPassword(
-        email: email,
-        password: password,
-      );
-      // The database stores the name, email, and the user id
-      await _firestore.collection("users").doc(credential.user!.uid).set({
-        'name': name,
-        "email": email,
-        'uid': credential.user!.uid,
-      });
-      // Message for successful signup
-      res = "Signup successful!";
+      // Ensure all fields are provided
+      if (email.isNotEmpty && password.isNotEmpty && name.isNotEmpty) { 
+        UserCredential credential = await _auth.createUserWithEmailAndPassword(
+          email: email,
+          password: password,
+        );
+        // Create a user document with placeholders for additional info
+        await _firestore.collection("users").doc(credential.user!.uid).set({
+          'name': name,
+          "email": email,
+          'firstName': "",
+          'lastName': "",
+          'birthdate': "",
+          'gender': "",
+          'uid': credential.user!.uid,
+        });
+        res = "Signup successful!";
       }
     } catch (e) {
       return e.toString();
@@ -34,28 +38,29 @@ class AuthServices {
     return res;
   }
 
-  //Login
+  // Login method remains unchanged
   Future<String> userLogin({
     required String email,
     required String password,
   }) async {
-    String res = "Some error occured";
-    try{
-      if (email.isNotEmpty || password.isNotEmpty) {
+    String res = "Some error occurred";
+    try {
+      if (email.isNotEmpty && password.isNotEmpty) {
         await _auth.signInWithEmailAndPassword(
           email: email, 
-          password: password
+          password: password,
         );
         res = "Login successful!";
       } else {
         res = "Please enter all the fields";
       }
-    }catch(e){
+    } catch (e) {
       return e.toString();
     }
     return res;
   }
-  //logout
+
+  // Logout method remains unchanged
   Future<void> signOut() async {
     await _auth.signOut();
   }
