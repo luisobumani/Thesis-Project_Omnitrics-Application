@@ -1,13 +1,14 @@
 import 'package:flutter/material.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:omnitrics_thesis/home/homepage.dart';
 import 'package:omnitrics_thesis/tell_me_who_you_are/Widget/birthdate_field.dart';
 import 'package:omnitrics_thesis/tell_me_who_you_are/Widget/continue_button.dart';
 import 'package:omnitrics_thesis/tell_me_who_you_are/Widget/exit_button.dart';
 import 'package:omnitrics_thesis/tell_me_who_you_are/Widget/first_name_field.dart';
+import 'package:omnitrics_thesis/tell_me_who_you_are/Widget/gender_selector.dart';
 import 'package:omnitrics_thesis/tell_me_who_you_are/Widget/last_name_field.dart';
 
-void main() {
-  runApp(const TellMe());
-}
 
 class TellMe extends StatelessWidget {
   const TellMe({Key? key}) : super(key: key);
@@ -15,7 +16,7 @@ class TellMe extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      debugShowCheckedModeBanner: false,  // This removes the debug banner
+      debugShowCheckedModeBanner: false,
       title: 'Profile Form',
       theme: ThemeData(
         primarySwatch: Colors.purple,
@@ -33,17 +34,55 @@ class ProfileForm extends StatefulWidget {
 }
 
 class _ProfileFormState extends State<ProfileForm> {
+  // Controllers for detailed profile fields
+  final TextEditingController firstNameController = TextEditingController();
+  final TextEditingController lastNameController = TextEditingController();
+  final TextEditingController birthDateController = TextEditingController();
+
+  // For gender radio buttons
   String? _selectedGender;
-  final List<String> _genderOptions = [
-    'Male',
-    'Female',
-    'Non-binary',
-    'Prefer not to say'
-  ];
+
+  // Save the profile info to Firestore
+  Future<void> updateUserProfile() async {
+    final user = FirebaseAuth.instance.currentUser;
+    if (user != null) {
+      try {
+        await FirebaseFirestore.instance.collection("users").doc(user.uid).update({
+          'firstName': firstNameController.text,
+          'lastName': lastNameController.text,
+          'birthdate': birthDateController.text,
+          'gender': _selectedGender ?? "",
+        });
+
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text("Profile updated successfully!")),
+        );
+        // Navigate to another screen if desired
+        Navigator.of(context).pushReplacement(
+        MaterialPageRoute(
+          builder: (context) => const HomePage(),
+        ),
+      );
+      } catch (e) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text("Error updating profile: $e")),
+        );
+      }
+    }
+  }
+
+  @override
+  void dispose() {
+    firstNameController.dispose();
+    lastNameController.dispose();
+    birthDateController.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      // Use a SingleChildScrollView to handle potential overflow
       body: Center(
         child: Container(
           width: 300,
@@ -60,86 +99,56 @@ class _ProfileFormState extends State<ProfileForm> {
               ),
             ],
           ),
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              // Header and close button
-              exitButton(),
-              const SizedBox(height: 16),
-              
-              // First Name field
-              const Text(
-                'First Name',
-                style: TextStyle(
-                  fontSize: 14,
+          child: SingleChildScrollView(
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                // Exit / header
+                exitButton(),
+
+                const SizedBox(height: 16),
+                // First Name
+                const Text('First Name', style: TextStyle(fontSize: 14)),
+                const SizedBox(height: 8),
+                FirstNameField(controller: firstNameController),
+
+                const SizedBox(height: 16),
+                // Last Name
+                const Text('Last Name', style: TextStyle(fontSize: 14)),
+                const SizedBox(height: 8),
+                LastNameField(controller: lastNameController),
+
+                const SizedBox(height: 16),
+                // Birthdate
+                const Text('Birthdate', style: TextStyle(fontSize: 14)),
+                const SizedBox(height: 8),
+                BirthdateField(controller: birthDateController),
+
+                const SizedBox(height: 20),
+                // Gender radio buttons
+                GenderSelector(
+                  selectedGender: _selectedGender,
+                  onChanged: (value) {
+                    setState(() {
+                      _selectedGender = value;
+                    });
+                  },
                 ),
-              ),
-              const SizedBox(height: 8),
-              firstName(),
-              const SizedBox(height: 16),
-              
-              // Last Name field
-              const Text(
-                'Last Name',
-                style: TextStyle(
-                  fontSize: 14,
+
+                const SizedBox(height: 16),
+                // Continue Button
+                ContinueButton(
+                  onPressed: () {
+                    // Validate fields if needed
+                    updateUserProfile();
+                  },
                 ),
-              ),
-              const SizedBox(height: 8),
-              lastName(),
-              const SizedBox(height: 16),
-              
-              // Birthdate field
-              const Text(
-                'Birthdate',
-                style: TextStyle(
-                  fontSize: 14,
-                ),
-              ),
-              const SizedBox(height: 8),
-              birthDate(),
-              const SizedBox(height: 20),
-              
-              // Gender radio buttons
-              genderButtons(),
-              const SizedBox(height: 16),
-              
-              // Continue button
-              continueBtn(),
-            ],
+              ],
+            ),
           ),
         ),
       ),
     );
   }
-
-  Column genderButtons() {
-    return Column(
-              children: _genderOptions.map((option) {
-                return Padding(
-                  padding: const EdgeInsets.only(bottom: 12.0),
-                  child: Row(
-                    children: [
-                      Radio<String>(
-                        value: option,
-                        groupValue: _selectedGender,
-                        activeColor: Colors.deepPurple,
-                        onChanged: (String? value) {
-                          setState(() {
-                            _selectedGender = value;
-                          });
-                        },
-                      ),
-                      Text(
-                        option,
-                        style: const TextStyle(fontSize: 14),
-                      ),
-                    ],
-                  ),
-                );
-              }).toList(),
-            );
-  }
-
 }
