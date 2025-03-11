@@ -4,6 +4,12 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:omnitrics_thesis/profile_editor/Widget/prof_image_editor.dart';
 import 'package:omnitrics_thesis/profile_editor/Widget/profile_fillup.dart';
 
+/// Returns true if the current user signed in with Google.
+bool isGoogleUser(User? user) {
+  if (user == null) return false;
+  return user.providerData.any((provider) => provider.providerId == "google.com");
+}
+
 class ProfileEditPage extends StatefulWidget {
   const ProfileEditPage({super.key});
 
@@ -12,7 +18,7 @@ class ProfileEditPage extends StatefulWidget {
 }
 
 class _ProfileEditPageState extends State<ProfileEditPage> {
-  // Controllers for the form fields
+  // Controllers for form fields.
   final TextEditingController nameController = TextEditingController();
   final TextEditingController genderController = TextEditingController();
   final TextEditingController birthdayController = TextEditingController();
@@ -21,6 +27,8 @@ class _ProfileEditPageState extends State<ProfileEditPage> {
   final TextEditingController newPasswordController = TextEditingController();
 
   bool isLoading = false;
+  // This flag will be false for Google users (no password fields needed).
+  bool showPasswordFields = true;
 
   @override
   void initState() {
@@ -32,21 +40,26 @@ class _ProfileEditPageState extends State<ProfileEditPage> {
   Future<void> _loadUserData() async {
     final user = FirebaseAuth.instance.currentUser;
     if (user != null) {
-      DocumentSnapshot doc = await FirebaseFirestore.instance.collection("users").doc(user.uid).get();
+      // If the user signed in with Google, we hide password fields.
+      setState(() {
+        showPasswordFields = !isGoogleUser(user);
+      });
+
+      final doc = await FirebaseFirestore.instance.collection("users").doc(user.uid).get();
       if (doc.exists) {
-        Map<String, dynamic> data = doc.data() as Map<String, dynamic>;
+        final data = doc.data() as Map<String, dynamic>;
         setState(() {
-          nameController.text = data["name"] ?? "";
-          genderController.text = data["gender"] ?? "";
-          birthdayController.text = data["birthdate"] ?? "";
-          emailController.text = data["email"] ?? "";
-          // For security reasons, we do not prefill password fields.
+          nameController.text = data['name'] ?? "";
+          genderController.text = data['gender'] ?? "";
+          birthdayController.text = data['birthdate'] ?? "";
+          emailController.text = data['email'] ?? "";
+          // For security, we do not prefill password fields.
         });
       }
     }
   }
 
-  /// Updates the Firestore document with the new values from the form.
+  /// Updates the Firestore document with new values.
   Future<void> _saveChanges() async {
     setState(() {
       isLoading = true;
@@ -59,7 +72,7 @@ class _ProfileEditPageState extends State<ProfileEditPage> {
           "gender": genderController.text,
           "birthdate": birthdayController.text,
           "email": emailController.text,
-          // Password update would be handled separately via Firebase Auth.
+          // Password update is handled separately.
         });
         ScaffoldMessenger.of(context).showSnackBar(
           const SnackBar(content: Text("Profile updated successfully")),
@@ -89,14 +102,20 @@ class _ProfileEditPageState extends State<ProfileEditPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: appBarProf(),
+      appBar: AppBar(
+        title: const Text(
+          'Edit Profile',
+          style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold),
+        ),
+        centerTitle: true,
+      ),
       body: SafeArea(
         child: SingleChildScrollView(
           child: Column(
             children: [
-              // Profile image editor remains as before.
+              // The profile image editor widget (unchanged).
               profileImageEditor(),
-              // Pass controllers to the FillUpSection widget.
+              // Pass controllers and the showPasswordFields flag.
               FillUpSection(
                 nameController: nameController,
                 genderController: genderController,
@@ -104,6 +123,7 @@ class _ProfileEditPageState extends State<ProfileEditPage> {
                 emailController: emailController,
                 currentPasswordController: currentPasswordController,
                 newPasswordController: newPasswordController,
+                showPasswordFields: showPasswordFields,
               ),
               Padding(
                 padding: const EdgeInsets.all(10),
@@ -118,10 +138,7 @@ class _ProfileEditPageState extends State<ProfileEditPage> {
                         ),
                         child: const Text(
                           'Save Changes',
-                          style: TextStyle(
-                            fontSize: 15,
-                            fontWeight: FontWeight.bold,
-                          ),
+                          style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold),
                         ),
                       ),
               )
@@ -129,19 +146,6 @@ class _ProfileEditPageState extends State<ProfileEditPage> {
           ),
         ),
       ),
-    );
-  }
-
-  AppBar appBarProf() {
-    return AppBar(
-      title: const Text(
-        'Edit Profile',
-        style: TextStyle(
-          color: Colors.black,
-          fontWeight: FontWeight.bold,
-        ),
-      ),
-      centerTitle: true,
     );
   }
 }

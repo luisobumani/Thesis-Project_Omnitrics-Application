@@ -55,17 +55,6 @@ class ProfInfo extends StatelessWidget {
             title: Text(data['email']?.toString() ?? "No Email"),
           ),
         ),
-        // Placeholder for password (not stored in Firestore)
-        Container(
-          margin: const EdgeInsets.all(10),
-          decoration: BoxDecoration(
-            border: Border.all(color: Colors.black),
-            borderRadius: BorderRadius.circular(10),
-          ),
-          child: const ListTile(
-            title: Text("********"),
-          ),
-        ),
       ],
     );
   }
