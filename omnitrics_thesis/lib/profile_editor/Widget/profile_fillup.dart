@@ -5,8 +5,9 @@ class FillUpSection extends StatelessWidget {
   final TextEditingController genderController;
   final TextEditingController birthdayController;
   final TextEditingController emailController;
-  final TextEditingController currentPasswordController;
-  final TextEditingController newPasswordController;
+  final TextEditingController? currentPasswordController;
+  final TextEditingController? newPasswordController;
+  final bool showPasswordFields;
 
   const FillUpSection({
     super.key,
@@ -14,8 +15,9 @@ class FillUpSection extends StatelessWidget {
     required this.genderController,
     required this.birthdayController,
     required this.emailController,
-    required this.currentPasswordController,
-    required this.newPasswordController,
+    this.currentPasswordController,
+    this.newPasswordController,
+    this.showPasswordFields = true,
   });
 
   @override
@@ -26,8 +28,10 @@ class FillUpSection extends StatelessWidget {
         shadowedTextField(label: 'Gender', controller: genderController),
         BirthdayField(controller: birthdayController),
         shadowedTextField(label: 'Email', controller: emailController),
-        shadowedTextField(label: 'Current Password', controller: currentPasswordController),
-        shadowedTextField(label: 'New Password', controller: newPasswordController),
+        if (showPasswordFields)
+          shadowedTextField(label: 'Current Password', controller: currentPasswordController!),
+        if (showPasswordFields)
+          shadowedTextField(label: 'New Password', controller: newPasswordController!),
       ],
     );
   }
@@ -55,8 +59,8 @@ class FillUpSection extends StatelessWidget {
               borderSide: BorderSide(color: Colors.black),
               borderRadius: BorderRadius.circular(10),
             ),
-            fillColor: Colors.white,
             filled: true,
+            fillColor: Colors.white,
           ),
         ),
       ),
@@ -64,7 +68,6 @@ class FillUpSection extends StatelessWidget {
   }
 }
 
-/// Modified BirthdayField accepts a controller passed from the parent.
 class BirthdayField extends StatefulWidget {
   final TextEditingController controller;
   const BirthdayField({Key? key, required this.controller}) : super(key: key);
