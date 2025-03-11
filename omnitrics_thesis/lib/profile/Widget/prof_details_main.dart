@@ -1,32 +1,46 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
-Container profDetails() {
+class ProfDetailsMain extends StatelessWidget {
+  final Map<String, dynamic> data;
+
+  const ProfDetailsMain({super.key, required this.data});
+
+  @override
+  Widget build(BuildContext context) {
+    // Determine the display name: use firstName + lastName if available, else fallback to name.
+    final String firstName = data['firstName']?.toString() ?? "";
+    final String lastName = data['lastName']?.toString() ?? "";
+    final String displayName = (firstName.isNotEmpty && lastName.isNotEmpty)
+        ? "$firstName $lastName"
+        : data['name']?.toString() ?? "No Name";
+
+    // Static condition text
+    const String condition = "Deuteranopia";
+
     return Container(
       margin: const EdgeInsets.all(10),
-      decoration: const BoxDecoration(
-        color: Colors.transparent,
-      ),
       child: Align(
         alignment: Alignment.center,
         child: Row(
           children: [
+            // Left side with text details
             Container(
               margin: const EdgeInsets.only(top: 20),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
-                children: const [
+                children: [
                   Text(
-                    'Ram Jesler Delos Santos',
-                    style: TextStyle(
+                    displayName,
+                    style: const TextStyle(
                       color: Colors.black,
                       fontWeight: FontWeight.bold,
                       fontSize: 20,
                     ),
                   ),
-                  SizedBox(height: 5), 
-                  Text(
-                    'Deuteranopia', 
+                  const SizedBox(height: 5),
+                  const Text(
+                    condition,
                     style: TextStyle(
                       color: Colors.green,
                       fontWeight: FontWeight.bold,
@@ -36,6 +50,7 @@ Container profDetails() {
                 ],
               ),
             ),
+            // Right side with profile image (SVG icon)
             Container(
               margin: const EdgeInsets.only(top: 30, left: 20),
               width: 120,
@@ -50,3 +65,4 @@ Container profDetails() {
       ),
     );
   }
+}
