@@ -5,41 +5,37 @@ class FirebaseServices {
   final FirebaseAuth auth = FirebaseAuth.instance;
   final GoogleSignIn googleLogin = GoogleSignIn();
 
-  // This method signs the user out first to ensure the Google account selector appears.
+  /// Signs out from both Google and Firebase, then triggers the Google sign-in process.
   Future<UserCredential?> signInWithGoogle() async {
     try {
-      // Sign out from Google and Firebase to ensure the account chooser will appear
+      // Ensure previous sessions are signed out to force the account chooser.
       await googleLogin.signOut();
-      await auth.signOut();  // Ensure Firebase signs out too
+      await auth.signOut();
 
-      // Delay added to ensure the sign-out process is complete
+      // A short delay to ensure sign-out has finished.
       await Future.delayed(const Duration(seconds: 1));
 
-      // Trigger the Google sign-in process and show the account picker
+      // Trigger the Google sign-in process.
       final GoogleSignInAccount? googleUser = await googleLogin.signIn();
-      
-      // If the user closed the account chooser or didn't select an account, `googleUser` will be null
       if (googleUser == null) {
-        print("No account selected or account chooser closed.");
-        return null;  // If no account is selected, return null and don't proceed
+        print("Google sign-in cancelled or no account selected.");
+        return null;
       }
 
-      // Proceed if the user selected an account
       final GoogleSignInAuthentication googleAuth = await googleUser.authentication;
       final AuthCredential credential = GoogleAuthProvider.credential(
         accessToken: googleAuth.accessToken,
         idToken: googleAuth.idToken,
       );
 
-      // Sign in with the Google credentials and return the UserCredential
+      // Sign in to Firebase with the Google credentials.
       return await auth.signInWithCredential(credential);
     } on FirebaseAuthException catch (e) {
       print("Error during Google sign-in: ${e.toString()}");
-      return null;  // If there is an error, return null
+      return null;
     }
   }
 
-  // This method signs out the user from both Google and Firebase.
   Future<void> googleSignOut() async {
     await googleLogin.signOut();
     await auth.signOut();

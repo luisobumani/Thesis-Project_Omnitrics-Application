@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:omnitrics_thesis/auth/forgetPassword/forgot_password.dart';
-import 'package:omnitrics_thesis/auth/googleSignIn/google_auth.dart';
+import 'package:omnitrics_thesis/auth/googleSignIn/google_signin_handler.dart';
 import 'package:omnitrics_thesis/auth/sign-in/Widget/login_button.dart';
 import 'package:omnitrics_thesis/auth/sign-in/Widget/text_field.dart';
 import 'package:omnitrics_thesis/auth/sign-in/sign_up.dart';
@@ -56,21 +56,9 @@ class _SignupScreenState extends State<LoginScreen> {
   }
 
   void googleSignIn() async {
-    var userCredential = await FirebaseServices().signInWithGoogle();
-    
-    if (userCredential == null) {
-      // If no account was selected, we don't navigate to the homepage
-      showSnackBar(context, "Account selection canceled or failed.");
-      return;  // Don't navigate to the homepage if no account was selected
-    }
-    
-    // Only proceed to homepage if sign-in was successful
-    Navigator.pushReplacement(
-      context,
-      MaterialPageRoute(
-        builder: (context) => const HomePage(),
-      ),
-    );
+    // Instead of directly calling signInWithGoogle,
+    // we now call our custom handler that checks Firestore and redirects appropriately.
+    await handleGoogleSignIn(context);
   }
 
   @override
@@ -107,9 +95,7 @@ class _SignupScreenState extends State<LoginScreen> {
                 padding: const EdgeInsets.symmetric(horizontal: 25, vertical: 10),
                 child: ElevatedButton(
                   style: ElevatedButton.styleFrom(backgroundColor: Colors.white),
-                  onPressed: () async {
-                    googleSignIn(); // Call the method to handle Google sign-in
-                  },
+                  onPressed: googleSignIn,
                   child: Row(
                     children: [
                       Padding(
