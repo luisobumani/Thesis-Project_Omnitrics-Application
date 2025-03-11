@@ -1,33 +1,38 @@
 import 'package:flutter/material.dart';
 
 class FillUpSection extends StatelessWidget {
-  const FillUpSection({super.key});
+  final TextEditingController nameController;
+  final TextEditingController genderController;
+  final TextEditingController birthdayController;
+  final TextEditingController emailController;
+  final TextEditingController currentPasswordController;
+  final TextEditingController newPasswordController;
+
+  const FillUpSection({
+    super.key,
+    required this.nameController,
+    required this.genderController,
+    required this.birthdayController,
+    required this.emailController,
+    required this.currentPasswordController,
+    required this.newPasswordController,
+  });
 
   @override
   Widget build(BuildContext context) {
     return Column(
       children: [
-        shadowedTextField(
-          label: 'Name',
-        ),
-        shadowedTextField(
-          label: 'Gender',
-        ),
-        BirthdayField(),
-        shadowedTextField(
-          label: 'Email',
-        ),
-        shadowedTextField(
-          label: 'Current Password',
-        ),
-        shadowedTextField(
-          label: 'New Password',
-        ),
+        shadowedTextField(label: 'Name', controller: nameController),
+        shadowedTextField(label: 'Gender', controller: genderController),
+        BirthdayField(controller: birthdayController),
+        shadowedTextField(label: 'Email', controller: emailController),
+        shadowedTextField(label: 'Current Password', controller: currentPasswordController),
+        shadowedTextField(label: 'New Password', controller: newPasswordController),
       ],
     );
   }
 
-  Widget shadowedTextField({required String label}) {
+  Widget shadowedTextField({required String label, required TextEditingController controller}) {
     return Container(
       margin: const EdgeInsets.all(12),
       child: Container(
@@ -43,29 +48,32 @@ class FillUpSection extends StatelessWidget {
           borderRadius: BorderRadius.circular(4),
         ),
         child: TextField(
+          controller: controller,
           decoration: InputDecoration(
-              labelText: label,
-              border: OutlineInputBorder(
-                borderSide: BorderSide(color: Colors.black),
-                borderRadius: BorderRadius.circular(10),
-              ),
-              fillColor: Colors.white,
-              filled: true),
+            labelText: label,
+            border: OutlineInputBorder(
+              borderSide: BorderSide(color: Colors.black),
+              borderRadius: BorderRadius.circular(10),
+            ),
+            fillColor: Colors.white,
+            filled: true,
+          ),
         ),
       ),
     );
   }
 }
 
+/// Modified BirthdayField accepts a controller passed from the parent.
 class BirthdayField extends StatefulWidget {
-  const BirthdayField({Key? key}) : super(key: key);
+  final TextEditingController controller;
+  const BirthdayField({Key? key, required this.controller}) : super(key: key);
 
   @override
   State<BirthdayField> createState() => _BirthdayFieldState();
 }
 
 class _BirthdayFieldState extends State<BirthdayField> {
-  final TextEditingController birthdayController = TextEditingController();
   DateTime? selectedDate;
 
   Future<void> _selectDate(BuildContext context) async {
@@ -78,15 +86,9 @@ class _BirthdayFieldState extends State<BirthdayField> {
     if (pickedDate != null && pickedDate != selectedDate) {
       setState(() {
         selectedDate = pickedDate;
-        birthdayController.text = "${pickedDate.toLocal()}".split(' ')[0];
+        widget.controller.text = "${pickedDate.toLocal()}".split(' ')[0];
       });
     }
-  }
-
-  @override
-  void dispose() {
-    birthdayController.dispose();
-    super.dispose();
   }
 
   @override
@@ -94,18 +96,18 @@ class _BirthdayFieldState extends State<BirthdayField> {
     return Container(
       margin: const EdgeInsets.all(10),
       child: Container(
-          decoration: BoxDecoration(
-        boxShadow: [
-          BoxShadow(
-            color: Colors.grey.withOpacity(0.5),
-            spreadRadius: 1,
-            blurRadius: 5,
-            offset: const Offset(0, 3),
-          ),
-        ],
+        decoration: BoxDecoration(
+          boxShadow: [
+            BoxShadow(
+              color: Colors.grey.withOpacity(0.5),
+              spreadRadius: 1,
+              blurRadius: 5,
+              offset: const Offset(0, 3),
+            ),
+          ],
         ),
         child: TextField(
-          controller: birthdayController,
+          controller: widget.controller,
           readOnly: true,
           onTap: () => _selectDate(context),
           decoration: InputDecoration(
