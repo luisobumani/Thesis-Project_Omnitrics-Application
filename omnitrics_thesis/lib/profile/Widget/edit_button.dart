@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:omnitrics_thesis/profile_editor/profile_edit_page.dart';
+import 'package:omnitrics_thesis/profile/profile_editor/profile_edit_page.dart';
 
 Padding editButton(BuildContext context) {
   return Padding(

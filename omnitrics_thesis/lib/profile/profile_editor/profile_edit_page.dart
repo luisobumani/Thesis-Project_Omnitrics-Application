@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:omnitrics_thesis/profile_editor/Widget/prof_image_editor.dart';
-import 'package:omnitrics_thesis/profile_editor/Widget/profile_fillup.dart';
+import 'package:omnitrics_thesis/profile/profile_editor/Widget/prof_image_editor.dart';
+import 'package:omnitrics_thesis/profile/profile_editor/Widget/profile_fillup.dart';
 
 /// Returns true if the current user signed in with Google.
 bool isGoogleUser(User? user) {
