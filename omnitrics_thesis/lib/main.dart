@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:animated_splash_screen/animated_splash_screen.dart';
 import 'package:omnitrics_thesis/auth/Services/auth_redirect.dart';
 
-
 void main() async {
-  // Ensure that the Flutter bindings are initialized before running Firebase
+  // Ensure Flutter bindings are initialized
   WidgetsFlutterBinding.ensureInitialized();
 
   // Initialize Firebase
@@ -21,8 +21,16 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'OmniTrics',
-      home: const AuthRedirect(), 
       debugShowCheckedModeBanner: false,
+      // Animated splash screen
+      home: AnimatedSplashScreen(
+        splash: 'assets/gifs/draft_logo.gif',
+        splashIconSize: 300.0,
+        centered: true,
+        nextScreen: const AuthRedirect(), // Navigate to Home after the splash
+        backgroundColor: Colors.deepPurple,
+        duration: 3100,
+      ),
     );
   }
 }
