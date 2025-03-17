@@ -30,9 +30,10 @@ class MainGetStarted extends StatelessWidget {
               child: SmoothPageIndicator(
                 controller: _controller,
                 count: 2,
-                effect: WormEffect(
-                  dotColor: const Color.fromARGB(255, 94, 91, 99),
+                effect: ExpandingDotsEffect(
                   activeDotColor: Colors.deepPurple,
+                  dotHeight: 20,
+                  dotWidth: 20,
                 ),
               ),
             ),
