@@ -4,8 +4,6 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:omnitrics_thesis/profile/profilePage.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-// Make sure you define _getProfileImagePath() somewhere accessible.
-// For example:
 Future<String?> _getProfileImagePath() async {
   final SharedPreferences prefs = await SharedPreferences.getInstance();
   return prefs.getString('profileImagePath');
@@ -15,13 +13,13 @@ AppBar appBarHome(BuildContext context) {
   final double screenWidth = MediaQuery.of(context).size.width;
   final double titleFontSize = screenWidth * (38 / 375);
   final double marginSize = screenWidth * (10 / 375);
-  final double iconWidth = screenWidth * (40 / 375);
+  final double iconSize = screenWidth * (40 / 375);
 
   return AppBar(
     title: Text(
       'OmniTrics',
       style: TextStyle(
-        color: Colors.white, // White for better contrast with the gradient
+        color: Colors.white,
         fontSize: titleFontSize,
         fontWeight: FontWeight.bold,
       ),
@@ -41,7 +39,7 @@ AppBar appBarHome(BuildContext context) {
     ),
     leading: Builder(
       builder: (context) => IconButton(
-        icon: Icon(Icons.menu, color: Colors.white),
+        icon: const Icon(Icons.menu, color: Colors.white),
         onPressed: () {
           Scaffold.of(context).openDrawer();
         },
@@ -57,30 +55,37 @@ AppBar appBarHome(BuildContext context) {
         },
         child: Container(
           margin: EdgeInsets.all(marginSize),
-          alignment: Alignment.center,
-          width: iconWidth,
-          decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(10),
-          ),
+          width: iconSize,
+          height: iconSize,
           child: FutureBuilder<String?>(
             future: _getProfileImagePath(),
             builder: (context, snapshot) {
+              // While waiting, show a circular progress indicator inside a CircleAvatar.
               if (snapshot.connectionState == ConnectionState.waiting) {
-                return const Center(child: CircularProgressIndicator());
+                return CircleAvatar(
+                  radius: iconSize / 2,
+                  backgroundColor: Colors.grey.shade300,
+                  child: const CircularProgressIndicator(),
+                );
               }
+              // If a valid image path is available, display the image.
               if (snapshot.hasData &&
                   snapshot.data != null &&
                   snapshot.data!.isNotEmpty) {
-                return ClipRRect(
-                  borderRadius: BorderRadius.circular(10),
-                  child: Image.file(
-                    File(snapshot.data!),
-                    fit: BoxFit.cover,
-                  ),
+                return CircleAvatar(
+                  radius: iconSize / 2,
+                  backgroundImage: FileImage(File(snapshot.data!)),
                 );
               }
-              // Fallback: show the default SVG asset if there's no image
-              return SvgPicture.asset('assets/icons/profile.svg');
+              // Otherwise, display the default SVG asset inside a CircleAvatar.
+              return CircleAvatar(
+                radius: iconSize / 2,
+                backgroundColor: Colors.transparent,
+                child: SvgPicture.asset(
+                  'assets/icons/profile.svg',
+                  fit: BoxFit.cover,
+                ),
+              );
             },
           ),
         ),
