@@ -4,12 +4,6 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:omnitrics_thesis/profile/profile_editor/Widget/prof_image_editor.dart';
 import 'package:omnitrics_thesis/profile/profile_editor/Widget/profile_fillup.dart';
 
-/// Returns true if the current user signed in with Google.
-bool isGoogleUser(User? user) {
-  if (user == null) return false;
-  return user.providerData.any((provider) => provider.providerId == "google.com");
-}
-
 class ProfileEditPage extends StatefulWidget {
   const ProfileEditPage({super.key});
 
@@ -23,12 +17,8 @@ class _ProfileEditPageState extends State<ProfileEditPage> {
   final TextEditingController genderController = TextEditingController();
   final TextEditingController birthdayController = TextEditingController();
   final TextEditingController emailController = TextEditingController();
-  final TextEditingController currentPasswordController = TextEditingController();
-  final TextEditingController newPasswordController = TextEditingController();
 
   bool isLoading = false;
-  // This flag will be false for Google users (no password fields needed).
-  bool showPasswordFields = true;
 
   @override
   void initState() {
@@ -40,11 +30,6 @@ class _ProfileEditPageState extends State<ProfileEditPage> {
   Future<void> _loadUserData() async {
     final user = FirebaseAuth.instance.currentUser;
     if (user != null) {
-      // Hide password fields if the user signed in with Google.
-      setState(() {
-        showPasswordFields = !isGoogleUser(user);
-      });
-
       final doc = await FirebaseFirestore.instance.collection("users").doc(user.uid).get();
       if (doc.exists) {
         final data = doc.data() as Map<String, dynamic>;
@@ -53,7 +38,6 @@ class _ProfileEditPageState extends State<ProfileEditPage> {
           genderController.text = data['gender'] ?? "";
           birthdayController.text = data['birthdate'] ?? "";
           emailController.text = data['email'] ?? "";
-          // For security, do not prefill password fields.
         });
       }
     }
@@ -71,8 +55,7 @@ class _ProfileEditPageState extends State<ProfileEditPage> {
           "name": nameController.text,
           "gender": genderController.text,
           "birthdate": birthdayController.text,
-          "email": emailController.text,
-          // Password update is handled separately.
+          // Email is not updated as it's read-only.
         });
         ScaffoldMessenger.of(context).showSnackBar(
           const SnackBar(content: Text("Profile updated successfully")),
@@ -94,8 +77,6 @@ class _ProfileEditPageState extends State<ProfileEditPage> {
     genderController.dispose();
     birthdayController.dispose();
     emailController.dispose();
-    currentPasswordController.dispose();
-    newPasswordController.dispose();
     super.dispose();
   }
 
@@ -113,17 +94,14 @@ class _ProfileEditPageState extends State<ProfileEditPage> {
         child: SingleChildScrollView(
           child: Column(
             children: [
-              // Display the locally saved image via ProfileImageEditor.
+              // The profile image editor widget.
               const ProfileImageEditor(),
-              // Display the rest of the edit form.
+              // The FillUpSection widget now displays only Name, Gender, Birthday and a read-only Email.
               FillUpSection(
                 nameController: nameController,
                 genderController: genderController,
                 birthdayController: birthdayController,
                 emailController: emailController,
-                currentPasswordController: currentPasswordController,
-                newPasswordController: newPasswordController,
-                showPasswordFields: showPasswordFields,
               ),
               Padding(
                 padding: const EdgeInsets.all(10),
