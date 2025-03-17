@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:omnitrics_thesis/getStarted/get_started.dart';
+import 'package:omnitrics_thesis/getStarted/main_get_started.dart';
 import 'package:omnitrics_thesis/home/homepage.dart';
 
 class AuthRedirect extends StatelessWidget {
@@ -18,7 +18,7 @@ class AuthRedirect extends StatelessWidget {
             return const HomePage();
           } else {
             // User is not logged in, show the SplashScreen or SignIn page
-            return const GetStarted();
+            return MainGetStarted();
           }
         }
 
