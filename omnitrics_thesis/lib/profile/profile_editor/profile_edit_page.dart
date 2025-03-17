@@ -40,7 +40,7 @@ class _ProfileEditPageState extends State<ProfileEditPage> {
   Future<void> _loadUserData() async {
     final user = FirebaseAuth.instance.currentUser;
     if (user != null) {
-      // If the user signed in with Google, we hide password fields.
+      // Hide password fields if the user signed in with Google.
       setState(() {
         showPasswordFields = !isGoogleUser(user);
       });
@@ -53,7 +53,7 @@ class _ProfileEditPageState extends State<ProfileEditPage> {
           genderController.text = data['gender'] ?? "";
           birthdayController.text = data['birthdate'] ?? "";
           emailController.text = data['email'] ?? "";
-          // For security, we do not prefill password fields.
+          // For security, do not prefill password fields.
         });
       }
     }
@@ -113,9 +113,9 @@ class _ProfileEditPageState extends State<ProfileEditPage> {
         child: SingleChildScrollView(
           child: Column(
             children: [
-              // The profile image editor widget (unchanged).
-              profileImageEditor(),
-              // Pass controllers and the showPasswordFields flag.
+              // Display the locally saved image via ProfileImageEditor.
+              const ProfileImageEditor(),
+              // Display the rest of the edit form.
               FillUpSection(
                 nameController: nameController,
                 genderController: genderController,
