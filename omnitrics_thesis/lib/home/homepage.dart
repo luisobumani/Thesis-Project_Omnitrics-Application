@@ -25,15 +25,15 @@ class HomePage extends StatelessWidget {
               colorModesTiles(context),
               colorSettingsText(context),
               adjustColorTiles(context),
-              generalCamBtn(context),
+              userDataText(context),
             ],
           ),
         ),
       ),
+      bottomNavigationBar: generalCamBtn(context),
     );
   }
 
-  // This method now accepts the BuildContext to compute sizes dynamically.
   Widget colorSettingsText(BuildContext context) {
     final screenWidth = MediaQuery.of(context).size.width;
     return Container(
@@ -42,7 +42,6 @@ class HomePage extends StatelessWidget {
       child: Text(
         'Color Settings',
         style: TextStyle(
-          // Font size is relative to screen width.
           fontSize: screenWidth * 0.05,
           color: Colors.black,
           fontWeight: FontWeight.bold,
@@ -67,4 +66,19 @@ class HomePage extends StatelessWidget {
     );
   }
 
+  Widget userDataText(BuildContext context) {
+    final screenWidth = MediaQuery.of(context).size.width;
+    return Container(
+      margin: EdgeInsets.only(top: screenWidth * 0.08, left: screenWidth * 0.05),
+      alignment: Alignment.centerLeft,
+      child: Text(
+        'Your Data',
+        style: TextStyle(
+          fontSize: screenWidth * 0.05,
+          color: Colors.black,
+          fontWeight: FontWeight.bold,
+        ),
+      ),
+    );
+  }
 }
