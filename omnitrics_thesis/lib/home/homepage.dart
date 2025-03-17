@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:omnitrics_thesis/about/drawer.dart';
 import 'package:omnitrics_thesis/home/Widget/adjustcolorWidget.dart';
 import 'package:omnitrics_thesis/home/Widget/appBar.dart';
 import 'package:omnitrics_thesis/home/Widget/colormodesWidget.dart';
@@ -13,6 +14,7 @@ class HomePage extends StatelessWidget {
 
     return Scaffold(
       appBar: appBarHome(context),
+      drawer: drawerHome(context),
       body: SafeArea(
         child: SingleChildScrollView(
           padding: EdgeInsets.only(bottom: screenHeight * 0.02),

@@ -14,7 +14,7 @@ Padding editButton(BuildContext context) {
       child: Container(
         padding: EdgeInsets.symmetric(horizontal: 32, vertical: 16),
         decoration: BoxDecoration(
-          color: Colors.purple,
+          color: Colors.deepPurple,
           borderRadius: BorderRadius.circular(30),
         ),
         child: const Text(
