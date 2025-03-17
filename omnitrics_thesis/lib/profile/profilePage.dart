@@ -52,13 +52,23 @@ class ProfilePage extends StatelessWidget {
 
   AppBar appBarProf() {
     return AppBar(
+      iconTheme: const IconThemeData(color: Colors.white),
       title: const Text(
         'My Profile',
         style: TextStyle(
-          color: Colors.black,
+          color: Colors.white,
           fontWeight: FontWeight.bold,
         ),
       ),
+      flexibleSpace: Container(
+      decoration: BoxDecoration(
+        gradient: LinearGradient(
+          colors: [Colors.deepPurple.shade700, Colors.deepPurple.shade400],
+          begin: Alignment.topLeft,
+          end: Alignment.bottomRight,
+        ),
+      ),
+    ),
       centerTitle: true,
     );
   }
