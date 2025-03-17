@@ -5,20 +5,14 @@ class FillUpSection extends StatelessWidget {
   final TextEditingController genderController;
   final TextEditingController birthdayController;
   final TextEditingController emailController;
-  final TextEditingController? currentPasswordController;
-  final TextEditingController? newPasswordController;
-  final bool showPasswordFields;
 
   const FillUpSection({
-    super.key,
+    Key? key,
     required this.nameController,
     required this.genderController,
     required this.birthdayController,
     required this.emailController,
-    this.currentPasswordController,
-    this.newPasswordController,
-    this.showPasswordFields = true,
-  });
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -27,16 +21,17 @@ class FillUpSection extends StatelessWidget {
         shadowedTextField(label: 'Name', controller: nameController),
         shadowedTextField(label: 'Gender', controller: genderController),
         BirthdayField(controller: birthdayController),
-        shadowedTextField(label: 'Email', controller: emailController),
-        if (showPasswordFields)
-          shadowedTextField(label: 'Current Password', controller: currentPasswordController!),
-        if (showPasswordFields)
-          shadowedTextField(label: 'New Password', controller: newPasswordController!),
+        // Email field shown as read-only.
+        shadowedTextField(label: 'Email', controller: emailController, readOnly: true),
       ],
     );
   }
 
-  Widget shadowedTextField({required String label, required TextEditingController controller}) {
+  Widget shadowedTextField({
+    required String label,
+    required TextEditingController controller,
+    bool readOnly = false,
+  }) {
     return Container(
       margin: const EdgeInsets.all(12),
       child: Container(
@@ -49,14 +44,15 @@ class FillUpSection extends StatelessWidget {
               offset: const Offset(0, 3),
             ),
           ],
-          borderRadius: BorderRadius.circular(4),
+          borderRadius: BorderRadius.circular(10),
         ),
         child: TextField(
           controller: controller,
+          readOnly: readOnly,
           decoration: InputDecoration(
             labelText: label,
             border: OutlineInputBorder(
-              borderSide: BorderSide(color: Colors.black),
+              borderSide: const BorderSide(color: Colors.black),
               borderRadius: BorderRadius.circular(10),
             ),
             filled: true,
