@@ -49,9 +49,9 @@ class _DisclaimerState extends State<Disclaimer> {
                   padding: const EdgeInsets.all(27.0),
                   decoration: BoxDecoration(
                     gradient: const LinearGradient(
-                      colors: [Colors.deepPurple, Colors.deepPurpleAccent],
-                      begin: Alignment.topLeft,
-                      end: Alignment.bottomRight,
+                      colors: [Colors.deepPurple, Color.fromARGB(255, 176, 59, 211)],
+                      begin: Alignment.centerLeft,
+                      end: Alignment.centerRight,
                     ),
                     borderRadius: BorderRadius.circular(10),
                     boxShadow: [
