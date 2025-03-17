@@ -4,6 +4,7 @@ import 'package:omnitrics_thesis/home/Widget/adjustcolorWidget.dart';
 import 'package:omnitrics_thesis/home/Widget/appBar.dart';
 import 'package:omnitrics_thesis/home/Widget/colormodesWidget.dart';
 import 'package:omnitrics_thesis/home/Widget/generalcamBtn.dart';
+import 'package:omnitrics_thesis/home/data_table/userdata_table.dart';
 
 class HomePage extends StatelessWidget {
   const HomePage({super.key});
@@ -14,7 +15,8 @@ class HomePage extends StatelessWidget {
 
     return Scaffold(
       appBar: appBarHome(context),
-      drawer: drawerHome(context),
+      drawer: drawerHome(context),  
+      backgroundColor: Colors.white,
       body: SafeArea(
         child: SingleChildScrollView(
           padding: EdgeInsets.only(bottom: screenHeight * 0.02),
@@ -26,6 +28,9 @@ class HomePage extends StatelessWidget {
               colorSettingsText(context),
               adjustColorTiles(context),
               userDataText(context),
+              userData(),
+              // ADD THIS SIZEDBOX TO PROVIDE SCROLL SPACE AT THE BOTTOM
+              SizedBox(height: screenHeight * 0.1), 
             ],
           ),
         ),
