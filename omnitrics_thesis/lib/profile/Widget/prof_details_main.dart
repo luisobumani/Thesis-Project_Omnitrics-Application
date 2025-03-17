@@ -28,70 +28,72 @@ class ProfDetailsMain extends StatelessWidget {
 
     return Container(
       margin: const EdgeInsets.all(10),
-      child: Align(
-        alignment: Alignment.center,
-        child: Row(
-          children: [
-            // Left side: display text details.
-            Container(
-              margin: const EdgeInsets.only(top: 20),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    displayName,
-                    style: const TextStyle(
-                      color: Colors.black,
-                      fontWeight: FontWeight.bold,
-                      fontSize: 20,
-                    ),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          // Left side: display text details.
+          Container(
+            margin: const EdgeInsets.only(top: 20),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  displayName,
+                  style: const TextStyle(
+                    color: Colors.black,
+                    fontWeight: FontWeight.bold,
+                    fontSize: 20,
                   ),
-                  const SizedBox(height: 5),
-                  const Text(
-                    condition,
-                    style: TextStyle(
-                      color: Colors.green,
-                      fontWeight: FontWeight.bold,
-                      fontSize: 16,
-                    ),
+                ),
+                const SizedBox(height: 5),
+                const Text(
+                  condition,
+                  style: TextStyle(
+                    color: Colors.green,
+                    fontWeight: FontWeight.bold,
+                    fontSize: 16,
                   ),
-                ],
-              ),
+                ),
+              ],
             ),
-            // Right side: display profile image.
-            Container(
-              margin: const EdgeInsets.only(top: 30, left: 20),
-              width: 120,
-              height: 120,
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(10),
-              ),
-              child: FutureBuilder<String?>(
-                future: _getProfileImagePath(),
-                builder: (context, snapshot) {
-                  // While waiting, show a loading indicator.
-                  if (snapshot.connectionState == ConnectionState.waiting) {
-                    return const Center(child: CircularProgressIndicator());
-                  }
-                  // If a valid image path is available, display the image.
-                  if (snapshot.hasData &&
-                      snapshot.data != null &&
-                      snapshot.data!.isNotEmpty) {
-                    return ClipRRect(
-                      borderRadius: BorderRadius.circular(10),
-                      child: Image.file(
-                        File(snapshot.data!),
-                        fit: BoxFit.cover,
-                      ),
-                    );
-                  }
-                  // Otherwise, display the default SVG.
-                  return SvgPicture.asset('assets/icons/profile.svg');
-                },
-              ),
+          ),
+          // Right side: display profile image as a circle.
+          Container(
+            margin: const EdgeInsets.only(top: 30),
+            width: 120,
+            height: 120,
+            decoration: const BoxDecoration(
+              shape: BoxShape.circle,
             ),
-          ],
-        ),
+            child: FutureBuilder<String?>(
+              future: _getProfileImagePath(),
+              builder: (context, snapshot) {
+                // While waiting, show a loading indicator.
+                if (snapshot.connectionState == ConnectionState.waiting) {
+                  return const Center(child: CircularProgressIndicator());
+                }
+                // If a valid image path is available, display the image.
+                if (snapshot.hasData &&
+                    snapshot.data != null &&
+                    snapshot.data!.isNotEmpty) {
+                  return ClipOval(
+                    child: Image.file(
+                      File(snapshot.data!),
+                      fit: BoxFit.cover,
+                    ),
+                  );
+                }
+                // Otherwise, display the default SVG.
+                return ClipOval(
+                  child: SvgPicture.asset(
+                    'assets/icons/profile.svg',
+                    fit: BoxFit.cover,
+                  ),
+                );
+              },
+            ),
+          ),
+        ],
       ),
     );
   }

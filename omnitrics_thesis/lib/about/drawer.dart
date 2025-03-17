@@ -4,7 +4,6 @@ import 'package:omnitrics_thesis/about/Widget/drawer_header.dart';
 import 'package:omnitrics_thesis/about/Widget/faqs.dart';
 import 'package:omnitrics_thesis/about/Widget/privacy_policy.dart';
 import 'package:omnitrics_thesis/about/Widget/share_app.dart';
-import 'package:path/path.dart';
 
 Drawer drawerHome(BuildContext context) {
   return Drawer(
