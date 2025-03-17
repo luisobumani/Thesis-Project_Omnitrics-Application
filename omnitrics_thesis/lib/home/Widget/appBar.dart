@@ -1,6 +1,15 @@
+import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:omnitrics_thesis/profile/profilePage.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+
+// Make sure you define _getProfileImagePath() somewhere accessible.
+// For example:
+Future<String?> _getProfileImagePath() async {
+  final SharedPreferences prefs = await SharedPreferences.getInstance();
+  return prefs.getString('profileImagePath');
+}
 
 AppBar appBarHome(BuildContext context) {
   final double screenWidth = MediaQuery.of(context).size.width;
@@ -18,13 +27,9 @@ AppBar appBarHome(BuildContext context) {
       ),
     ),
     centerTitle: true,
-
-    // ✅ Make background transparent to show the gradient
     backgroundColor: Colors.transparent,
     elevation: 6.0,
     shadowColor: Colors.grey,
-
-    // ✅ Apply gradient using flexibleSpace
     flexibleSpace: Container(
       decoration: BoxDecoration(
         gradient: LinearGradient(
@@ -34,16 +39,14 @@ AppBar appBarHome(BuildContext context) {
         ),
       ),
     ),
-
     leading: Builder(
       builder: (context) => IconButton(
-        icon: Icon(Icons.menu, color: Colors.white), // White for better contrast
+        icon: Icon(Icons.menu, color: Colors.white),
         onPressed: () {
-          Scaffold.of(context).openDrawer(); // Open the drawer
+          Scaffold.of(context).openDrawer();
         },
       ),
     ),
-
     actions: [
       GestureDetector(
         onTap: () {
@@ -59,8 +62,26 @@ AppBar appBarHome(BuildContext context) {
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(10),
           ),
-          child: SvgPicture.asset(
-            'assets/icons/Display Picture Variants.svg',
+          child: FutureBuilder<String?>(
+            future: _getProfileImagePath(),
+            builder: (context, snapshot) {
+              if (snapshot.connectionState == ConnectionState.waiting) {
+                return const Center(child: CircularProgressIndicator());
+              }
+              if (snapshot.hasData &&
+                  snapshot.data != null &&
+                  snapshot.data!.isNotEmpty) {
+                return ClipRRect(
+                  borderRadius: BorderRadius.circular(10),
+                  child: Image.file(
+                    File(snapshot.data!),
+                    fit: BoxFit.cover,
+                  ),
+                );
+              }
+              // Fallback: show the default SVG asset if there's no image
+              return SvgPicture.asset('assets/icons/profile.svg');
+            },
           ),
         ),
       ),
