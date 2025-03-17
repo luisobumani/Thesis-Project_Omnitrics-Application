@@ -4,8 +4,6 @@ import 'package:omnitrics_thesis/home/filtered_camera/deuteranopia_camera_page.d
 import 'package:omnitrics_thesis/home/filtered_camera/protanopia_camera_page.dart';
 import 'package:omnitrics_thesis/home/filtered_camera/tritanopia_camera_page.dart';
 
-
-
 Center colorModesTiles(BuildContext context) {
   return Center(
     child: Row(
