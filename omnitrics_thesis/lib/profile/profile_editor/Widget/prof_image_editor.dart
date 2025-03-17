@@ -75,6 +75,7 @@ class _ProfileImageEditorState extends State<ProfileImageEditor> {
             child: IconButton(
               onPressed: _pickAndSaveImage,
               icon: const Icon(Icons.add_a_photo),
+              color: Colors.purple,
             ),
           ),
         ],
