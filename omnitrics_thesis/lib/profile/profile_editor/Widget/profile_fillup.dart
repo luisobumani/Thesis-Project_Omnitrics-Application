@@ -1,14 +1,16 @@
 import 'package:flutter/material.dart';
 
 class FillUpSection extends StatelessWidget {
-  final TextEditingController nameController;
+  final TextEditingController firstNameController;
+  final TextEditingController lastNameController;
   final TextEditingController genderController;
   final TextEditingController birthdayController;
   final TextEditingController emailController;
 
   const FillUpSection({
     Key? key,
-    required this.nameController,
+    required this.firstNameController,
+    required this.lastNameController,
     required this.genderController,
     required this.birthdayController,
     required this.emailController,
@@ -18,7 +20,8 @@ class FillUpSection extends StatelessWidget {
   Widget build(BuildContext context) {
     return Column(
       children: [
-        shadowedTextField(label: 'Name', controller: nameController),
+        shadowedTextField(label: 'First Name', controller: firstNameController),
+        shadowedTextField(label: 'Last Name', controller: lastNameController),
         // Replace gender text field with dropdown
         GenderDropdown(controller: genderController),
         BirthdayField(controller: birthdayController),

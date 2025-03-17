@@ -18,7 +18,17 @@ class ProfInfo extends StatelessWidget {
             borderRadius: BorderRadius.circular(10),
           ),
           child: ListTile(
-            title: Text(data['name']?.toString() ?? "No Name"),
+            title: Text(data['firstName']?.toString() ?? "No Name"),
+          ),
+        ),
+        Container(
+          margin: const EdgeInsets.all(10),
+          decoration: BoxDecoration(
+            border: Border.all(color: Colors.black),
+            borderRadius: BorderRadius.circular(10),
+          ),
+          child: ListTile(
+            title: Text(data['lastName']?.toString() ?? "No Name"),
           ),
         ),
         // Gender tile
