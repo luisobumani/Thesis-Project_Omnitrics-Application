@@ -13,7 +13,8 @@ class ProfileEditPage extends StatefulWidget {
 
 class _ProfileEditPageState extends State<ProfileEditPage> {
   // Controllers for form fields.
-  final TextEditingController nameController = TextEditingController();
+  final TextEditingController firstNameController = TextEditingController();
+  final TextEditingController lastNameController = TextEditingController();
   final TextEditingController genderController = TextEditingController();
   final TextEditingController birthdayController = TextEditingController();
   final TextEditingController emailController = TextEditingController();
@@ -34,7 +35,8 @@ class _ProfileEditPageState extends State<ProfileEditPage> {
       if (doc.exists) {
         final data = doc.data() as Map<String, dynamic>;
         setState(() {
-          nameController.text = data['name'] ?? "";
+          firstNameController.text = data['firstName'] ?? "";
+          lastNameController.text = data['lastName'] ?? "";
           genderController.text = data['gender'] ?? "";
           birthdayController.text = data['birthdate'] ?? "";
           emailController.text = data['email'] ?? "";
@@ -52,7 +54,8 @@ class _ProfileEditPageState extends State<ProfileEditPage> {
     if (user != null) {
       try {
         await FirebaseFirestore.instance.collection("users").doc(user.uid).update({
-          "name": nameController.text,
+          "firstName": firstNameController.text,
+          "lastName": lastNameController.text,
           "gender": genderController.text,
           "birthdate": birthdayController.text,
           // Email is not updated as it's read-only.
@@ -73,7 +76,8 @@ class _ProfileEditPageState extends State<ProfileEditPage> {
 
   @override
   void dispose() {
-    nameController.dispose();
+    firstNameController.dispose();
+    lastNameController.dispose();
     genderController.dispose();
     birthdayController.dispose();
     emailController.dispose();
@@ -98,7 +102,8 @@ class _ProfileEditPageState extends State<ProfileEditPage> {
               const ProfileImageEditor(),
               // The FillUpSection widget now displays only Name, Gender, Birthday and a read-only Email.
               FillUpSection(
-                nameController: nameController,
+                firstNameController: firstNameController,
+                lastNameController: lastNameController,
                 genderController: genderController,
                 birthdayController: birthdayController,
                 emailController: emailController,
