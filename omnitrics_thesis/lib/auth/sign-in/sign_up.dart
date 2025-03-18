@@ -2,8 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:omnitrics_thesis/auth/services/authentication.dart';
 import 'package:omnitrics_thesis/auth/sign-in/Widget/snack_bar.dart';
 import 'package:omnitrics_thesis/tell_me_who_you_are/tell_me.dart'; // Redirect to detailed info page
-import 'Widget/login_button.dart';
-import 'Widget/text_field.dart';
 import 'package:omnitrics_thesis/auth/sign-in/login.dart'; // Retain login for existing users
 
 class SignUpScreen extends StatefulWidget {
@@ -74,7 +72,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
             borderRadius: BorderRadius.circular(8),
             boxShadow: [
               BoxShadow(
-                color: Colors.grey.withOpacity(0.2),
+                color: const Color.fromARGB(255, 103, 58, 183).withOpacity(0.3),
                 spreadRadius: 1,
                 blurRadius: 8,
                 offset: const Offset(0, 2),
@@ -107,7 +105,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
               ),
               const SizedBox(height: 16),
               const Text(
-                'Username',
+                'Username*',
                 style: TextStyle(
                   fontSize: 14,
                   fontWeight: FontWeight.w500,
@@ -115,23 +113,27 @@ class _SignUpScreenState extends State<SignUpScreen> {
               ),
               const SizedBox(height: 8),
               Container(
-                height: 48,
-                decoration: BoxDecoration(
-                  border: Border.all(color: Colors.grey.shade300),
-                  borderRadius: BorderRadius.circular(4),
+              height: 48,
+              decoration: BoxDecoration(
+                border: Border.all(color: Colors.grey.shade300),
+                borderRadius: BorderRadius.circular(8),
                 ),
-                child: TextField(
-                  controller: nameController,
-                  decoration: const InputDecoration(
-                    hintText: 'Enter your name',
-                    contentPadding: EdgeInsets.symmetric(horizontal: 12),
-                    border: InputBorder.none,
+              child: TextField(
+                controller: nameController,
+                decoration: InputDecoration(
+                  hintText: 'Enter your name',
+                  contentPadding: EdgeInsets.symmetric(horizontal: 12),
+                  border: InputBorder.none,
+                  focusedBorder: OutlineInputBorder(
+                    borderSide: BorderSide(color: Color.fromARGB(255, 103, 58, 183), width: 2.0),
+                    borderRadius: BorderRadius.circular(8),
+                    ),
                   ),
                 ),
               ),
               const SizedBox(height: 16),
               const Text(
-                'Email',
+                'Email*',
                 style: TextStyle(
                   fontSize: 14,
                   fontWeight: FontWeight.w500,
@@ -141,21 +143,25 @@ class _SignUpScreenState extends State<SignUpScreen> {
               Container(
                 height: 48,
                 decoration: BoxDecoration(
-                  border: Border.all(color: Colors.grey.shade300),
-                  borderRadius: BorderRadius.circular(4),
+                border: Border.all(color: Colors.grey.shade300),
+                borderRadius: BorderRadius.circular(8),
                 ),
-                child: TextField(
-                  controller: emailController,
-                  decoration: const InputDecoration(
-                    hintText: 'Enter your email',
-                    contentPadding: EdgeInsets.symmetric(horizontal: 12),
-                    border: InputBorder.none,
+              child: TextField(
+                controller: emailController,
+                decoration: InputDecoration(
+                  hintText: 'Enter your email',
+                  contentPadding: EdgeInsets.symmetric(horizontal: 12),
+                  border: InputBorder.none,
+                  focusedBorder: OutlineInputBorder(
+                    borderSide: BorderSide(color: Color.fromARGB(255, 103, 58, 183), width: 2.0),
+                    borderRadius: BorderRadius.circular(8),
+                    ),
                   ),
                 ),
               ),
               const SizedBox(height: 16),
               const Text(
-                'Password',
+                'Password*',
                 style: TextStyle(
                   fontSize: 14,
                   fontWeight: FontWeight.w500,
@@ -166,15 +172,19 @@ class _SignUpScreenState extends State<SignUpScreen> {
                 height: 48,
                 decoration: BoxDecoration(
                   border: Border.all(color: Colors.grey.shade300),
-                  borderRadius: BorderRadius.circular(4),
+                  borderRadius: BorderRadius.circular(8),
                 ),
                 child: TextField(
                   controller: passwordController,
                   obscureText: true,
-                  decoration: const InputDecoration(
+                  decoration: InputDecoration(
                     hintText: 'Create a password',
                     contentPadding: EdgeInsets.symmetric(horizontal: 12),
                     border: InputBorder.none,
+                    focusedBorder: OutlineInputBorder(
+                      borderSide: BorderSide(color: Color.fromARGB(255, 103, 58, 183), width: 2.0),
+                      borderRadius: BorderRadius.circular(8),
+                    ),
                   ),
                 ),
               ),
