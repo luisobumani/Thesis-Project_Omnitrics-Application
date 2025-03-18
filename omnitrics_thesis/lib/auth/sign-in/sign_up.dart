@@ -208,7 +208,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                     shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(8),
                     ),
-                    elevation: 0,
+                    elevation: 10,
                   ),
                   child: const Text(
                     'Sign Up',

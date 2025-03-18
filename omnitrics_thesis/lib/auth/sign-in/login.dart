@@ -189,6 +189,7 @@ class _LoginScreenState extends State<LoginScreen> {
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(8),
                         ),
+                        elevation: 10,
                       ),
                       child: isLoading
                           ? const CircularProgressIndicator(
