@@ -17,7 +17,6 @@
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(12),
         ),
-        elevation: 10,
       ),
       child: const Text(
         'Get Started',
