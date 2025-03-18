@@ -4,7 +4,7 @@ import 'package:flutter_circle_chart/flutter_circle_chart.dart';
 /// A widget that shows a single CircleChart (using the gradient type) with separate data items.
 Widget userData() {
   return Container(
-    color: const Color(0xff4C2882), // Optional background color
+    color: Colors.transparent, // Remove background color to make it see-through
     child: SingleChildScrollView(
       child: Column(
         children: [
@@ -12,35 +12,37 @@ Widget userData() {
           const Padding(
             padding: EdgeInsets.all(8.0),
             child: Text(
-              'Gradient',
+              'You Are NOPIA',
               style: TextStyle(
                 fontSize: 16,
-                color: Colors.white,
+                color: Color.fromARGB(255, 8, 8, 8), // Keep text color visible
                 fontWeight: FontWeight.bold,
               ),
             ),
           ),
-          // The CircleChart using the gradient chart type with separate data.
+          // The CircleChart using the gradient chart type with transparent background.
           CircleChart(
             chartType: CircleChartType.gradient,
+            backgroundColor: Colors.transparent, // <-- Make chart background transparent
             items: [
               CircleChartItemData(
                 color: Colors.red,
                 value: 30.0,
-                name: 'Data A',
-                description: 'PRE MAY PULANG MATA KA XD',
+                name: 'PROTANOPIA',
+                description: 'red-blind → Reduced sensitivity to red light',
+
               ),
               CircleChartItemData(
                 color: Colors.green,
                 value: 20.0,
-                name: 'Data B',
-                description: 'IKAW SI LOLONG LOL',
+                name: 'DEUTERANOPIA',
+                description: 'green-blind → Reduced sensitivity to green light',
               ),
               CircleChartItemData(
                 color: Colors.blue,
                 value: 50.0,
-                name: 'Data C',
-                description: 'ZAIDO KA BES??',
+                name: 'TRITANOPIA',
+                description: 'blue-yellow blindness → Reduced sensitivity to blue light',
               ),
             ],
           ),
