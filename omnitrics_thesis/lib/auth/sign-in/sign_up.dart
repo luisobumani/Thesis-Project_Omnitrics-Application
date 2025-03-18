@@ -63,40 +63,159 @@ class _SignUpScreenState extends State<SignUpScreen> {
   
   @override
   Widget build(BuildContext context) {
-    double height = MediaQuery.of(context).size.height;
     return Scaffold(
       backgroundColor: Colors.white,
-      body: SafeArea(
-        child: SizedBox(
+      body: Center(
+        child: Container(
+          width: 350,
+          padding: const EdgeInsets.all(24),
+          decoration: BoxDecoration(
+            color: Colors.white,
+            borderRadius: BorderRadius.circular(8),
+            boxShadow: [
+              BoxShadow(
+                color: Colors.grey.withOpacity(0.2),
+                spreadRadius: 1,
+                blurRadius: 8,
+                offset: const Offset(0, 2),
+              ),
+            ],
+          ),
           child: Column(
+            mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  const Text(
+                    'Sign up',
+                    style: TextStyle(
+                      fontSize: 20,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                  IconButton(
+                    icon: const Icon(Icons.close),
+                    padding: EdgeInsets.zero,
+                    constraints: const BoxConstraints(),
+                    onPressed: () {
+                      Navigator.pop(context);
+                    },
+                  ),
+                ],
+              ),
+              const SizedBox(height: 16),
+              const Text(
+                'Username',
+                style: TextStyle(
+                  fontSize: 14,
+                  fontWeight: FontWeight.w500,
+                ),
+              ),
+              const SizedBox(height: 8),
+              Container(
+                height: 48,
+                decoration: BoxDecoration(
+                  border: Border.all(color: Colors.grey.shade300),
+                  borderRadius: BorderRadius.circular(4),
+                ),
+                child: TextField(
+                  controller: nameController,
+                  decoration: const InputDecoration(
+                    hintText: 'Enter your name',
+                    contentPadding: EdgeInsets.symmetric(horizontal: 12),
+                    border: InputBorder.none,
+                  ),
+                ),
+              ),
+              const SizedBox(height: 16),
+              const Text(
+                'Email',
+                style: TextStyle(
+                  fontSize: 14,
+                  fontWeight: FontWeight.w500,
+                ),
+              ),
+              const SizedBox(height: 8),
+              Container(
+                height: 48,
+                decoration: BoxDecoration(
+                  border: Border.all(color: Colors.grey.shade300),
+                  borderRadius: BorderRadius.circular(4),
+                ),
+                child: TextField(
+                  controller: emailController,
+                  decoration: const InputDecoration(
+                    hintText: 'Enter your email',
+                    contentPadding: EdgeInsets.symmetric(horizontal: 12),
+                    border: InputBorder.none,
+                  ),
+                ),
+              ),
+              const SizedBox(height: 16),
+              const Text(
+                'Password',
+                style: TextStyle(
+                  fontSize: 14,
+                  fontWeight: FontWeight.w500,
+                ),
+              ),
+              const SizedBox(height: 8),
+              Container(
+                height: 48,
+                decoration: BoxDecoration(
+                  border: Border.all(color: Colors.grey.shade300),
+                  borderRadius: BorderRadius.circular(4),
+                ),
+                child: TextField(
+                  controller: passwordController,
+                  obscureText: true,
+                  decoration: const InputDecoration(
+                    hintText: 'Create a password',
+                    contentPadding: EdgeInsets.symmetric(horizontal: 12),
+                    border: InputBorder.none,
+                  ),
+                ),
+              ),
+              const SizedBox(height: 4),
+              const Text(
+                'Must be at least 8 characters.',
+                style: TextStyle(
+                  fontSize: 12,
+                  color: Colors.grey,
+                ),
+              ),
+              const SizedBox(height: 24),
               SizedBox(
-                height: height / 2.7, 
-                child: Image.asset("assets/images/signup.jpg"),
+                width: double.infinity,
+                height: 48,
+                child: ElevatedButton(
+                  onPressed: userSignup,
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: const Color.fromARGB(255, 103, 58, 183), // Purple color
+                    foregroundColor: Colors.white,
+                    shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(8),
+                    ),
+                    elevation: 0,
+                  ),
+                  child: const Text(
+                    'Sign Up',
+                    style: TextStyle(
+                      fontSize: 16,
+                      fontWeight: FontWeight.w500,
+                    ),
+                  ),
+                ),
               ),
-              TextFieldInput(
-                textEditingController: nameController, 
-                hintText: "Enter your name", 
-                icon: Icons.person,
-              ),
-              TextFieldInput(
-                textEditingController: emailController, 
-                hintText: "Enter your email", 
-                icon: Icons.email,
-              ),
-              TextFieldInput(
-                textEditingController: passwordController, 
-                hintText: "Enter your password", 
-                icon: Icons.lock,
-              ),
-              LoginButton(onTab: userSignup, text: "Sign Up"),
-              SizedBox(height: height / 15),
+              const SizedBox(height: 16),
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   const Text(
-                    "Already have an account?", 
-                    style: TextStyle(fontSize: 16),
+                    'Already have an account?',
+                    style: TextStyle(fontSize: 14),
                   ),
                   GestureDetector(
                     onTap: () {
@@ -107,15 +226,16 @@ class _SignUpScreenState extends State<SignUpScreen> {
                       );
                     },
                     child: const Text(
-                      " Log In ", 
+                      ' Log In',
                       style: TextStyle(
                         fontWeight: FontWeight.bold,
-                        fontSize: 16,                      
+                        fontSize: 14,
+                        color: Color.fromARGB(255, 0, 0, 0),
                       ),
                     ),
                   )
                 ],
-              )
+              ),
             ],
           ),
         ),

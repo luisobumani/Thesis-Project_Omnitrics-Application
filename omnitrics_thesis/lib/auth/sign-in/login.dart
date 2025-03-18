@@ -96,7 +96,7 @@ class _LoginScreenState extends State<LoginScreen> {
                     'Username/Email',
                     style: TextStyle(
                       fontSize: 14,
-                      fontWeight: FontWeight.normal,
+                      fontWeight: FontWeight.w500,
                     ),
                   ),
                   const SizedBox(height: 8),
@@ -127,7 +127,7 @@ class _LoginScreenState extends State<LoginScreen> {
                     'Password',
                     style: TextStyle(
                       fontSize: 14,
-                      fontWeight: FontWeight.normal,
+                      fontWeight: FontWeight.w500,
                     ),
                   ),
                   const SizedBox(height: 8),
