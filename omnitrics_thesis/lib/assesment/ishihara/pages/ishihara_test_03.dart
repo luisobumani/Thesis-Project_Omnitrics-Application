@@ -1,16 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:omnitrics_thesis/assesment/ishihara/data/plates_config.dart';
-import 'package:omnitrics_thesis/assesment/ishihara/pages/ishihara_test_03.dart';
+import 'package:omnitrics_thesis/assesment/ishihara/pages/ishihara_test_02.dart';
 
-class IshiharaTest02 extends StatefulWidget {
-  const IshiharaTest02({Key? key}) : super(key: key);
+class IshiharaTest03 extends StatefulWidget {
+  const IshiharaTest03({Key? key}) : super(key: key);
 
   @override
-  _IshiharaTest02State createState() => _IshiharaTest02State();
+  _IshiharaTest03State createState() => _IshiharaTest03State();
 }
 
-class _IshiharaTest02State extends State<IshiharaTest02> {
-  final TestConfig config = testConfigs[1];
+class _IshiharaTest03State extends State<IshiharaTest03> {
+  final TestConfig config = testConfigs[2];
   int selectedOption = -1;
   bool answerSubmitted = false;
   Color? nextButtonColor;
@@ -37,7 +37,7 @@ class _IshiharaTest02State extends State<IshiharaTest02> {
     Future.delayed(const Duration(seconds: 1), () {
       Navigator.push(
         context,
-        MaterialPageRoute(builder: (context) => IshiharaTest03()),
+        MaterialPageRoute(builder: (context) => IshiharaTest02()),
       );
     });
   }
