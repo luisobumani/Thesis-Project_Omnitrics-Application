@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:omnitrics_thesis/assesment/ishihara/data/plates_config.dart';
-import 'package:omnitrics_thesis/assesment/ishihara/pages/ishihara_test_02.dart';
+import 'package:omnitrics_thesis/assesment/ishihara/pages/ishihara_test_04.dart';
 
 class IshiharaTest03 extends StatefulWidget {
   const IshiharaTest03({Key? key}) : super(key: key);
@@ -37,7 +37,7 @@ class _IshiharaTest03State extends State<IshiharaTest03> {
     Future.delayed(const Duration(seconds: 1), () {
       Navigator.push(
         context,
-        MaterialPageRoute(builder: (context) => IshiharaTest02()),
+        MaterialPageRoute(builder: (context) => IshiharaTest04()),
       );
     });
   }
