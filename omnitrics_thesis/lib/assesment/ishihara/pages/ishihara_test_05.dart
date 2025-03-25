@@ -1,16 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:omnitrics_thesis/assesment/ishihara/data/plates_config.dart';
-import 'package:omnitrics_thesis/assesment/ishihara/pages/ishihara_test_02.dart';
+import 'package:omnitrics_thesis/assesment/ishihara/pages/ishihara_test_06.dart';
 
-class IshiharaTest01 extends StatefulWidget {
-  const IshiharaTest01({Key? key}) : super(key: key);
+class IshiharaTest05 extends StatefulWidget {
+  const IshiharaTest05({Key? key}) : super(key: key);
 
   @override
-  _IshiharaTest01State createState() => _IshiharaTest01State();
+  _IshiharaTest05State createState() => _IshiharaTest05State();
 }
 
-class _IshiharaTest01State extends State<IshiharaTest01> {
-  final TestConfig config = testConfigs[0];
+class _IshiharaTest05State extends State<IshiharaTest05> {
+  final TestConfig config = testConfigs[4];
   int selectedOption = -1;
   bool answerSubmitted = false;
   Color? nextButtonColor;
@@ -37,7 +37,7 @@ class _IshiharaTest01State extends State<IshiharaTest01> {
     Future.delayed(const Duration(seconds: 1), () {
       Navigator.push(
         context,
-        MaterialPageRoute(builder: (context) => IshiharaTest02()),
+        MaterialPageRoute(builder: (context) => IshiharaTest06()),
       );
     });
   }
@@ -134,6 +134,7 @@ class _IshiharaTest01State extends State<IshiharaTest01> {
                 },
               ),
             ),
+            // Next button
             Center(
               child: ConstrainedBox(
                 constraints: const BoxConstraints(maxWidth: 300),
@@ -142,7 +143,8 @@ class _IshiharaTest01State extends State<IshiharaTest01> {
                       ? _handleNextTap
                       : null,
                   style: ButtonStyle(
-                    backgroundColor: WidgetStateProperty.resolveWith<Color>(
+                    backgroundColor:
+                        WidgetStateProperty.resolveWith<Color>(
                       (states) {
                         // If answer has been submitted, use the nextButtonColor
                         if (answerSubmitted && nextButtonColor != null) {
@@ -152,7 +154,8 @@ class _IshiharaTest01State extends State<IshiharaTest01> {
                         return Colors.deepPurple.shade200;
                       },
                     ),
-                    foregroundColor: WidgetStateProperty.resolveWith<Color>(
+                    foregroundColor:
+                        WidgetStateProperty.resolveWith<Color>(
                       (states) {
                         if (answerSubmitted && nextButtonColor != null) {
                           return Colors.white;
@@ -165,7 +168,8 @@ class _IshiharaTest01State extends State<IshiharaTest01> {
                         borderRadius: BorderRadius.circular(10),
                       ),
                     ),
-                    minimumSize: WidgetStateProperty.all(const Size(300, 50)),
+                    minimumSize:
+                        WidgetStateProperty.all(const Size(300, 50)),
                   ),
                   child: const Text(
                     'Next',
