@@ -21,7 +21,7 @@ migrate_working_dir/
 # The .vscode folder contains launch configuration and tasks you configure in
 # VS Code which you may wish to be included in version control, so this line
 # is commented out by default.
-#.vscode/
+#.vscode/1
 
 # Flutter/Dart/Pub related
 **/doc/api/
@@ -43,3 +43,32 @@ app.*.map.json
 /android/app/debug
 /android/app/profile
 /android/app/release
+
+# Ignore CMake generated files
+build/
+CMakeCache.txt
+CMakeFiles/
+cmake_install.cmake
+build.ninja
+*.ninja
+*.json
+*.bin
+*.lock
+*.txt
+
+# Ignore IDE and debug artifacts
+.vscode/
+directory:*
+*.log
+*.tmp
+*-Debug/
+Debug/
+.cache/
+symbol_folder_index.txt
+
+# Ignore TensorFlow and Android build files
+*.gradle
+.gradle/
+build/
+*.iml
+local.properties
