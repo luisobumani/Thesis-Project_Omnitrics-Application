@@ -46,4 +46,29 @@ final List<TestConfig> testConfigs = [
     options: ['8', '0', '3', '9'],
     correctAnswerIndex: 0,
   ),
+  TestConfig(
+    imagePath: 'assets/images/ishihara/ishihara_08.jpg',
+    options: ['8', '2', '3', '0'],
+    correctAnswerIndex: 2,
+  ),
+  TestConfig(
+    imagePath: 'assets/images/ishihara/ishihara_09.jpg',
+    options: ['29', '36', '57', '19'],
+    correctAnswerIndex: 0,
+  ),
+  TestConfig(
+    imagePath: 'assets/images/ishihara/ishihara_10.jpg',
+    options: ['75', '32', '55', '45'],
+    correctAnswerIndex: 3,
+  ),
+  TestConfig(
+    imagePath: 'assets/images/ishihara/ishihara_11.jpg',
+    options: ['67', '97', '86', '91'],
+    correctAnswerIndex: 1,
+  ),
+  TestConfig(
+    imagePath: 'assets/images/ishihara/ishihara_12.jpg',
+    options: ['72', '23', '42', '35'],
+    correctAnswerIndex: 2,
+  ),
 ];
