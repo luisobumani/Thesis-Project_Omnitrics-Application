@@ -2,29 +2,27 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:omnitrics_thesis/home/general_camera/camera_page.dart';
 
-BottomAppBar generalCamBtn(BuildContext context) {
-  return BottomAppBar(
-    color: Colors.white,
-    // Give the BottomAppBar a larger height
-    child: SizedBox(
-      height: 250, // Adjust this to control how tall the bar should be
-      child: Center(
-        child: SizedBox(
-          width: 80, // Adjust to control the icon’s width
-          height: 80, // Adjust to control the icon’s height
-          child: IconButton(
-            padding: EdgeInsets.zero, // Remove default IconButton padding
-            icon: SvgPicture.asset(
-              'assets/icons/agbnakolbn;aslnm 1.svg',
-              fit: BoxFit.contain,
-            ),
-            onPressed: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(builder: (ctx) => const CameraPage()),
-              );
-            },
-          ),
+Widget generalCamBtn(BuildContext context) {
+  return Transform.scale(
+    scale: 1.6, // Adjust to resize the FAB
+    child: FloatingActionButton(
+      backgroundColor: Colors.transparent,
+      elevation: 0,           // Removes the default shadow
+      focusElevation: 0,      // Removes shadow on focus
+      hoverElevation: 0,      // Removes shadow on hover
+      highlightElevation: 0,  // Removes shadow on tap
+      onPressed: () {
+        Navigator.push(
+          context,
+          MaterialPageRoute(builder: (ctx) => const CameraPage()),
+        );
+      },
+      child: SizedBox(
+        width: 28,
+        height: 28,
+        child: SvgPicture.asset(
+          'assets/icons/Camera.svg',
+          fit: BoxFit.contain,
         ),
       ),
     ),

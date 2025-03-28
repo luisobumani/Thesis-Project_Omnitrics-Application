@@ -25,18 +25,9 @@ AppBar appBarHome(BuildContext context) {
       ),
     ),
     centerTitle: true,
-    backgroundColor: Colors.transparent,
+    backgroundColor: Colors.deepPurple,
     elevation: 6.0,
     shadowColor: Colors.grey,
-    flexibleSpace: Container(
-      decoration: BoxDecoration(
-        gradient: LinearGradient(
-          colors: [Colors.deepPurple.shade700, Colors.deepPurple.shade400],
-          begin: Alignment.topLeft,
-          end: Alignment.bottomRight,
-        ),
-      ),
-    ),
     leading: Builder(
       builder: (context) => IconButton(
         icon: const Icon(Icons.menu, color: Colors.white),
