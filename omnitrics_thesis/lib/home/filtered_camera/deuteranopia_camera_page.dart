@@ -15,13 +15,23 @@ class DeuteranopiaCameraPage extends StatefulWidget {
   _DeuteranopiaCameraPageState createState() => _DeuteranopiaCameraPageState();
 }
 
-class _DeuteranopiaCameraPageState extends State<DeuteranopiaCameraPage> with WidgetsBindingObserver {
+class _DeuteranopiaCameraPageState extends State<DeuteranopiaCameraPage>
+    with WidgetsBindingObserver {
   CameraController? _controller;
   List<CameraDescription>? _cameras;
   XFile? _capturedImage;
   int _selectedCameraIndex = 0;
   bool _isCameraReady = false;
   bool _isFlashOn = false;
+  bool _simulateDeuteranopia = false; 
+
+ // Color Correction Filter Matrix
+  final List<double> _correctionMatrix = [
+    0.8, 0.2, 0, 0, 0,
+    0.2, 0.8, 0, 0, 0,
+    0,   0,   1, 0, 0,
+    0,   0,   0, 1, 0,
+  ];
 
   // Deuteranopia Color Filter Matrix
   final List<double> _deuteranopiaMatrix = [
@@ -31,7 +41,10 @@ class _DeuteranopiaCameraPageState extends State<DeuteranopiaCameraPage> with Wi
     0,     0,     0, 1, 0,
   ];
 
-  ColorFilter get _currentColorFilter => ColorFilter.matrix(_deuteranopiaMatrix);
+  ColorFilter get _correctionColorFilter =>
+      ColorFilter.matrix(_correctionMatrix);
+  ColorFilter get _deuteranopiaColorFilter =>
+      ColorFilter.matrix(_deuteranopiaMatrix);
 
   @override
   void initState() {
@@ -50,7 +63,8 @@ class _DeuteranopiaCameraPageState extends State<DeuteranopiaCameraPage> with Wi
   @override
   void didChangeAppLifecycleState(AppLifecycleState state) async {
     if (_controller == null || !_controller!.value.isInitialized) return;
-    if (state == AppLifecycleState.inactive || state == AppLifecycleState.paused) {
+    if (state == AppLifecycleState.inactive ||
+        state == AppLifecycleState.paused) {
       await _controller?.dispose();
     } else if (state == AppLifecycleState.resumed) {
       _initializeCamera();
@@ -61,12 +75,10 @@ class _DeuteranopiaCameraPageState extends State<DeuteranopiaCameraPage> with Wi
     try {
       _cameras = await availableCameras();
       if (_cameras!.isEmpty) throw Exception('No cameras found');
-
       _controller = CameraController(
         _cameras![_selectedCameraIndex],
         ResolutionPreset.medium,
       );
-
       await _controller!.initialize();
       if (!mounted) return;
       setState(() {
@@ -80,7 +92,8 @@ class _DeuteranopiaCameraPageState extends State<DeuteranopiaCameraPage> with Wi
   Future<void> _toggleFlash() async {
     if (!_isCameraReady || _controller == null) return;
     try {
-      await _controller!.setFlashMode(_isFlashOn ? FlashMode.off : FlashMode.torch);
+      await _controller!
+          .setFlashMode(_isFlashOn ? FlashMode.off : FlashMode.torch);
       setState(() {
         _isFlashOn = !_isFlashOn;
       });
@@ -89,16 +102,37 @@ class _DeuteranopiaCameraPageState extends State<DeuteranopiaCameraPage> with Wi
     }
   }
 
+  
+  Future<void> _switchCamera() async {
+    if (_cameras == null || _cameras!.length < 2) return;
+    _selectedCameraIndex = _selectedCameraIndex == 0 ? 1 : 0;
+    await _controller?.dispose();
+    setState(() {
+      _isCameraReady = false;
+    });
+    await _initializeCamera();
+  }
+
+  // Toggle simulation mode for deuteranopia.
+  void _toggleSimulation() {
+    setState(() {
+      _simulateDeuteranopia = !_simulateDeuteranopia;
+    });
+  }
+
   Future<void> _takePicture() async {
-    if (!_controller!.value.isInitialized || _controller!.value.isTakingPicture) return;
+    if (!_controller!.value.isInitialized ||
+        _controller!.value.isTakingPicture) return;
 
     final Directory appDir = await getApplicationDocumentsDirectory();
-    final String fileName = 'photo_${DateTime.now().millisecondsSinceEpoch}.png';
+    final String fileName =
+        'photo_${DateTime.now().millisecondsSinceEpoch}.png';
     final String filePath = path.join(appDir.path, fileName);
 
     try {
       final XFile rawFile = await _controller!.takePicture();
       final File savedImage = await File(rawFile.path).copy(filePath);
+      // Apply the currently active filter when saving the image.
       final File filteredFile = await _applyFilterToImage(savedImage);
       await GallerySaver.saveImage(filteredFile.path);
       setState(() {
@@ -117,7 +151,8 @@ class _DeuteranopiaCameraPageState extends State<DeuteranopiaCameraPage> with Wi
 
       final filtered = _applyColorMatrix(decodedImage);
       final filteredBytes = img.encodePng(filtered);
-      final String newPath = imageFile.path.replaceAll('.png', '_filtered.png');
+      final String newPath =
+          imageFile.path.replaceAll('.png', '_filtered.png');
       final File newFile = File(newPath)..writeAsBytesSync(filteredBytes);
       return newFile;
     } catch (e) {
@@ -126,25 +161,32 @@ class _DeuteranopiaCameraPageState extends State<DeuteranopiaCameraPage> with Wi
     }
   }
 
-   img.Image _applyColorMatrix(img.Image src) {
+  img.Image _applyColorMatrix(img.Image src) {
+    // Select the appropriate matrix.
+    final matrix = _simulateDeuteranopia ? _deuteranopiaMatrix : _correctionMatrix;
     final w = src.width;
     final h = src.height;
-
     for (int y = 0; y < h; y++) {
       for (int x = 0; x < w; x++) {
-        int pixel = src.getPixel(x, y) as int;
-        int a = (pixel >> 24) & 0xFF;
-        int r = (pixel >> 16) & 0xFF;
-        int g = (pixel >> 8) & 0xFF;
-        int b = pixel & 0xFF;
+        var pixel = src.getPixel(x, y);
+        int a = pixel.a.toInt();
+        int r = pixel.r.toInt();
+        int g = pixel.g.toInt();
+        int b = pixel.b.toInt();
 
-        double nr = (r * _deuteranopiaMatrix[0] + g * _deuteranopiaMatrix[1] + b * _deuteranopiaMatrix[2]);
-        double ng = (r * _deuteranopiaMatrix[5] + g * _deuteranopiaMatrix[6] + b * _deuteranopiaMatrix[7]);
-        double nb = (r * _deuteranopiaMatrix[10] + g * _deuteranopiaMatrix[11] + b * _deuteranopiaMatrix[12]);
+        double nr = (r * matrix[0] +
+            g * matrix[1] +
+            b * matrix[2]);
+        double ng = (r * matrix[5] +
+            g * matrix[6] +
+            b * matrix[7]);
+        double nb = (r * matrix[10] +
+            g * matrix[11] +
+            b * matrix[12]);
 
-        int fr = nr.round().clamp(0, 255);
-        int fg = ng.round().clamp(0, 255);
-        int fb = nb.round().clamp(0, 255);
+        int fr = nr.round().clamp(0, 255).toInt();
+        int fg = ng.round().clamp(0, 255).toInt();
+        int fb = nb.round().clamp(0, 255).toInt();
 
         src.setPixelRgba(x, y, fr, fg, fb, a);
       }
@@ -152,20 +194,11 @@ class _DeuteranopiaCameraPageState extends State<DeuteranopiaCameraPage> with Wi
     return src;
   }
 
-  Future<void> _switchCamera() async {
-    if (_cameras == null || _cameras!.length < 2) return;
-    _selectedCameraIndex = _selectedCameraIndex == 0 ? 1 : 0;
-    await _controller!.dispose();
-    setState(() {
-      _isCameraReady = false;
-    });
-    await _initializeCamera();
-  }
-
   Widget _thumbnailPreview() {
     return GestureDetector(
       onTap: () async {
-        if (_capturedImage != null && File(_capturedImage!.path).existsSync()) {
+        if (_capturedImage != null &&
+            File(_capturedImage!.path).existsSync()) {
           await OpenFile.open(_capturedImage!.path);
         }
       },
@@ -177,7 +210,8 @@ class _DeuteranopiaCameraPageState extends State<DeuteranopiaCameraPage> with Wi
           border: Border.all(color: Colors.white, width: 2),
         ),
         child: ClipOval(
-          child: _capturedImage != null && File(_capturedImage!.path).existsSync()
+          child: _capturedImage != null &&
+                  File(_capturedImage!.path).existsSync()
               ? Image.file(File(_capturedImage!.path), fit: BoxFit.cover)
               : Container(color: Colors.black),
         ),
@@ -185,18 +219,16 @@ class _DeuteranopiaCameraPageState extends State<DeuteranopiaCameraPage> with Wi
     );
   }
 
+  
   Widget _cameraControlButtons() {
-    // Shutter button tinted in green to indicate deuteranopia filter.
     Color shutterColor = Colors.green.withOpacity(0.4);
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
-        // Thumbnail preview on the left.
         Padding(
           padding: const EdgeInsets.all(20.0),
           child: _thumbnailPreview(),
         ),
-        // Shutter button in the middle.
         Container(
           width: 70,
           height: 70,
@@ -210,15 +242,27 @@ class _DeuteranopiaCameraPageState extends State<DeuteranopiaCameraPage> with Wi
             onPressed: _takePicture,
           ),
         ),
-        // Switch camera button on the right.
         Padding(
           padding: const EdgeInsets.all(20.0),
           child: IconButton(
-            icon: const Icon(Icons.switch_camera, size: 40, color: Colors.white),
-            onPressed: _switchCamera,
+            icon: const Icon(Icons.remove_red_eye, size: 32, color: Colors.white),
+            onPressed: _toggleSimulation,
           ),
         ),
       ],
+    );
+  }
+
+  
+  Widget _cameraPreview() {
+    if (!_isCameraReady || _controller == null) {
+      return const Center(child: CircularProgressIndicator());
+    }
+    final filter =
+        _simulateDeuteranopia ? _deuteranopiaColorFilter : _correctionColorFilter;
+    return ColorFiltered(
+      colorFilter: filter,
+      child: CameraPreview(_controller!),
     );
   }
 
@@ -228,21 +272,14 @@ class _DeuteranopiaCameraPageState extends State<DeuteranopiaCameraPage> with Wi
       children: [
         _cameraControlButtons(),
         const SizedBox(height: 8),
-        const Text(
-          'Deuteranopia Mode',
-          style: TextStyle(color: Colors.white, fontSize: 16, fontWeight: FontWeight.w500),
+        Text(
+          _simulateDeuteranopia
+              ? 'Deuteranopia Simulation Active'
+              : 'Correction Filter Active',
+          style: const TextStyle(
+              color: Colors.white, fontSize: 16, fontWeight: FontWeight.w500),
         ),
       ],
-    );
-  }
-
-  Widget _cameraPreviewWithFilter() {
-    if (!_isCameraReady || _controller == null) {
-      return const Center(child: CircularProgressIndicator());
-    }
-    return ColorFiltered(
-      colorFilter: _currentColorFilter,
-      child: CameraPreview(_controller!),
     );
   }
 
@@ -257,7 +294,7 @@ class _DeuteranopiaCameraPageState extends State<DeuteranopiaCameraPage> with Wi
               children: [
                 Expanded(
                   flex: 5,
-                  child: _cameraPreviewWithFilter(),
+                  child: _cameraPreview(),
                 ),
                 Expanded(
                   flex: 1,
@@ -265,7 +302,7 @@ class _DeuteranopiaCameraPageState extends State<DeuteranopiaCameraPage> with Wi
                 ),
               ],
             ),
-            // Back button ("X") in the top-left corner.
+            
             Positioned(
               top: 16,
               left: 16,
@@ -275,17 +312,30 @@ class _DeuteranopiaCameraPageState extends State<DeuteranopiaCameraPage> with Wi
                 onPressed: () => Navigator.of(context).pop(),
               ),
             ),
-            // Flash toggle in the top-right corner.
+            
             Positioned(
               top: 16,
               right: 16,
-              child: IconButton(
-                icon: Icon(
-                  _isFlashOn ? Icons.flash_on : Icons.flash_off,
-                  color: Colors.white,
-                ),
-                iconSize: 32,
-                onPressed: _toggleFlash,
+              child: Column(
+                children: [
+                  IconButton(
+                    icon: Icon(
+                      _isFlashOn ? Icons.flash_on : Icons.flash_off,
+                      color: Colors.white,
+                      size: 32,
+                    ),
+                    onPressed: _toggleFlash,
+                  ),
+                  const SizedBox(height: 8),
+                  IconButton(
+                    icon: const Icon(
+                      Icons.switch_camera,
+                      color: Colors.white,
+                      size: 32,
+                    ),
+                    onPressed: _switchCamera,
+                  ),
+                ],
               ),
             ),
           ],
