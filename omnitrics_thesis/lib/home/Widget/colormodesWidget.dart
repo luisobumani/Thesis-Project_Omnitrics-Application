@@ -41,7 +41,7 @@ Widget _buildColorModeTile(String title, String assetPath, VoidCallback onTap) {
       margin: EdgeInsets.all(15),
       decoration: BoxDecoration(
         color: Colors.white,
-        borderRadius: BorderRadius.circular(10),
+        borderRadius: BorderRadius.circular(20),
         boxShadow: [
           BoxShadow(
             color: Colors.grey,

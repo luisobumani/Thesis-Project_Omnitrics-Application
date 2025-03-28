@@ -15,27 +15,37 @@ class HomePage extends StatelessWidget {
 
     return Scaffold(
       appBar: appBarHome(context),
-      drawer: drawerHome(context),  
-      backgroundColor: Colors.white,
-      body: SafeArea(
-        child: SingleChildScrollView(
-          padding: EdgeInsets.only(bottom: screenHeight * 0.02),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              colorModesText(context),
-              colorModesTiles(context),
-              colorSettingsText(context),
-              adjustColorTiles(context),
-              userDataText(context),
-              userData(),
-              // ADD THIS SIZEDBOX TO PROVIDE SCROLL SPACE AT THE BOTTOM
-              SizedBox(height: screenHeight * 0.1), 
-            ],
+      drawer: drawerHome(context),
+      backgroundColor: Colors.transparent, // Make scaffold background transparent
+      body: Container(
+        decoration: const BoxDecoration(
+          gradient: LinearGradient(
+            colors: [Colors.white, Colors.deepPurple],
+            begin: Alignment.topCenter,
+            end: Alignment.bottomCenter,
+          ),
+        ),
+        child: SafeArea(
+          child: SingleChildScrollView(
+            padding: EdgeInsets.only(bottom: screenHeight * 0.02),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                colorModesText(context),
+                colorModesTiles(context),
+                colorSettingsText(context),
+                adjustColorTiles(context),
+                userDataText(context),
+                userData(),
+                // ADD THIS SIZEDBOX TO PROVIDE SCROLL SPACE AT THE BOTTOM
+                SizedBox(height: screenHeight * 0.1),
+              ],
+            ),
           ),
         ),
       ),
-      bottomNavigationBar: generalCamBtn(context),
+      floatingActionButton: generalCamBtn(context),
+      floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
     );
   }
 
