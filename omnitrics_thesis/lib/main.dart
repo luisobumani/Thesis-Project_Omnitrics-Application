@@ -31,6 +31,9 @@ class MyApp extends StatelessWidget {
         backgroundColor: Colors.deepPurple,
         duration: 3100,
       ),
+      theme: ThemeData(
+        fontFamily: 'Inter',
+      )
     );
   }
 }
