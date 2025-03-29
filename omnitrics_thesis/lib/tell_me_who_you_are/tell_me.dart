@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:omnitrics_thesis/home/homepage.dart';
+import 'package:omnitrics_thesis/assesment/intro/intro_assessment.dart';
 import 'package:omnitrics_thesis/tell_me_who_you_are/Widget/birthdate_field.dart';
 import 'package:omnitrics_thesis/tell_me_who_you_are/Widget/continue_button.dart';
 import 'package:omnitrics_thesis/tell_me_who_you_are/Widget/exit_button.dart';
@@ -60,7 +60,7 @@ class _ProfileFormState extends State<ProfileForm> {
         // Navigate to another screen if desired
         Navigator.of(context).pushReplacement(
         MaterialPageRoute(
-          builder: (context) => const HomePage(),
+          builder: (context) => const IntroAssessment(),
         ),
       );
       } catch (e) {
