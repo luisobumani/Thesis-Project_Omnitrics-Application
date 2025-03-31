@@ -18,6 +18,8 @@ class HomePage extends StatelessWidget {
       drawer: drawerHome(context),
       backgroundColor: Colors.transparent, // Make scaffold background transparent
       body: Container(
+        width: double.infinity,
+        height: double.infinity,
         decoration: const BoxDecoration(
           gradient: LinearGradient(
             colors: [Colors.white, Colors.deepPurple],
