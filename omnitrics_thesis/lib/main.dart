@@ -24,12 +24,12 @@ class MyApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       // Animated splash screen
       home: AnimatedSplashScreen(
-        splash: 'assets/gifs/draft_logo.gif',
+        splash: 'assets/gifs/omnitrics_logo_gif.gif',
         splashIconSize: 300.0,
         centered: true,
         nextScreen: const AuthRedirect(), // Navigate to Home after the splash
         backgroundColor: Colors.deepPurple,
-        duration: 3100,
+        duration: 4100,
       ),
       theme: ThemeData(
         fontFamily: 'Inter',
