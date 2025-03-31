@@ -114,7 +114,6 @@ class _IntroAssessmentState extends State<IntroAssessment>
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 const SizedBox(height: 100),
-                // "Take the test!" animation (0-1 second)
                 FadeTransition(
                   opacity: _fadeTakeTheTest,
                   child: SlideTransition(
@@ -123,7 +122,6 @@ class _IntroAssessmentState extends State<IntroAssessment>
                   ),
                 ),
                 const SizedBox(height: 60),
-                // Description animation (1-2 seconds)
                 FadeTransition(
                   opacity: _fadeDescription,
                   child: SlideTransition(
@@ -132,7 +130,6 @@ class _IntroAssessmentState extends State<IntroAssessment>
                   ),
                 ),
                 const SizedBox(height: 60),
-                // Disclaimer animation (2-3 seconds)
                 FadeTransition(
                   opacity: _fadeDisclaimer,
                   child: SlideTransition(
