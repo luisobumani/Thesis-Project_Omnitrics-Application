@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:omnitrics_thesis/assesment/intro/intro_ishihara.dart';
 
 Container startTestBtn(BuildContext context) {
   return Container(
@@ -21,8 +22,9 @@ Container startTestBtn(BuildContext context) {
               actions: [
                 ElevatedButton(
                   onPressed: () {
-                    Navigator.of(context).pop();
-                    // Place further actions here, if needed, such as navigating to the test screen.
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) => IntroIshihara()));
                   },
                   style: ElevatedButton.styleFrom(
                     foregroundColor: Colors.white,
