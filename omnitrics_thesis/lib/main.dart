@@ -29,7 +29,7 @@ class MyApp extends StatelessWidget {
         centered: true,
         nextScreen: const AuthRedirect(), // Navigate to Home after the splash
         backgroundColor: Colors.deepPurple,
-        duration: 4100,
+        duration: 3000,
       ),
       theme: ThemeData(
         fontFamily: 'Inter',
