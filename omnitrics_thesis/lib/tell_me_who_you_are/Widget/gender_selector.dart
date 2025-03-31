@@ -15,14 +15,12 @@ class GenderSelector extends StatelessWidget {
     final List<String> genderOptions = [
       'Male',
       'Female',
-      'Non-binary',
-      'Prefer not to say',
     ];
 
     return Column(
       children: genderOptions.map((option) {
         return Padding(
-          padding: const EdgeInsets.only(bottom: 12.0),
+          padding: const EdgeInsets.only(bottom: 0.0),
           child: Row(
             children: [
               Radio<String>(
@@ -32,7 +30,8 @@ class GenderSelector extends StatelessWidget {
               ),
               Text(
                 option,
-                style: const TextStyle(fontSize: 14),
+                style: const TextStyle(fontSize: 14,
+                fontWeight: FontWeight.w500,),
               ),
             ],
           ),

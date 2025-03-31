@@ -98,7 +98,9 @@ class _SignUpScreenState extends State<SignUpScreen> {
                     padding: EdgeInsets.zero,
                     constraints: const BoxConstraints(),
                     onPressed: () {
-                      Navigator.pop(context);
+                      Navigator.of(context).pushReplacement(
+                      MaterialPageRoute(builder: (context) => const LoginScreen()),
+                      );
                     },
                   ),
                 ],

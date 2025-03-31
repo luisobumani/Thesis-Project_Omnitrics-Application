@@ -19,7 +19,7 @@ class TellMe extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       title: 'Profile Form',
       theme: ThemeData(
-        primarySwatch: Colors.purple,
+        primarySwatch: Colors.deepPurple,
       ),
       home: const ProfileForm(),
     );
@@ -89,10 +89,10 @@ class _ProfileFormState extends State<ProfileForm> {
           padding: const EdgeInsets.all(16.0),
           decoration: BoxDecoration(
             color: Colors.white,
-            borderRadius: BorderRadius.circular(10),
+            borderRadius: BorderRadius.circular(16),
             boxShadow: [
               BoxShadow(
-                color: Colors.grey.withOpacity(0.3),
+                color: const Color.fromARGB(255, 103, 58, 183).withOpacity(0.3),
                 spreadRadius: 1,
                 blurRadius: 5,
                 offset: const Offset(0, 3),
@@ -108,25 +108,36 @@ class _ProfileFormState extends State<ProfileForm> {
                 exitButton(),
 
                 const SizedBox(height: 16),
+
                 // First Name
-                const Text('First Name', style: TextStyle(fontSize: 14)),
+                const Text('First Name', 
+                style: TextStyle(
+                  fontSize: 14,
+                  fontWeight: FontWeight.w500,)),
                 const SizedBox(height: 8),
                 FirstNameField(controller: firstNameController),
-
                 const SizedBox(height: 16),
+
                 // Last Name
-                const Text('Last Name', style: TextStyle(fontSize: 14)),
+                const Text('Last Name', style: TextStyle(
+                  fontSize: 14, 
+                  fontWeight: FontWeight.w500,)),
                 const SizedBox(height: 8),
                 LastNameField(controller: lastNameController),
-
                 const SizedBox(height: 16),
+
                 // Birthdate
-                const Text('Birthdate', style: TextStyle(fontSize: 14)),
+                const Text('Birthdate', style: TextStyle(
+                  fontSize: 14, 
+                  fontWeight: FontWeight.w500,)),
                 const SizedBox(height: 8),
                 BirthdateField(controller: birthDateController),
-
                 const SizedBox(height: 20),
+
                 // Gender radio buttons
+                const Text('Sex', style: TextStyle(
+                  fontSize: 14,
+                  fontWeight: FontWeight.w500,)),
                 GenderSelector(
                   selectedGender: _selectedGender,
                   onChanged: (value) {

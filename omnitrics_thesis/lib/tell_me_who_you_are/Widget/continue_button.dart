@@ -12,11 +12,12 @@ class ContinueButton extends StatelessWidget {
       child: ElevatedButton(
         onPressed: onPressed,
         style: ElevatedButton.styleFrom(
-          backgroundColor: const Color(0xFF9C5DD5),
+          backgroundColor: Colors.deepPurple,
           foregroundColor: Colors.white,
           padding: const EdgeInsets.symmetric(vertical: 12),
+          elevation: 10, // Increased elevation for a more raised appearance
           shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(4),
+            borderRadius: BorderRadius.circular(8),
           ),
         ),
         child: const Text('Continue'),
