@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:omnitrics_thesis/auth/sign-in/sign_up.dart';
 
 Row exitButton() {
   return Row(
@@ -7,17 +8,23 @@ Row exitButton() {
       const Text(
         'Tell me who you are',
         style: TextStyle(
-          fontSize: 16,
+          fontSize: 20,
           fontWeight: FontWeight.bold,
         ),
       ),
-      IconButton(
-        icon: const Icon(Icons.close),
-        onPressed: () {
-          // define your exit behavior
+      Builder(
+        builder: (context) {
+          return IconButton(
+            icon: const Icon(Icons.close),
+            onPressed: () {
+              Navigator.of(context).pushReplacement(
+                MaterialPageRoute(builder: (context) => const SignUpScreen()),
+              );
+            },
+            padding: EdgeInsets.zero,
+            constraints: const BoxConstraints(),
+          );
         },
-        padding: EdgeInsets.zero,
-        constraints: const BoxConstraints(),
       ),
     ],
   );

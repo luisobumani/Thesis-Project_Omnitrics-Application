@@ -11,9 +11,15 @@ class LastNameField extends StatelessWidget {
       controller: controller,
       decoration: InputDecoration(
         border: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(4),
+          borderRadius: BorderRadius.circular(8),
           borderSide: const BorderSide(color: Colors.grey),
         ),
+        enabledBorder: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(8),
+                        borderSide: BorderSide(
+                          color: Colors.grey.shade300,
+                        ),
+                      ),
         contentPadding: const EdgeInsets.symmetric(
           vertical: 10.0,
           horizontal: 12.0,
