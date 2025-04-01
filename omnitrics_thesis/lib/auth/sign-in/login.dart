@@ -61,8 +61,13 @@ class _LoginScreenState extends State<LoginScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.white,
-      body: SafeArea(
+      body: Container(
+        decoration: BoxDecoration(
+          gradient: LinearGradient(colors: [Colors.deepPurple.shade700, Colors.deepPurple.shade400],
+          begin: Alignment.topLeft,
+          end: Alignment.bottomRight)
+        ),
+        child: SafeArea(
         child: Center(
           child: SingleChildScrollView(
             child: Container(
@@ -283,6 +288,7 @@ class _LoginScreenState extends State<LoginScreen> {
           ),
         ),
       ),
+      )
     );
   }
 }
