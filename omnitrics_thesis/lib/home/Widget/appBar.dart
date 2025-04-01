@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:omnitrics_thesis/profile/profilePage.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 Future<String?> _getProfileImagePath() async {
   final SharedPreferences prefs = await SharedPreferences.getInstance();
@@ -10,17 +11,12 @@ Future<String?> _getProfileImagePath() async {
 }
 
 AppBar appBarHome(BuildContext context) {
-  final double screenWidth = MediaQuery.of(context).size.width;
-  final double titleFontSize = screenWidth * (38 / 375);
-  final double marginSize = screenWidth * (10 / 375);
-  final double iconSize = screenWidth * (40 / 375);
-
   return AppBar(
     title: Text(
       'OmniTrics',
       style: TextStyle(
         color: Colors.white,
-        fontSize: titleFontSize,
+        fontSize: 35.sp,
         fontWeight: FontWeight.bold,
       ),
     ),
@@ -45,16 +41,16 @@ AppBar appBarHome(BuildContext context) {
           );
         },
         child: Container(
-          margin: EdgeInsets.all(marginSize),
-          width: iconSize,
-          height: iconSize,
+          margin: EdgeInsets.all(13.h),
+          width: 30.w,
+          height: 30.h,
           child: FutureBuilder<String?>(
             future: _getProfileImagePath(),
             builder: (context, snapshot) {
               // While waiting, show a circular progress indicator inside a CircleAvatar.
               if (snapshot.connectionState == ConnectionState.waiting) {
                 return CircleAvatar(
-                  radius: iconSize / 2,
+                  radius: 15.r,
                   backgroundColor: Colors.grey.shade300,
                   child: const CircularProgressIndicator(),
                 );
@@ -64,13 +60,13 @@ AppBar appBarHome(BuildContext context) {
                   snapshot.data != null &&
                   snapshot.data!.isNotEmpty) {
                 return CircleAvatar(
-                  radius: iconSize / 2,
+                  radius: 15.r,
                   backgroundImage: FileImage(File(snapshot.data!)),
                 );
               }
               // Otherwise, display the default SVG asset inside a CircleAvatar.
               return CircleAvatar(
-                radius: iconSize / 2,
+                radius: 15.r,
                 backgroundColor: Colors.transparent,
                 child: SvgPicture.asset(
                   'assets/icons/profile.svg',
