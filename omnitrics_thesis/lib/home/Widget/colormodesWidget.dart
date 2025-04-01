@@ -3,6 +3,7 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:omnitrics_thesis/home/filtered_camera/deuteranopia_camera_page.dart';
 import 'package:omnitrics_thesis/home/filtered_camera/protanopia_camera_page.dart';
 import 'package:omnitrics_thesis/home/filtered_camera/tritanopia_camera_page.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 Center colorModesTiles(BuildContext context) {
   return Center(
@@ -16,13 +17,13 @@ Center colorModesTiles(BuildContext context) {
           );
         }),
         _buildColorModeTile('Protanopia', 'assets/icons/821826-200 4.svg', () {
-         Navigator.push(
+          Navigator.push(
             context,
             MaterialPageRoute(builder: (context) => ProtanopiaCameraPage()),
           );
         }),
         _buildColorModeTile('Tritanopia', 'assets/icons/821826-200 4.svg', () {
-         Navigator.push(
+          Navigator.push(
             context,
             MaterialPageRoute(builder: (context) => TritanopiaCameraPage()),
           );
@@ -36,9 +37,9 @@ Widget _buildColorModeTile(String title, String assetPath, VoidCallback onTap) {
   return GestureDetector(
     onTap: onTap, // Action when tapped
     child: Container(
-      width: 100,
-      height: 125,
-      margin: EdgeInsets.all(15),
+      width: 100.w,
+      height: 125.h,
+      margin: EdgeInsets.all(18.w),
       decoration: BoxDecoration(
         color: Colors.white,
         borderRadius: BorderRadius.circular(20),
@@ -47,7 +48,7 @@ Widget _buildColorModeTile(String title, String assetPath, VoidCallback onTap) {
             color: Colors.grey,
             spreadRadius: 2,
             blurRadius: 5,
-            offset: Offset(0, 3),
+            offset: Offset(0, 3.h),
           ),
         ],
       ),
@@ -58,16 +59,16 @@ Widget _buildColorModeTile(String title, String assetPath, VoidCallback onTap) {
             ClipOval(
               child: SvgPicture.asset(
                 assetPath,
-                width: 50,
-                height: 50,
+                width: 50.w,
+                height: 50.h,
               ),
             ),
-            SizedBox(height: 5),
+            SizedBox(height: 5.h),
             Text(
               title,
               style: TextStyle(
                 color: Colors.black,
-                fontSize: 12,
+                fontSize: 12.sp,
                 fontWeight: FontWeight.bold,
               ),
             ),
