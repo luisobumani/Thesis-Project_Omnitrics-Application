@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:omnitrics_thesis/auth/googleSignIn/google_auth.dart';
 import 'package:omnitrics_thesis/auth/services/authentication.dart';
 import 'package:omnitrics_thesis/auth/sign-in/login.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 Padding logoutBtn(BuildContext context) {
   return Padding(
@@ -17,11 +18,20 @@ Padding logoutBtn(BuildContext context) {
           ),
         );
       },
-      style: ElevatedButton.styleFrom(
-        foregroundColor: Colors.white,
-        backgroundColor: const Color.fromARGB(255, 228, 36, 23), // Text color
-        padding: EdgeInsets.symmetric(horizontal: 32, vertical: 16),
-      ),
+      style: ButtonStyle(
+          backgroundColor: WidgetStateProperty.resolveWith<Color>(
+            (Set<WidgetState> states) {
+              if (states.contains(WidgetState.pressed)) {
+                return Colors.red.shade900; // Darker shade on pressed
+              }
+              return Colors.red.shade600; // Default color
+            },
+          ),
+          padding: WidgetStateProperty.all<EdgeInsetsGeometry>(
+            EdgeInsets.symmetric(horizontal: 32.w, vertical: 16.h),
+          ),
+          foregroundColor: WidgetStateProperty.all<Color>(Colors.white),
+        ),
       child: Text(
         'Logout',
         style: TextStyle(
