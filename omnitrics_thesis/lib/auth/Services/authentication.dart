@@ -7,6 +7,15 @@ class AuthServices {
   // Firebase Auth instance
   final FirebaseAuth _auth = FirebaseAuth.instance;
 
+
+  Future<void> sendEmailVerificationLink()async{
+    try{
+      await _auth.currentUser?.sendEmailVerification();
+    } catch(e) {
+      print(e.toString());
+    } 
+  }  
+  
   Future<String> userSignup({
     required String email,
     required String password,
@@ -30,7 +39,7 @@ class AuthServices {
           'gender': "",
           'uid': credential.user!.uid,
         });
-        res = "Signup successful!";
+        res = "Please verify your email.";
       }
     } catch (e) {
       return e.toString();

@@ -1,4 +1,7 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:omnitrics_thesis/auth/emailVerification/email_verification_page.dart';
 import 'package:omnitrics_thesis/auth/forgetPassword/forgot_password.dart';
 import 'package:omnitrics_thesis/auth/googleSignIn/google_signin_handler.dart';
 import 'package:omnitrics_thesis/auth/sign-in/sign_up.dart';
@@ -24,6 +27,7 @@ class _LoginScreenState extends State<LoginScreen> {
     emailController.dispose();
     passwordController.dispose();
     super.dispose();
+    super.dispose();
   }
 
   void userLogin() async {
@@ -31,20 +35,30 @@ class _LoginScreenState extends State<LoginScreen> {
       showSnackBar(context, "Please fill all the fields.");
       return;
     }
+    // Attempt to log in
     String res = await AuthServices().userLogin(
       email: emailController.text,
       password: passwordController.text,
     );
 
     if (res == "Login successful!") {
+      // Reload the user to get the updated email verification status
+      await FirebaseAuth.instance.currentUser?.reload();
+      final user = FirebaseAuth.instance.currentUser!;
       showSnackBar(context, "Successfully logged in!");
       setState(() {
         isLoading = true;
       });
-      Future.delayed(const Duration(seconds: 2), () {
-        Navigator.of(context).pushReplacement(
-          MaterialPageRoute(builder: (context) => const HomePage()),
-        );
+      Future.delayed(const Duration(seconds: 1), () {
+        if (user.emailVerified) {
+          Navigator.of(context).pushReplacement(
+            MaterialPageRoute(builder: (context) => const HomePage()),
+          );
+        } else {
+          Navigator.of(context).pushReplacement(
+            MaterialPageRoute(builder: (context) => const VerificationScreen()),
+          );
+        }
       });
     } else {
       setState(() {
