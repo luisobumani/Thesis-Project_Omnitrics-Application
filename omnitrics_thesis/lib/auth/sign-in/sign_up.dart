@@ -63,8 +63,13 @@ class _SignUpScreenState extends State<SignUpScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.white,
-      body: Center(
+      body: Container(
+        decoration: BoxDecoration(
+            gradient: LinearGradient(colors: [Colors.deepPurple.shade700, Colors.deepPurple.shade400],
+            begin: Alignment.topLeft,
+            end: Alignment.bottomRight)
+          ),
+        child: Center(
         child: Container(
           width: 340.w, // Responsive width using ScreenUtil
           padding: EdgeInsets.all(24.w), // Responsive padding
@@ -260,6 +265,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
           ),
         ),
       ),
+      )
     );
   }
 }
