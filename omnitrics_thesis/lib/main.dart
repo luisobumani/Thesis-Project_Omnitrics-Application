@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:animated_splash_screen/animated_splash_screen.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:omnitrics_thesis/auth/Services/auth_redirect.dart';
 
 void main() async {
@@ -19,7 +20,12 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
+    return ScreenUtilInit(
+      designSize: const Size(375, 812), // Replace with your design's dimensions
+      minTextAdapt: true,
+      splitScreenMode: true,
+      builder: (context, child) {
+        return MaterialApp(
       title: 'OmniTrics',
       debugShowCheckedModeBanner: false,
       // Animated splash screen
@@ -35,5 +41,8 @@ class MyApp extends StatelessWidget {
         fontFamily: 'Inter',
       )
     );
+      },
+    );
   }
+
 }
