@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:omnitrics_thesis/auth/emailVerification/email_verification_page.dart';
 import 'package:omnitrics_thesis/getStarted/main_get_started.dart';
 import 'package:omnitrics_thesis/home/homepage.dart';
 
@@ -11,18 +12,22 @@ class AuthRedirect extends StatelessWidget {
     return StreamBuilder<User?>(
       stream: FirebaseAuth.instance.authStateChanges(),
       builder: (context, snapshot) {
-        // Checking the connection state of the FirebaseAuth stream
+        // Check the connection state of the FirebaseAuth stream
         if (snapshot.connectionState == ConnectionState.active) {
           if (snapshot.hasData) {
-            // User is logged in, go to the HomePage
-            return const HomePage();
+            // User is logged in, now check email verification
+            final user = FirebaseAuth.instance.currentUser!;
+            if (user.emailVerified) {
+              return const HomePage();
+            } else {
+              return const VerificationScreen();
+            }
           } else {
-            // User is not logged in, show the SplashScreen or SignIn page
+            // User is not logged in, show your get started / login page
             return MainGetStarted();
           }
         }
-
-        // If still waiting for the auth state to be available, show a loading indicator
+        // Loading indicator while waiting
         return const Scaffold(
           body: Center(child: CircularProgressIndicator()),
         );

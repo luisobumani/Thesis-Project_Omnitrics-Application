@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:omnitrics_thesis/auth/emailVerification/email_verification_page.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:omnitrics_thesis/auth/services/authentication.dart';
 import 'package:omnitrics_thesis/auth/sign-in/Widget/snack_bar.dart';
-import 'package:omnitrics_thesis/tell_me_who_you_are/tell_me.dart'; // Redirect to detailed info page
 import 'package:omnitrics_thesis/auth/sign-in/login.dart'; // Retain login for existing users
 
 class SignUpScreen extends StatefulWidget {
@@ -41,15 +41,16 @@ class _SignUpScreenState extends State<SignUpScreen> {
       password: passwordController.text, 
       name: nameController.text,
     );
-
-    if (res == "Signup successful!") {
+    //Debug
+    print("Signup result: $res");
+    if (res == "Please verify your email.") {
       setState(() {
         isLoading = true;
       });
-      // Redirect to the detailed info (Tell Me Who You Are) page
+      // Redirect to verification
       Navigator.of(context).pushReplacement(
         MaterialPageRoute(
-          builder: (context) => const TellMe(),
+          builder: (context) => const VerificationScreen(),
         ),
       );
     } else {

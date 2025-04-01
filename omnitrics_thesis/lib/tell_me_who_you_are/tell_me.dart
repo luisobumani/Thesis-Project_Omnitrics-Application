@@ -105,7 +105,6 @@ class _ProfileFormState extends State<ProfileForm> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 // Exit / header
-                exitButton(),
 
                 const SizedBox(height: 16),
 
