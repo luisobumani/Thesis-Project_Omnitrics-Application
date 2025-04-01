@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class ProfInfo extends StatelessWidget {
   final Map<String, dynamic> data;
@@ -11,21 +12,21 @@ class ProfInfo extends StatelessWidget {
       children: [
         // Name tile
         Container(
-          margin: const EdgeInsets.only(
-              top: 35, left: 10, right: 10, bottom: 10),
+          margin: EdgeInsets.only(
+              top: 35.h, left: 10.w, right: 10.w, bottom: 10.h),
           decoration: BoxDecoration(
             border: Border.all(color: Colors.black),
-            borderRadius: BorderRadius.circular(10),
+            borderRadius: BorderRadius.circular(10.r),
           ),
           child: ListTile(
             title: Text(data['firstName']?.toString() ?? "No Name"),
           ),
         ),
         Container(
-          margin: const EdgeInsets.all(10),
+          margin: EdgeInsets.only(top: 10.h, bottom: 10.h, right: 10.w, left: 10.w),
           decoration: BoxDecoration(
             border: Border.all(color: Colors.black),
-            borderRadius: BorderRadius.circular(10),
+            borderRadius: BorderRadius.circular(10.r),
           ),
           child: ListTile(
             title: Text(data['lastName']?.toString() ?? "No Name"),
@@ -33,10 +34,10 @@ class ProfInfo extends StatelessWidget {
         ),
         // Gender tile
         Container(
-          margin: const EdgeInsets.all(10),
+          margin: EdgeInsets.only(top: 10.h, bottom: 10.h, right: 10.w, left: 10.w),
           decoration: BoxDecoration(
             border: Border.all(color: Colors.black),
-            borderRadius: BorderRadius.circular(10),
+            borderRadius: BorderRadius.circular(10.r),
           ),
           child: ListTile(
             title: Text(data['gender']?.toString() ?? "No Gender"),
@@ -44,10 +45,10 @@ class ProfInfo extends StatelessWidget {
         ),
         // Birthdate tile
         Container(
-          margin: const EdgeInsets.all(10),
+          margin: EdgeInsets.only(top: 10.h, bottom: 10.h, right: 10.w, left: 10.w),
           decoration: BoxDecoration(
             border: Border.all(color: Colors.black),
-            borderRadius: BorderRadius.circular(10),
+            borderRadius: BorderRadius.circular(10.r),
           ),
           child: ListTile(
             title:
@@ -56,10 +57,10 @@ class ProfInfo extends StatelessWidget {
         ),
         // Email tile
         Container(
-          margin: const EdgeInsets.all(10),
+          margin: EdgeInsets.only(top: 10.h, bottom: 10.h, right: 10.w, left: 10.w),
           decoration: BoxDecoration(
             border: Border.all(color: Colors.black),
-            borderRadius: BorderRadius.circular(10),
+            borderRadius: BorderRadius.circular(10.r),
           ),
           child: ListTile(
             title: Text(data['email']?.toString() ?? "No Email"),
