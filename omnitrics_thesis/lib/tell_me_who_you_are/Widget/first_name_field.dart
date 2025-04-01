@@ -21,7 +21,7 @@ class FirstNameField extends StatelessWidget {
                         ),
                       ),
         contentPadding: const EdgeInsets.symmetric(
-          vertical: 10.0,
+          vertical: 14.0,
           horizontal: 12.0,
         ),
         hintText: 'Enter your first name',

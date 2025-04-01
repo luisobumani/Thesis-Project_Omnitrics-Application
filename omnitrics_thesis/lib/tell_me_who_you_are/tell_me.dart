@@ -4,11 +4,10 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:omnitrics_thesis/assesment/intro/intro_assessment.dart';
 import 'package:omnitrics_thesis/tell_me_who_you_are/Widget/birthdate_field.dart';
 import 'package:omnitrics_thesis/tell_me_who_you_are/Widget/continue_button.dart';
-import 'package:omnitrics_thesis/tell_me_who_you_are/Widget/exit_button.dart';
 import 'package:omnitrics_thesis/tell_me_who_you_are/Widget/first_name_field.dart';
 import 'package:omnitrics_thesis/tell_me_who_you_are/Widget/gender_selector.dart';
 import 'package:omnitrics_thesis/tell_me_who_you_are/Widget/last_name_field.dart';
-
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class TellMe extends StatelessWidget {
   const TellMe({Key? key}) : super(key: key);
@@ -55,17 +54,27 @@ class _ProfileFormState extends State<ProfileForm> {
         });
 
         ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text("Profile updated successfully!")),
+          SnackBar(
+            content: Text(
+              "Profile updated successfully!",
+              style: TextStyle(fontSize: 14.sp),
+            ),
+          ),
         );
         // Navigate to another screen if desired
         Navigator.of(context).pushReplacement(
-        MaterialPageRoute(
-          builder: (context) => const IntroAssessment(),
-        ),
-      );
+          MaterialPageRoute(
+            builder: (context) => const IntroAssessment(),
+          ),
+        );
       } catch (e) {
         ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text("Error updating profile: $e")),
+          SnackBar(
+            content: Text(
+              "Error updating profile: $e",
+              style: TextStyle(fontSize: 14.sp),
+            ),
+          ),
         );
       }
     }
@@ -82,20 +91,33 @@ class _ProfileFormState extends State<ProfileForm> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      // Use a SingleChildScrollView to handle potential overflow
-      body: Center(
+      // Using a SingleChildScrollView to handle potential overflow
+      body: Container(
+        width: double.infinity,
+        height: double.infinity,
+        decoration: BoxDecoration(
+          gradient: LinearGradient(
+            colors: [
+              Colors.deepPurple.shade700,
+              Colors.deepPurple.shade400,
+            ],
+            begin: Alignment.topLeft,
+            end: Alignment.bottomRight,
+          )
+        ),
+        child: Center(
         child: Container(
-          width: 300,
-          padding: const EdgeInsets.all(16.0),
+          width: 340.w, // Responsive width
+          padding: EdgeInsets.all(24.w),
           decoration: BoxDecoration(
             color: Colors.white,
-            borderRadius: BorderRadius.circular(16),
+            borderRadius: BorderRadius.circular(16.r),
             boxShadow: [
               BoxShadow(
                 color: const Color.fromARGB(255, 103, 58, 183).withOpacity(0.3),
-                spreadRadius: 1,
-                blurRadius: 5,
-                offset: const Offset(0, 3),
+                spreadRadius: 3.r,
+                blurRadius: 10.r,
+                offset: Offset(0.w, 3.w),
               ),
             ],
           ),
@@ -104,39 +126,52 @@ class _ProfileFormState extends State<ProfileForm> {
               mainAxisSize: MainAxisSize.min,
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                // Exit / header
-
-                const SizedBox(height: 16),
+                SizedBox(height: 16.h),
 
                 // First Name
-                const Text('First Name', 
-                style: TextStyle(
-                  fontSize: 14,
-                  fontWeight: FontWeight.w500,)),
-                const SizedBox(height: 8),
+                Text(
+                  'First Name',
+                  style: TextStyle(
+                    fontSize: 14.sp,
+                    fontWeight: FontWeight.w500,
+                  ),
+                ),
+                SizedBox(height: 8.h),
                 FirstNameField(controller: firstNameController),
-                const SizedBox(height: 16),
+                SizedBox(height: 16.h),
 
                 // Last Name
-                const Text('Last Name', style: TextStyle(
-                  fontSize: 14, 
-                  fontWeight: FontWeight.w500,)),
-                const SizedBox(height: 8),
+                Text(
+                  'Last Name',
+                  style: TextStyle(
+                    fontSize: 14.sp,
+                    fontWeight: FontWeight.w500,
+                  ),
+                ),
+                SizedBox(height: 8.h),
                 LastNameField(controller: lastNameController),
-                const SizedBox(height: 16),
+                SizedBox(height: 16.h),
 
                 // Birthdate
-                const Text('Birthdate', style: TextStyle(
-                  fontSize: 14, 
-                  fontWeight: FontWeight.w500,)),
-                const SizedBox(height: 8),
+                Text(
+                  'Birthdate',
+                  style: TextStyle(
+                    fontSize: 14.sp,
+                    fontWeight: FontWeight.w500,
+                  ),
+                ),
+                SizedBox(height: 8.h),
                 BirthdateField(controller: birthDateController),
-                const SizedBox(height: 20),
+                SizedBox(height: 20.h),
 
                 // Gender radio buttons
-                const Text('Sex', style: TextStyle(
-                  fontSize: 14,
-                  fontWeight: FontWeight.w500,)),
+                Text(
+                  'Sex',
+                  style: TextStyle(
+                    fontSize: 14.sp,
+                    fontWeight: FontWeight.w500,
+                  ),
+                ),
                 GenderSelector(
                   selectedGender: _selectedGender,
                   onChanged: (value) {
@@ -146,7 +181,7 @@ class _ProfileFormState extends State<ProfileForm> {
                   },
                 ),
 
-                const SizedBox(height: 16),
+                SizedBox(height: 16.h),
                 // Continue Button
                 ContinueButton(
                   onPressed: () {
@@ -159,6 +194,7 @@ class _ProfileFormState extends State<ProfileForm> {
           ),
         ),
       ),
+      )
     );
   }
 }
