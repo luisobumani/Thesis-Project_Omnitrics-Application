@@ -2,6 +2,7 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class ProfDetailsMain extends StatelessWidget {
   final Map<String, dynamic> data;
@@ -27,31 +28,31 @@ class ProfDetailsMain extends StatelessWidget {
     const String condition = "Deuteranopia";
 
     return Container(
-      margin: const EdgeInsets.all(10),
+      margin: EdgeInsets.only(top: 10.h, bottom: 10.h, right: 10.h, left: 10.h),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
           // Left side: display text details.
           Container(
-            margin: const EdgeInsets.only(top: 20),
+            margin: EdgeInsets.only(top: 20.h),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
                   displayName,
-                  style: const TextStyle(
+                  style: TextStyle(
                     color: Colors.black,
                     fontWeight: FontWeight.bold,
-                    fontSize: 20,
+                    fontSize: 20.sp,
                   ),
                 ),
-                const SizedBox(height: 5),
-                const Text(
+                SizedBox(height: 5.h),
+                Text(
                   condition,
                   style: TextStyle(
                     color: Colors.green,
                     fontWeight: FontWeight.bold,
-                    fontSize: 16,
+                    fontSize: 16.sp,
                   ),
                 ),
               ],
@@ -59,9 +60,9 @@ class ProfDetailsMain extends StatelessWidget {
           ),
           // Right side: display profile image as a circle.
           Container(
-            margin: const EdgeInsets.only(top: 30),
-            width: 120,
-            height: 120,
+            margin: EdgeInsets.only(top: 30.h),
+            width: 120.w,
+            height: 120.h,
             decoration: const BoxDecoration(
               shape: BoxShape.circle,
             ),
