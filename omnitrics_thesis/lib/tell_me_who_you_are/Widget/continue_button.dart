@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class ContinueButton extends StatelessWidget {
   final VoidCallback onPressed;
@@ -14,10 +15,10 @@ class ContinueButton extends StatelessWidget {
         style: ElevatedButton.styleFrom(
           backgroundColor: Colors.deepPurple,
           foregroundColor: Colors.white,
-          padding: const EdgeInsets.symmetric(vertical: 12),
+          padding: EdgeInsets.symmetric(vertical: 16.h),
           elevation: 10, // Increased elevation for a more raised appearance
           shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(8),
+            borderRadius: BorderRadius.circular(8.r),
           ),
         ),
         child: const Text('Continue'),

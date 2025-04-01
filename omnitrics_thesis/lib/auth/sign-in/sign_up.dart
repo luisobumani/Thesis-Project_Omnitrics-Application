@@ -122,7 +122,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
               ),
               SizedBox(height: 8.h),
               Container(
-                height: 48.h,
+                height: 53.h,
                 decoration: BoxDecoration(
                   border: Border.all(color: Colors.grey.shade300),
                   borderRadius: BorderRadius.circular(8.r),
@@ -152,7 +152,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
               ),
               SizedBox(height: 8.h),
               Container(
-                height: 48.h,
+                height: 53.h,
                 decoration: BoxDecoration(
                   border: Border.all(color: Colors.grey.shade300),
                   borderRadius: BorderRadius.circular(8.r),
@@ -182,7 +182,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
               ),
               SizedBox(height: 8.h),
               Container(
-                height: 48.h,
+                height: 53.h,
                 decoration: BoxDecoration(
                   border: Border.all(color: Colors.grey.shade300),
                   borderRadius: BorderRadius.circular(8.r),
