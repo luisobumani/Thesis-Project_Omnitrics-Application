@@ -39,7 +39,7 @@ class ProfilePage extends StatelessWidget {
                   // Pass the loaded data to each widget
                   ProfDetailsMain(data: data),
                   ProfInfo(data: data),
-                  editButton(context),
+                  EditButton(),
                   logoutBtn(context),
                 ],
               ),
@@ -60,15 +60,7 @@ class ProfilePage extends StatelessWidget {
           fontWeight: FontWeight.bold,
         ),
       ),
-      flexibleSpace: Container(
-      decoration: BoxDecoration(
-        gradient: LinearGradient(
-          colors: [Colors.deepPurple.shade700, Colors.deepPurple.shade400],
-          begin: Alignment.topLeft,
-          end: Alignment.bottomRight,
-        ),
-      ),
-    ),
+      backgroundColor: Colors.deepPurple,
       centerTitle: true,
     );
   }
