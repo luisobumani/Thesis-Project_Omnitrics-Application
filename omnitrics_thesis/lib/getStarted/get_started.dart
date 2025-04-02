@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:omnitrics_thesis/getStarted/Widget/button.dart';
 import '../auth/sign-in/login.dart';
 
@@ -7,22 +8,21 @@ class GetStarted extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final screenSize = MediaQuery.of(context).size;
     return Scaffold(
       backgroundColor: Colors.white,
       body: SafeArea(
         child: Container(
-          width: screenSize.width,
-          height: screenSize.height,
-          padding: const EdgeInsets.symmetric(horizontal: 15.0),
+          width: 1.sw, // Full screen width
+          height: 1.sh, // Full screen height
+          padding: EdgeInsets.symmetric(horizontal: 15.w),
           child: Column(
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: [
-              // TITLE with responsive font size
+              // TITLE with responsive font size using screen width factor
               Text(
                 'OmniTrics',
                 style: TextStyle(
-                  fontSize: screenSize.width * 0.18,
+                  fontSize: 0.18.sw,
                   fontWeight: FontWeight.bold,
                 ),
               ),
