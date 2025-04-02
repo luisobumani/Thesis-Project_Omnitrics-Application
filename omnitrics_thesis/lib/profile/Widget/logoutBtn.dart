@@ -31,6 +31,7 @@ Padding logoutBtn(BuildContext context) {
             EdgeInsets.symmetric(horizontal: 32.w, vertical: 16.h),
           ),
           foregroundColor: WidgetStateProperty.all<Color>(Colors.white),
+          elevation: WidgetStateProperty.all<double>(10.h)
         ),
       child: Text(
         'Logout',
