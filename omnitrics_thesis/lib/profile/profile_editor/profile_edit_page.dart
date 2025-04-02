@@ -3,6 +3,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:omnitrics_thesis/profile/profile_editor/Widget/prof_image_editor.dart';
 import 'package:omnitrics_thesis/profile/profile_editor/Widget/profile_fillup.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class ProfileEditPage extends StatefulWidget {
   const ProfileEditPage({super.key});
@@ -88,13 +89,21 @@ class _ProfileEditPageState extends State<ProfileEditPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        iconTheme: const IconThemeData(color: Colors.white),
         title: const Text(
           'Edit Profile',
-          style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold),
+          style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
         ),
         centerTitle: true,
+        backgroundColor: Colors.deepPurple,
       ),
-      body: SafeArea(
+      body: Container(
+        width: double.infinity,
+        height: double.infinity,
+        decoration: BoxDecoration(
+          color: Colors.white,
+        ),
+        child: SafeArea(
         child: SingleChildScrollView(
           child: Column(
             children: [
@@ -108,20 +117,33 @@ class _ProfileEditPageState extends State<ProfileEditPage> {
                 birthdayController: birthdayController,
                 emailController: emailController,
               ),
+              SizedBox(height: 15.h,),
               Padding(
-                padding: const EdgeInsets.all(10),
+                padding: EdgeInsets.only(top: 10.h, bottom: 10.h, right: 10.w, left: 10.w),
                 child: isLoading
                     ? const CircularProgressIndicator()
                     : ElevatedButton(
                         onPressed: _saveChanges,
-                        style: ElevatedButton.styleFrom(
-                          foregroundColor: Colors.white,
-                          backgroundColor: Colors.purple,
-                          padding: const EdgeInsets.symmetric(horizontal: 32, vertical: 16),
+                        style: ButtonStyle(
+                          elevation: WidgetStateProperty.all<double>(10.h),
+                          backgroundColor: WidgetStateProperty.resolveWith<Color>(
+                            (Set<WidgetState> states) {
+                              if (states.contains(WidgetState.pressed)) {
+                                return Colors.deepPurple.shade900;
+                              }
+                              return Colors.deepPurple.shade600;
+                            }
+                          ),
+                          padding: WidgetStateProperty.all<EdgeInsetsGeometry>(
+                            EdgeInsets.symmetric(horizontal: 32.w, vertical: 16.h),
+                          ),
+                          foregroundColor: WidgetStateProperty.all<Color> (
+                            Colors.white,
+                          ),
                         ),
-                        child: const Text(
+                        child: Text(
                           'Save Changes',
-                          style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold),
+                          style: TextStyle(fontSize: 15.sp, fontWeight: FontWeight.bold),
                         ),
                       ),
               )
@@ -129,6 +151,7 @@ class _ProfileEditPageState extends State<ProfileEditPage> {
           ),
         ),
       ),
+      )
     );
   }
 }
