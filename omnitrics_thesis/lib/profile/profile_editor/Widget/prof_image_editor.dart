@@ -4,6 +4,7 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class ProfileImageEditor extends StatefulWidget {
   const ProfileImageEditor({super.key});
@@ -58,7 +59,7 @@ class _ProfileImageEditorState extends State<ProfileImageEditor> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      margin: const EdgeInsets.only(top: 30, bottom: 20),
+      margin: EdgeInsets.only(top: 30.h, bottom: 20.h),
       alignment: Alignment.center,
       child: Stack(
         children: [
@@ -70,12 +71,12 @@ class _ProfileImageEditorState extends State<ProfileImageEditor> {
                 : null,
           ),
           Positioned(
-            bottom: -10,
-            left: 80,
+            bottom: -10.h,
+            left: 80.w,
             child: IconButton(
               onPressed: _pickAndSaveImage,
               icon: const Icon(Icons.add_a_photo),
-              color: Colors.purple,
+              color: Colors.deepPurple,
             ),
           ),
         ],
