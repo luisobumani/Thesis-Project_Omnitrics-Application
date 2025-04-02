@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'dart:ui'; // For ImageFilter
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class Disclaimer extends StatefulWidget {
   const Disclaimer({Key? key}) : super(key: key);
@@ -14,7 +15,7 @@ class _DisclaimerState extends State<Disclaimer> {
   @override
   void initState() {
     super.initState();
-    // Delay for 2 seconds before starting the fade-in animation.
+    // Delay for 1 second before starting the fade-in animation.
     Future.delayed(const Duration(seconds: 1), () {
       setState(() {
         _opacity = 1.0;
@@ -39,26 +40,26 @@ class _DisclaimerState extends State<Disclaimer> {
           ),
           Center(
             child: Padding(
-              padding: const EdgeInsets.all(40.0),
+              padding: EdgeInsets.all(40.w),
               child: AnimatedOpacity(
                 opacity: _opacity,
                 duration: const Duration(milliseconds: 500),
                 child: Container(
                   // Constrain width for larger screens/tablets so it doesn't stretch too far.
-                  constraints: const BoxConstraints(maxWidth: 500),
-                  padding: const EdgeInsets.all(27.0),
+                  constraints: BoxConstraints(maxWidth: 500.w),
+                  padding: EdgeInsets.all(27.w),
                   decoration: BoxDecoration(
                     gradient: const LinearGradient(
                       colors: [Colors.deepPurple, Color.fromARGB(255, 176, 59, 211)],
                       begin: Alignment.centerLeft,
                       end: Alignment.centerRight,
                     ),
-                    borderRadius: BorderRadius.circular(10),
+                    borderRadius: BorderRadius.circular(10.r),
                     boxShadow: [
                       BoxShadow(
                         color: Colors.black26,
-                        blurRadius: 8,
-                        offset: const Offset(0, 4),
+                        blurRadius: 8.r,
+                        offset: Offset(0, 4.h),
                       ),
                     ],
                   ),
@@ -68,30 +69,30 @@ class _DisclaimerState extends State<Disclaimer> {
                       crossAxisAlignment: CrossAxisAlignment.center,
                       children: [
                         // Optional icon at the top
-                        const Icon(
+                        Icon(
                           Icons.warning_amber_rounded,
-                          size: 100,
-                          color: Color.fromARGB(255, 235, 17, 17),
+                          size: 100.sp,
+                          color: const Color.fromARGB(255, 235, 17, 17),
                         ),
-                        const SizedBox(height: 16),
+                        SizedBox(height: 16.h),
                         // Disclaimer title in the middle (centered)
-                        const Text(
+                        Text(
                           'DISCLAIMER',
                           textAlign: TextAlign.center,
                           style: TextStyle(
-                            fontSize: 30,
+                            fontSize: 30.sp,
                             fontWeight: FontWeight.bold,
                             color: Colors.white,
                           ),
                         ),
-                        const SizedBox(height: 8),
+                        SizedBox(height: 8.h),
                         // New body text (justified)
-                        const Text(
+                        Text(
                           '''This app is designed to aid individuals with color blindness by enhancing color perception. However, it's not a medical device and should not replace professional eye care. It does not cure or reverse color blindness. Results may vary based on individual vision and environmental factors. Consult an optometrist or ophthalmologist for diagnosis and treatment. Use this app as a supplementary tool to improve color differentiation, not as a definitive medical solution.
                           ''',
                           textAlign: TextAlign.justify,
                           style: TextStyle(
-                            fontSize: 15,
+                            fontSize: 15.sp,
                             color: Colors.white,
                           ),
                         ),
