@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class FillUpSection extends StatelessWidget {
   final TextEditingController firstNameController;
@@ -37,18 +39,18 @@ class FillUpSection extends StatelessWidget {
     bool readOnly = false,
   }) {
     return Container(
-      margin: const EdgeInsets.all(12),
+      margin: EdgeInsets.only(top: 12.h, bottom: 12.h, right: 12.w, left: 12.w),
       child: Container(
         decoration: BoxDecoration(
           boxShadow: [
             BoxShadow(
               color: Colors.grey.withOpacity(0.5),
-              spreadRadius: 1,
-              blurRadius: 5,
+              spreadRadius: 1.r,
+              blurRadius: 5.r,
               offset: const Offset(0, 3),
             ),
           ],
-          borderRadius: BorderRadius.circular(10),
+          borderRadius: BorderRadius.circular(10.r),
         ),
         child: TextField(
           controller: controller,
@@ -57,7 +59,7 @@ class FillUpSection extends StatelessWidget {
             labelText: label,
             border: OutlineInputBorder(
               borderSide: const BorderSide(color: Colors.black),
-              borderRadius: BorderRadius.circular(10),
+              borderRadius: BorderRadius.circular(10.r),
             ),
             filled: true,
             fillColor: Colors.white,
@@ -94,29 +96,29 @@ class _GenderDropdownState extends State<GenderDropdown> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      margin: const EdgeInsets.all(12),
+      margin: EdgeInsets.only(top: 12.h, bottom: 12.h, right: 12.w, left: 12.w),
       decoration: BoxDecoration(
         boxShadow: [
           BoxShadow(
             color: Colors.grey.withOpacity(0.5),
-            spreadRadius: 1,
-            blurRadius: 5,
+            spreadRadius: 1.r,
+            blurRadius: 5.r,
             offset: const Offset(0, 3),
           ),
         ],
-        borderRadius: BorderRadius.circular(4),
+        borderRadius: BorderRadius.circular(4.r),
       ),
       child: InputDecorator(
         decoration: InputDecoration(
           labelText: 'Gender',
           border: OutlineInputBorder(
             borderSide: BorderSide(color: Colors.black),
-            borderRadius: BorderRadius.circular(10),
+            borderRadius: BorderRadius.circular(10.r),
           ),
           filled: true,
           fillColor: Colors.white,
           contentPadding:
-              const EdgeInsets.symmetric(horizontal: 12, vertical: 5),
+             EdgeInsets.symmetric(horizontal: 12.w, vertical: 5.h),
         ),
         child: DropdownButtonHideUnderline(
           child: DropdownButton<String>(
@@ -156,14 +158,14 @@ class _BirthdayFieldState extends State<BirthdayField> {
   Future<void> _selectDate(BuildContext context) async {
     final DateTime? pickedDate = await showDatePicker(
       context: context,
-      initialDate: selectedDate ?? DateTime.now(),
+      initialDate: DateTime.now(),
       firstDate: DateTime(1900),
       lastDate: DateTime.now(),
     );
     if (pickedDate != null && pickedDate != selectedDate) {
       setState(() {
         selectedDate = pickedDate;
-        widget.controller.text = "${pickedDate.toLocal()}".split(' ')[0];
+        widget.controller.text = DateFormat('MM/dd/yyyy').format(pickedDate);
       });
     }
   }

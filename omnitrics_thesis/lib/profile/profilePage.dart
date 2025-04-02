@@ -15,6 +15,7 @@ class ProfilePage extends StatelessWidget {
     final String uid = FirebaseAuth.instance.currentUser!.uid;
 
     return Scaffold(
+      backgroundColor: Colors.white,
       appBar: appBarProf(),
       body: SafeArea(
         child: FutureBuilder<DocumentSnapshot>(

@@ -39,6 +39,14 @@ class _EditButtonState extends State<EditButton> {
               end: Alignment.bottomRight,
             ),
             borderRadius: BorderRadius.circular(30.r),
+            boxShadow: [
+              BoxShadow(
+                color: Colors.black.withOpacity(0.25),
+                spreadRadius: 3.r,
+                blurRadius: 10.r,
+                offset: Offset(0, 3), // changes the position of the shadow
+              ),
+            ],
           ),
           child: Container(
             padding: EdgeInsets.symmetric(horizontal: 32.w, vertical: 16.h),
