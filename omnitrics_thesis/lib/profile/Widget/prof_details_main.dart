@@ -28,7 +28,7 @@ class ProfDetailsMain extends StatelessWidget {
     const String condition = "Deuteranopia";
 
     return Container(
-      margin: EdgeInsets.only(top: 10.h, bottom: 10.h, right: 10.h, left: 10.h),
+      margin: EdgeInsets.only(top: 10.h, bottom: 10.h, right: 10.w, left: 10.w),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
