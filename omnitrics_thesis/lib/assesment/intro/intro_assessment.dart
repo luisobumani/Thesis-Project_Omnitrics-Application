@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:omnitrics_thesis/assesment/intro/Widget/start_test_btn.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class IntroAssessment extends StatefulWidget {
   const IntroAssessment({Key? key}) : super(key: key);
@@ -113,7 +114,7 @@ class _IntroAssessmentState extends State<IntroAssessment>
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                const SizedBox(height: 100),
+                SizedBox(height: 100.h),
                 FadeTransition(
                   opacity: _fadeTakeTheTest,
                   child: SlideTransition(
@@ -121,7 +122,7 @@ class _IntroAssessmentState extends State<IntroAssessment>
                     child: takeTheTest(),
                   ),
                 ),
-                const SizedBox(height: 60),
+                SizedBox(height: 60.h),
                 FadeTransition(
                   opacity: _fadeDescription,
                   child: SlideTransition(
@@ -129,7 +130,7 @@ class _IntroAssessmentState extends State<IntroAssessment>
                     child: descriptionText(),
                   ),
                 ),
-                const SizedBox(height: 60),
+                SizedBox(height: 60.h),
                 FadeTransition(
                   opacity: _fadeDisclaimer,
                   child: SlideTransition(
@@ -137,7 +138,7 @@ class _IntroAssessmentState extends State<IntroAssessment>
                     child: disclaimerText(),
                   ),
                 ),
-                const SizedBox(height: 60),
+                SizedBox(height: 60.h),
                 FadeTransition(
                   opacity: _fadeDisclaimer,
                   child: SlideTransition(
@@ -155,19 +156,19 @@ class _IntroAssessmentState extends State<IntroAssessment>
 
   Container disclaimerText() {
     return Container(
-      margin: const EdgeInsets.only(left: 25.0, right: 30.0),
-      child: const Text(
+      margin: EdgeInsets.only(left: 25.w, right: 30.w),
+      child: Text(
         'Disclaimer: This test is based on research conducted by students. '
         'It is not guaranteed to be 100% accurate and should not be used as a substitute '
         'for professional advice. If you have any concerns or require a formal diagnosis, '
         'please consult a qualified healthcare professional for more accurate results.',
         textAlign: TextAlign.left,
         style: TextStyle(
-          fontSize: 18,
+          fontSize: 18.sp,
           color: Colors.white,
           fontStyle: FontStyle.italic,
           fontWeight: FontWeight.bold,
-          height: 1.4,
+          height: 1.4.h,
         ),
       ),
     );
@@ -175,16 +176,16 @@ class _IntroAssessmentState extends State<IntroAssessment>
 
   Container descriptionText() {
     return Container(
-      margin: const EdgeInsets.only(left: 25.0, right: 30.0),
-      child: const Text(
+      margin: EdgeInsets.only(left: 25.0.w, right: 30.0.w),
+      child: Text(
         'Please take the tests before continuing. It will help us understand the type '
         'of colorblindness you have. Don’t worry, it won’t take long! Once you’re done, '
         'you can explore everything we have to offer.',
         textAlign: TextAlign.left,
         style: TextStyle(
-          fontSize: 18,
+          fontSize: 18.sp,
           color: Colors.white,
-          height: 1.4,
+          height: 1.4.h,
         ),
       ),
     );
@@ -192,12 +193,12 @@ class _IntroAssessmentState extends State<IntroAssessment>
 
   Container takeTheTest() {
     return Container(
-      margin: const EdgeInsets.only(left: 25.0),
-      child: const Text(
+      margin: EdgeInsets.only(left: 25.0.w),
+      child: Text(
         'Take the test!',
         textAlign: TextAlign.center,
         style: TextStyle(
-          fontSize: 50,
+          fontSize: 50.sp,
           fontWeight: FontWeight.bold,
           color: Colors.white,
         ),
