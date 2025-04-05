@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:omnitrics_thesis/assesment/ishihara/pages/ishihara_test_01.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class IntroIshihara extends StatefulWidget {
   const IntroIshihara({Key? key}) : super(key: key);
@@ -21,7 +22,7 @@ class _IntroIshiharaState extends State<IntroIshihara>
 
     _controller = AnimationController(
       vsync: this,
-      duration: const Duration(seconds: 1),
+      duration: const Duration(seconds: 2),
     );
 
     _fadeText = Tween<double>(begin: 0.0, end: 1.0).animate(
@@ -71,7 +72,7 @@ class _IntroIshiharaState extends State<IntroIshihara>
                   child: SlideTransition(
                     position: _slideText,
                     child: Container(
-                      margin: EdgeInsets.only(top: 350),
+                      margin: EdgeInsets.only(top: 350.h),
                       child: textIshihara(),
                     )
                   ),
@@ -81,9 +82,9 @@ class _IntroIshiharaState extends State<IntroIshihara>
                   child: SlideTransition(
                     position: _slideText,
                     child: Container(
-                      margin: EdgeInsets.only(top: 350),
+                      margin: EdgeInsets.only(top: 350.h),
                       child: Container(
-                        margin: EdgeInsets.only(right: 25),
+                        margin: EdgeInsets.only(right: 25.w),
                         alignment: Alignment.bottomRight,
                         child: TextButton(
                           style: ButtonStyle(
@@ -107,7 +108,7 @@ class _IntroIshiharaState extends State<IntroIshihara>
                             style: TextStyle(
                               fontWeight: FontWeight.bold,
                               color: Colors.white,
-                              fontSize: 30
+                              fontSize: 30.sp
                             ),
                           )),
                       ),
