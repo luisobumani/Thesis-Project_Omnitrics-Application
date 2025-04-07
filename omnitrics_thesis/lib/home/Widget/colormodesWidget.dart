@@ -45,11 +45,11 @@ Widget _buildColorModeTile(String title, String assetPath, VoidCallback onTap) {
         borderRadius: BorderRadius.circular(20),
         boxShadow: [
           BoxShadow(
-            color: Colors.grey,
-            spreadRadius: 2,
-            blurRadius: 5,
-            offset: Offset(0, 3.h),
-          ),
+                color: const Color.fromARGB(255, 0, 0, 0).withOpacity(0.8),
+                spreadRadius: 1.r,
+                blurRadius: 10.r,
+                offset: Offset(0.w, 3.w),
+              ),
         ],
       ),
       child: Center(
