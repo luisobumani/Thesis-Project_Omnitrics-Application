@@ -75,13 +75,13 @@ class _LoginScreenState extends State<LoginScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Container(
-        decoration: BoxDecoration(
-          gradient: LinearGradient(colors: [Colors.deepPurple.shade700, Colors.deepPurple.shade400],
-          begin: Alignment.topLeft,
-          end: Alignment.bottomRight)
-        ),
-        child: SafeArea(
+        body: Container(
+      decoration: BoxDecoration(
+          gradient: LinearGradient(
+              colors: [Colors.deepPurple.shade700, Colors.deepPurple.shade400],
+              begin: Alignment.topLeft,
+              end: Alignment.bottomRight)),
+      child: SafeArea(
         child: Center(
           child: SingleChildScrollView(
             child: Container(
@@ -201,14 +201,29 @@ class _LoginScreenState extends State<LoginScreen> {
                     width: double.infinity,
                     child: ElevatedButton(
                       onPressed: userLogin,
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: Colors.deepPurple,
-                        foregroundColor: Colors.white,
-                        padding: EdgeInsets.symmetric(vertical: 16.h),
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(8.r),
+                      style: ButtonStyle(
+                        backgroundColor: WidgetStateProperty.resolveWith<Color>(
+                          (Set<WidgetState> states) {
+                            if (states.contains(WidgetState.pressed)) {
+                              return Colors.deepPurple.shade900;
+                            }
+                            return Colors.deepPurple;
+                          },
                         ),
-                        elevation: 10,
+                        foregroundColor:
+                            WidgetStateProperty.all<Color>(Colors.white),
+                        padding: WidgetStateProperty.all<EdgeInsets>(
+                          EdgeInsets.symmetric(
+                            horizontal: 120.w,
+                            vertical: 16.h,
+                          ),
+                        ),
+                        shape: WidgetStateProperty.all<RoundedRectangleBorder>(
+                          RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(12.r),
+                          ),
+                        ),
+                        elevation: WidgetStateProperty.all<double>(10.h),
                       ),
                       child: isLoading
                           ? const CircularProgressIndicator(
@@ -302,7 +317,6 @@ class _LoginScreenState extends State<LoginScreen> {
           ),
         ),
       ),
-      )
-    );
+    ));
   }
 }
