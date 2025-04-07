@@ -2,7 +2,7 @@
 import 'dart:ui';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart'; 
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:omnitrics_thesis/auth/sign-in/Widget/snack_bar.dart';
 
 class ForgotPassword extends StatefulWidget {
@@ -101,12 +101,25 @@ class _ForgotPasswordState extends State<ForgotPassword> {
                 width: double.infinity,
                 child: ElevatedButton(
                   onPressed: resetPassword,
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: Colors.deepPurple,
-                    foregroundColor: Colors.white,
-                    padding: EdgeInsets.symmetric(vertical: 16.h),
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(8.r),
+                  style: ButtonStyle(
+                    backgroundColor: WidgetStateProperty.resolveWith<Color>(
+                      (Set<WidgetState> states) {
+                        if (states.contains(WidgetState.pressed)) {
+                          return Colors
+                              .deepPurple.shade900; // Darker when pressed
+                        }
+                        return Colors.deepPurple; // Default color
+                      },
+                    ),
+                    foregroundColor:
+                        WidgetStateProperty.all<Color>(Colors.white),
+                    padding: WidgetStateProperty.all<EdgeInsets>(
+                      EdgeInsets.symmetric(vertical: 16.h),
+                    ),
+                    shape: WidgetStateProperty.all<RoundedRectangleBorder>(
+                      RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(8.r),
+                      ),
                     ),
                   ),
                   child: Text(
