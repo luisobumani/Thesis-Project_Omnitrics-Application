@@ -114,9 +114,9 @@ class _ProfileFormState extends State<ProfileForm> {
             borderRadius: BorderRadius.circular(16.r),
             boxShadow: [
               BoxShadow(
-                color: const Color.fromARGB(255, 103, 58, 183).withOpacity(0.3),
-                spreadRadius: 3.r,
-                blurRadius: 10.r,
+                color: const Color.fromARGB(255, 0, 0, 0).withOpacity(0.8),
+                spreadRadius: 4.r,
+                blurRadius: 16.r,
                 offset: Offset(0.w, 3.w),
               ),
             ],
