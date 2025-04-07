@@ -10,7 +10,7 @@ class getStartedButton extends StatelessWidget {
     return ElevatedButton(
       onPressed: onPressed, // Call the function when pressed
       style: ElevatedButton.styleFrom(
-        backgroundColor: Colors.deepPurple,
+        backgroundColor: Colors.purple,
         padding: EdgeInsets.symmetric(
           horizontal: 120.w,
           vertical: 16.h,
