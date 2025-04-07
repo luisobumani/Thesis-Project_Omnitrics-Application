@@ -35,7 +35,7 @@ class _ForgotPasswordState extends State<ForgotPassword> {
   @override
   Widget build(BuildContext context) {
     return BackdropFilter(
-      filter: ImageFilter.blur(sigmaX: 5, sigmaY: 5),
+      filter: ImageFilter.blur(sigmaX: 1.w, sigmaY: 4.h),
       child: Dialog(
         backgroundColor: Colors.white,
         shape: RoundedRectangleBorder(
