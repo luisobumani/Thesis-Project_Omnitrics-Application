@@ -20,7 +20,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
   bool isLoading = false;
 
   @override
-  void dispose(){
+  void dispose() {
     nameController.dispose();
     emailController.dispose();
     passwordController.dispose();
@@ -37,8 +37,8 @@ class _SignUpScreenState extends State<SignUpScreen> {
     }
     // Sign up process
     String res = await AuthServices().userSignup(
-      email: emailController.text, 
-      password: passwordController.text, 
+      email: emailController.text,
+      password: passwordController.text,
       name: nameController.text,
     );
     //Debug
@@ -60,17 +60,17 @@ class _SignUpScreenState extends State<SignUpScreen> {
       showSnackBar(context, res);
     }
   }
-  
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Container(
-        decoration: BoxDecoration(
-            gradient: LinearGradient(colors: [Colors.deepPurple.shade700, Colors.deepPurple.shade400],
-            begin: Alignment.topLeft,
-            end: Alignment.bottomRight)
-          ),
-        child: Center(
+        body: Container(
+      decoration: BoxDecoration(
+          gradient: LinearGradient(
+              colors: [Colors.deepPurple.shade700, Colors.deepPurple.shade400],
+              begin: Alignment.topLeft,
+              end: Alignment.bottomRight)),
+      child: Center(
         child: Container(
           width: 340.w, // Responsive width using ScreenUtil
           padding: EdgeInsets.all(24.w), // Responsive padding
@@ -106,7 +106,8 @@ class _SignUpScreenState extends State<SignUpScreen> {
                     constraints: const BoxConstraints(),
                     onPressed: () {
                       Navigator.of(context).pushReplacement(
-                        MaterialPageRoute(builder: (context) => const LoginScreen()),
+                        MaterialPageRoute(
+                            builder: (context) => const LoginScreen()),
                       );
                     },
                   ),
@@ -132,11 +133,14 @@ class _SignUpScreenState extends State<SignUpScreen> {
                   decoration: InputDecoration(
                     hintText: 'Enter your name',
                     contentPadding: EdgeInsets.symmetric(
-                      horizontal: 16.w, 
-                      vertical: 12.h,),
+                      horizontal: 16.w,
+                      vertical: 12.h,
+                    ),
                     border: InputBorder.none,
                     focusedBorder: OutlineInputBorder(
-                      borderSide: BorderSide(color: const Color.fromARGB(255, 103, 58, 183), width: 2.0),
+                      borderSide: BorderSide(
+                          color: const Color.fromARGB(255, 103, 58, 183),
+                          width: 2.0),
                       borderRadius: BorderRadius.circular(8.r),
                     ),
                   ),
@@ -162,11 +166,14 @@ class _SignUpScreenState extends State<SignUpScreen> {
                   decoration: InputDecoration(
                     hintText: 'Enter your email',
                     contentPadding: EdgeInsets.symmetric(
-                      horizontal: 16.w, 
-                      vertical: 12.h,),
+                      horizontal: 16.w,
+                      vertical: 12.h,
+                    ),
                     border: InputBorder.none,
                     focusedBorder: OutlineInputBorder(
-                      borderSide: BorderSide(color: const Color.fromARGB(255, 103, 58, 183), width: 2.0),
+                      borderSide: BorderSide(
+                          color: const Color.fromARGB(255, 103, 58, 183),
+                          width: 2.0),
                       borderRadius: BorderRadius.circular(8.r),
                     ),
                   ),
@@ -193,11 +200,14 @@ class _SignUpScreenState extends State<SignUpScreen> {
                   decoration: InputDecoration(
                     hintText: 'Create a password',
                     contentPadding: EdgeInsets.symmetric(
-                      horizontal: 16.w, 
-                      vertical: 12.h,),
+                      horizontal: 16.w,
+                      vertical: 12.h,
+                    ),
                     border: InputBorder.none,
                     focusedBorder: OutlineInputBorder(
-                      borderSide: BorderSide(color: const Color.fromARGB(255, 103, 58, 183), width: 2.0),
+                      borderSide: BorderSide(
+                          color: const Color.fromARGB(255, 103, 58, 183),
+                          width: 2.0),
                       borderRadius: BorderRadius.circular(8.r),
                     ),
                   ),
@@ -216,14 +226,26 @@ class _SignUpScreenState extends State<SignUpScreen> {
                 width: double.infinity,
                 child: ElevatedButton(
                   onPressed: userSignup,
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: const Color.fromARGB(255, 103, 58, 183), // Purple color
-                    foregroundColor: Colors.white,
-                    padding: EdgeInsets.symmetric(vertical: 16.h),
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(8.r),
+                  style: ButtonStyle(
+                    backgroundColor: WidgetStateProperty.resolveWith<Color>(
+                      (Set<WidgetState> states) {
+                        if (states.contains(WidgetState.pressed)) {
+                          return Colors.deepPurple.shade900;
+                        }
+                        return Colors.deepPurple;
+                      },
                     ),
-                    elevation: 10,
+                    foregroundColor:
+                        WidgetStateProperty.all<Color>(Colors.white),
+                    padding: WidgetStateProperty.all<EdgeInsets>(
+                      EdgeInsets.symmetric(vertical: 16.h),
+                    ),
+                    shape: WidgetStateProperty.all<RoundedRectangleBorder>(
+                      RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(8.r),
+                      ),
+                    ),
+                    elevation: WidgetStateProperty.all<double>(10),
                   ),
                   child: Text(
                     'Sign Up',
@@ -266,7 +288,6 @@ class _SignUpScreenState extends State<SignUpScreen> {
           ),
         ),
       ),
-      )
-    );
+    ));
   }
 }
