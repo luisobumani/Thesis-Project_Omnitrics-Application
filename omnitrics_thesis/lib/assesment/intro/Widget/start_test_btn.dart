@@ -51,15 +51,6 @@ Container startTestBtn(BuildContext context) {
                       )
                     )
                     ),
-                  // style: ElevatedButton.styleFrom(
-                  //   foregroundColor: Colors.white,
-                  //   padding: EdgeInsets.symmetric(
-                  //       horizontal: 20.w, vertical: 12.h),
-                  //   backgroundColor: Colors.deepPurple,
-                  //   shape: RoundedRectangleBorder(
-                  //     borderRadius: BorderRadius.circular(8.r),
-                  //   ),
-                  // ),
                   child: const Text("Continue"),
                 ),
               ],
