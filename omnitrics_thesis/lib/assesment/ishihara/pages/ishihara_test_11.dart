@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:omnitrics_thesis/assesment/ishihara/data/plates_config.dart';
 import 'package:omnitrics_thesis/assesment/ishihara/pages/ishihara_test_12.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class IshiharaTest11 extends StatefulWidget {
   const IshiharaTest11({Key? key}) : super(key: key);
@@ -46,11 +47,11 @@ class _IshiharaTest11State extends State<IshiharaTest11> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text(
+        title: Text(
           'Ishihara Test',
           style: TextStyle(
             color: Colors.white,
-            fontSize: 30,
+            fontSize: 30.sp,
             fontWeight: FontWeight.bold,
           ),
         ),
@@ -70,7 +71,7 @@ class _IshiharaTest11State extends State<IshiharaTest11> {
       ),
       backgroundColor: Colors.white,
       body: Padding(
-        padding: const EdgeInsets.all(16.0),
+        padding: EdgeInsets.all(16.0.w),
         child: Column(
           children: [
             // Image section
@@ -83,18 +84,18 @@ class _IshiharaTest11State extends State<IshiharaTest11> {
                 ),
               ),
             ),
-            const SizedBox(height: 16),
+           SizedBox(height: 16.h),
             // Options section
             Expanded(
               flex: 3,
               child: ListView.separated(
                 itemCount: config.options.length,
                 separatorBuilder: (context, index) =>
-                    const SizedBox(height: 12),
+                   SizedBox(height: 12.h),
                 itemBuilder: (context, index) {
                   return Center(
                     child: ConstrainedBox(
-                      constraints: const BoxConstraints(maxWidth: 300),
+                      constraints: BoxConstraints(maxWidth: 300.w),
                       child: ElevatedButton(
                         onPressed: () => _handleOptionTap(index),
                         style: ButtonStyle(
@@ -118,15 +119,15 @@ class _IshiharaTest11State extends State<IshiharaTest11> {
                           ),
                           shape: WidgetStateProperty.all(
                             RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(10),
+                              borderRadius: BorderRadius.circular(10.r),
                             ),
                           ),
                           minimumSize:
-                              WidgetStateProperty.all(const Size(300, 50)),
+                              WidgetStateProperty.all(Size(300.w, 50.h)),
                         ),
                         child: Text(
                           config.options[index],
-                          style: const TextStyle(fontSize: 18),
+                          style: TextStyle(fontSize: 18.sp),
                         ),
                       ),
                     ),
@@ -134,10 +135,9 @@ class _IshiharaTest11State extends State<IshiharaTest11> {
                 },
               ),
             ),
-            // Next button
             Center(
               child: ConstrainedBox(
-                constraints: const BoxConstraints(maxWidth: 300),
+                constraints: BoxConstraints(maxWidth: 300.w),
                 child: ElevatedButton(
                   onPressed: selectedOption != -1 && !answerSubmitted
                       ? _handleNextTap
@@ -146,11 +146,9 @@ class _IshiharaTest11State extends State<IshiharaTest11> {
                     backgroundColor:
                         WidgetStateProperty.resolveWith<Color>(
                       (states) {
-                        // If answer has been submitted, use the nextButtonColor
                         if (answerSubmitted && nextButtonColor != null) {
                           return nextButtonColor!;
                         }
-                        // Otherwise, use a darker grey for the Next button
                         return Colors.deepPurple.shade200;
                       },
                     ),
@@ -165,15 +163,15 @@ class _IshiharaTest11State extends State<IshiharaTest11> {
                     ),
                     shape: WidgetStateProperty.all(
                       RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(10),
+                        borderRadius: BorderRadius.circular(10.r),
                       ),
                     ),
                     minimumSize:
-                        WidgetStateProperty.all(const Size(300, 50)),
+                        WidgetStateProperty.all(Size(300.w, 50.h)),
                   ),
-                  child: const Text(
+                  child: Text(
                     'Next',
-                    style: TextStyle(fontSize: 18),
+                    style: TextStyle(fontSize: 18.sp),
                   ),
                 ),
               ),
