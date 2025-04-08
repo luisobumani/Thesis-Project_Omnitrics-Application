@@ -92,9 +92,9 @@ class _IntroIshiharaState extends State<IntroIshihara>
                               WidgetStateProperty.resolveWith<Color>(
                             (Set<WidgetState> states) {
                               if (states.contains(WidgetState.pressed)) {
-                                return Colors.green; // Color when pressed
+                                return Colors.green;
                               }
-                              return Colors.white; // Default color
+                              return Colors.white;
                             },
                           ),
                         ),
