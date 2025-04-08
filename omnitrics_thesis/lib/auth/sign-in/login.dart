@@ -4,6 +4,8 @@ import 'package:flutter/services.dart';
 import 'package:omnitrics_thesis/auth/emailVerification/email_verification_page.dart';
 import 'package:omnitrics_thesis/auth/forgetPassword/forgot_password.dart';
 import 'package:omnitrics_thesis/auth/googleSignIn/google_signin_handler.dart';
+import 'package:omnitrics_thesis/auth/sign-in/Widget/privacyPopUp.dart';
+import 'package:omnitrics_thesis/auth/sign-in/Widget/termsPopUp.dart';
 import 'package:omnitrics_thesis/auth/sign-in/sign_up.dart';
 import 'package:omnitrics_thesis/home/homepage.dart';
 import '../services/authentication.dart';
@@ -196,6 +198,57 @@ class _LoginScreenState extends State<LoginScreen> {
                       ),
                     ),
                   ),
+                  SizedBox(height: 14.h,),
+                  Center(child: 
+              Wrap (
+                alignment: WrapAlignment.center,
+                children: [
+                  Text(
+                    'By signing up, you agree to our ',
+                    style: TextStyle(fontSize: 13.sp),
+                  ),
+                  GestureDetector(
+                    onTap: () {
+                      showDialog(
+                        context: context, 
+                      builder: (BuildContextcontext) {
+                      return termsPop();
+                      }
+                      );
+                    },
+                    child: Text(
+                      'Terms and Conditions ',
+                      style: TextStyle(
+                        fontSize: 13.sp,
+                        fontWeight: FontWeight.bold,
+                        color: Colors.deepPurple),
+                    ),
+                  ),
+                  Text(
+                    'and ',
+                    style: TextStyle(
+                      fontSize: 13.sp,
+                      color: Colors.black,
+                    ),
+                  ),
+                  GestureDetector(
+                    onTap: () {
+                      showDialog(
+                        context: context, 
+                        builder: (BuildContext context) {
+                          return privacypolicyPop();
+                        });
+                    },
+                    child: Text(
+                      'Privacy Policy',
+                      style: TextStyle(
+                        fontSize: 13.sp,
+                        fontWeight: FontWeight.bold,
+                        color: Colors.deepPurple),
+                    ),
+                  ),
+                ],
+              ),),
                   SizedBox(height: 16.h),
                   SizedBox(
                     width: double.infinity,
