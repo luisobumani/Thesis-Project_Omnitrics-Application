@@ -27,15 +27,39 @@ Container startTestBtn(BuildContext context) {
                       context,
                       MaterialPageRoute(builder: (context) => IntroIshihara()));
                   },
-                  style: ElevatedButton.styleFrom(
-                    foregroundColor: Colors.white,
-                    padding: EdgeInsets.symmetric(
-                        horizontal: 20.w, vertical: 12.h),
-                    backgroundColor: Colors.deepPurple,
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(8.r),
+                  style: ButtonStyle(
+                    foregroundColor: WidgetStateProperty.all<Color>(
+                      Colors.white
                     ),
-                  ),
+                    padding: WidgetStateProperty.all<EdgeInsets>(
+                      EdgeInsets.symmetric(
+                        horizontal: 20.w, 
+                        vertical: 12.h
+                      )
+                    ),
+                    backgroundColor: WidgetStateProperty.resolveWith<Color>(
+                      (Set<WidgetState> states) {
+                        if (states.contains(WidgetState.pressed)) {
+                          return Colors.deepPurple.shade900;
+                        }
+                        return Colors.deepPurple;
+                      }
+                    ),
+                    shape: WidgetStateProperty.all<RoundedRectangleBorder>(
+                      RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(8.r)
+                      )
+                    )
+                    ),
+                  // style: ElevatedButton.styleFrom(
+                  //   foregroundColor: Colors.white,
+                  //   padding: EdgeInsets.symmetric(
+                  //       horizontal: 20.w, vertical: 12.h),
+                  //   backgroundColor: Colors.deepPurple,
+                  //   shape: RoundedRectangleBorder(
+                  //     borderRadius: BorderRadius.circular(8.r),
+                  //   ),
+                  // ),
                   child: const Text("Continue"),
                 ),
               ],
@@ -43,13 +67,34 @@ Container startTestBtn(BuildContext context) {
           },
         );
       },
-      style: ElevatedButton.styleFrom(
-        foregroundColor: Colors.deepPurple,
-        padding: EdgeInsets.symmetric(horizontal: 20.w, vertical: 12.h),
-        backgroundColor: Colors.white,
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(8.r),
+      style: ButtonStyle(
+        foregroundColor: WidgetStateProperty.resolveWith<Color>(
+          (Set<WidgetState> states) {
+            if (states.contains(WidgetState.pressed)) {
+              return Colors.white;
+            }
+            return Colors.deepPurple;
+          }
         ),
+        backgroundColor: WidgetStateProperty.resolveWith<Color>(
+          (Set<WidgetState> states) {
+            if (states.contains(WidgetState.pressed)) {
+              return Colors.deepPurple.shade900;
+            }
+            return Colors.white;
+          }
+        ),
+        padding: WidgetStateProperty.all<EdgeInsets>(
+          EdgeInsets.symmetric(
+            horizontal: 20.w, 
+            vertical: 12.h
+          )
+        ),
+        shape: WidgetStateProperty.all<RoundedRectangleBorder>(
+          RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(8.r)
+          )
+        )
       ),
       child: Text(
         "Start the Test",
