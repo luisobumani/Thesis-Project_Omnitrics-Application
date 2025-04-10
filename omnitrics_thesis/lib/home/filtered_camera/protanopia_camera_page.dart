@@ -27,10 +27,10 @@ class _ProtanopiaCameraPageState extends State<ProtanopiaCameraPage>
 
  //Color Correction Filter Matrix
   final List<double> _correctionMatrix = [
-    0.8, 0.2, 0, 0, 0,
-    0.2, 0.8, 0, 0, 0,
-    0,   0,   1, 0, 0,
-    0,   0,   0, 1, 0,
+    1, 0, 0, 0, 0,
+    0, 0, 0, 0, 0,
+    0, 0, 0, 0, 0,
+    0, 0, 0, 1, 0 
   ];
 
   // Protanopia Color Filter Matrix 
