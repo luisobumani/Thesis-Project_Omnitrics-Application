@@ -1,16 +1,21 @@
 import 'package:flutter/material.dart';
+import 'package:omnitrics_thesis/assesment/ishihara/data/ishihara_test_model.dart';
 import 'package:omnitrics_thesis/assesment/ishihara/data/plates_config.dart';
 import 'package:omnitrics_thesis/assesment/ishihara/pages/ishihara_test_02.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class IshiharaTest01 extends StatefulWidget {
-  const IshiharaTest01({Key? key}) : super(key: key);
+  final IshiharaTestModel testModel;
+
+  const IshiharaTest01(
+      {Key? key, required this.testModel})
+      : super(key: key);
 
   @override
-  _IshiharaTest01State createState() => _IshiharaTest01State();
+  _IshiharaTestPageState createState() => _IshiharaTestPageState();
 }
 
-class _IshiharaTest01State extends State<IshiharaTest01> {
+class _IshiharaTestPageState extends State<IshiharaTest01> {
   final TestConfig config = testConfigs[0];
   int selectedOption = -1;
   bool answerSubmitted = false;
@@ -28,6 +33,7 @@ class _IshiharaTest01State extends State<IshiharaTest01> {
 
     setState(() {
       answerSubmitted = true;
+      // Provide visual feedback based on the plate’s correct answer.
       if (selectedOption == config.correctAnswerIndex) {
         nextButtonColor = Colors.green;
       } else {
@@ -35,14 +41,19 @@ class _IshiharaTest01State extends State<IshiharaTest01> {
       }
     });
 
+    // Record the selected answer.
+    widget.testModel.updateAnswer(plateIndex: 0, selectedOption: selectedOption);
+
     Future.delayed(const Duration(seconds: 1), () {
-      Navigator.push(
+      Navigator.pushReplacement(
         context,
-        MaterialPageRoute(builder: (context) => IshiharaTest02()),
+        MaterialPageRoute(
+          builder: (context) => IshiharaTest02(testModel: widget.testModel),
+        ),
       );
     });
   }
-
+  
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -83,13 +94,12 @@ class _IshiharaTest01State extends State<IshiharaTest01> {
                 ),
               ),
             ),
-           SizedBox(height: 16.h),
+            SizedBox(height: 16.h),
             Expanded(
               flex: 3,
               child: ListView.separated(
                 itemCount: config.options.length,
-                separatorBuilder: (context, index) =>
-                   SizedBox(height: 12.h),
+                separatorBuilder: (context, index) => SizedBox(height: 12.h),
                 itemBuilder: (context, index) {
                   return Center(
                     child: ConstrainedBox(
