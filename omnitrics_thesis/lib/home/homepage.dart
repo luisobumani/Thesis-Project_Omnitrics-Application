@@ -3,6 +3,7 @@ import 'package:omnitrics_thesis/about/drawer.dart';
 import 'package:omnitrics_thesis/home/Widget/adjustcolorWidget.dart';
 import 'package:omnitrics_thesis/home/Widget/appBar.dart';
 import 'package:omnitrics_thesis/home/Widget/colormodesWidget.dart';
+// Import the file that contains your AnimatedCameraButton widget.
 import 'package:omnitrics_thesis/home/Widget/generalcamBtn.dart';
 import 'package:omnitrics_thesis/home/data_table/userdata_table.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -15,7 +16,7 @@ class HomePage extends StatelessWidget {
     return Scaffold(
       appBar: appBarHome(context),
       drawer: drawerHome(context),
-      backgroundColor: Colors.transparent, // Make scaffold background transparent
+      backgroundColor: Colors.transparent, // Transparent scaffold background
       body: Container(
         width: double.infinity,
         height: double.infinity,
@@ -38,14 +39,15 @@ class HomePage extends StatelessWidget {
                 adjustColorTiles(context),
                 userDataText(context),
                 userData(),
-                // ADD THIS SIZEDBOX TO PROVIDE SCROLL SPACE AT THE BOTTOM
+                // Sufficient space at the bottom for scrolling
                 SizedBox(height: 10.h),
               ],
             ),
           ),
         ),
       ),
-      floatingActionButton: generalCamBtn(context),
+      // Use the animated button widget here
+      floatingActionButton: const AnimatedCameraButton(),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
     );
   }
