@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:omnitrics_thesis/assesment/intro/intro_hue.dart';
 import 'package:omnitrics_thesis/assesment/ishihara/data/plates_config.dart';
-import 'package:omnitrics_thesis/home/homepage.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class IshiharaTest12 extends StatefulWidget {
@@ -38,7 +38,7 @@ class _IshiharaTest12State extends State<IshiharaTest12> {
     Future.delayed(const Duration(seconds: 1), () {
       Navigator.push(
         context,
-        MaterialPageRoute(builder: (context) => HomePage()),
+        MaterialPageRoute(builder: (context) => IntroHue()),
       );
     });
   }
