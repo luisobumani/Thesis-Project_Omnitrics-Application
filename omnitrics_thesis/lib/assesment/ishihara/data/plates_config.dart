@@ -13,62 +13,62 @@ class TestConfig {
 final List<TestConfig> testConfigs = [
   TestConfig(
     imagePath: 'assets/images/ishihara/ishihara_01.png',
-    options: ['12', '13', '16', '15'],
+    options: ['12', '13', '16', 'None'],
     correctAnswerIndex: 0,
   ),
   TestConfig(
     imagePath: 'assets/images/ishihara/ishihara_02.jpg',
-    options: ['3', '6', '5', '7'],
+    options: ['3', '6', '5', 'None'],
     correctAnswerIndex: 1,
   ),
   TestConfig(
     imagePath: 'assets/images/ishihara/ishihara_03.jpg',
-    options: ['0', '3', '2', '8'],
+    options: ['0', '3', 'None', '8'],
     correctAnswerIndex: 3,
   ),
   TestConfig(
     imagePath: 'assets/images/ishihara/ishihara_04.jpg',
-    options: ['1', '5', '2', '3'],
+    options: ['1', '5', '2', 'None'],
     correctAnswerIndex: 1,
   ),
   TestConfig(
     imagePath: 'assets/images/ishihara/ishihara_05.jpg',
-    options: ['3', '4', '5', '6'],
+    options: ['3', '4', '5', 'None'],
     correctAnswerIndex: 0,
   ),
   TestConfig(
     imagePath: 'assets/images/ishihara/ishihara_06.jpg',
-    options: ['15', '16', '17', '19'],
+    options: ['15', '16', '17', 'None'],
     correctAnswerIndex: 0,
   ),
   TestConfig(
     imagePath: 'assets/images/ishihara/ishihara_07.jpg',
-    options: ['21', '32', '36', '74'],
+    options: ['21', 'None', '36', '74'],
     correctAnswerIndex: 3,
   ),
   TestConfig(
     imagePath: 'assets/images/ishihara/ishihara_08.jpg',
-    options: ['8', '2', '3', '0'],
+    options: ['None', '2', '3', '0'],
     correctAnswerIndex: 1,
   ),
   TestConfig(
     imagePath: 'assets/images/ishihara/ishihara_09.jpg',
-    options: ['29', '45', '57', '19'],
+    options: ['29', '45', '57', 'None'],
     correctAnswerIndex: 1,
   ),
   TestConfig(
     imagePath: 'assets/images/ishihara/ishihara_10.jpg',
-    options: ['97', '32', '55', '45'],
+    options: ['97', 'None', '55', '45'],
     correctAnswerIndex: 0,
   ),
   TestConfig(
     imagePath: 'assets/images/ishihara/ishihara_11.jpg',
-    options: ['11', '13', '16', '15'],
+    options: ['11', '13', '16', 'None'],
     correctAnswerIndex: 2,
   ),
   TestConfig(
     imagePath: 'assets/images/ishihara/ishihara_12.jpg',
-    options: ['4', '2', '42', '24'],
+    options: ['4', '2', '42', 'None'],
     correctAnswerIndex: 2,
   ),
 ];
