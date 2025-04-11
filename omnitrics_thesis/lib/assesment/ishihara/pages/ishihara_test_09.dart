@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:omnitrics_thesis/assesment/ishihara/data/ishihara_test_model.dart';
 import 'package:omnitrics_thesis/assesment/ishihara/data/plates_config.dart';
 import 'package:omnitrics_thesis/assesment/ishihara/pages/ishihara_test_10.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class IshiharaTest09 extends StatefulWidget {
-  const IshiharaTest09({Key? key}) : super(key: key);
+  final IshiharaTestModel testModel;
+  const IshiharaTest09({Key? key, required this.testModel}) : super(key: key);
 
   @override
   _IshiharaTest09State createState() => _IshiharaTest09State();
@@ -34,11 +36,13 @@ class _IshiharaTest09State extends State<IshiharaTest09> {
         nextButtonColor = Colors.red;
       }
     });
+    //Update model
+    widget.testModel.updateAnswer(plateIndex: 8, selectedOption: selectedOption);
 
     Future.delayed(const Duration(seconds: 1), () {
       Navigator.push(
         context,
-        MaterialPageRoute(builder: (context) => IshiharaTest10()),
+        MaterialPageRoute(builder: (context) => IshiharaTest10(testModel: widget.testModel)),
       );
     });
   }
