@@ -5,6 +5,7 @@ import 'package:omnitrics_thesis/assesment/ishihara/data/ishihara_test_model.dar
 
 /// Evaluates the Ishihara test results and saves them in Firestore.
 Future<void> evaluateAndSaveIshiharaTest(IshiharaTestModel testModel) async {
+  int correctCount = 0;
   int redGreenCount = 0;
   int totalColorCount = 0;
   
@@ -12,6 +13,10 @@ Future<void> evaluateAndSaveIshiharaTest(IshiharaTestModel testModel) async {
   for (int i = 0; i < testConfigs.length; i++) {
     final config = testConfigs[i];
     final answer = testModel.answers[i];
+
+    if(config == config.correctAnswerIndex){
+      correctCount++;
+    }
 
     if (config.redGreenAnswerIndex != null && answer == config.redGreenAnswerIndex) {
       redGreenCount++;
@@ -49,6 +54,7 @@ Future<void> evaluateAndSaveIshiharaTest(IshiharaTestModel testModel) async {
     'answers': testModel.answers,
     'diagnosis': diagnosis,
     'score': {
+      'correctCount': correctCount,
       'redGreenCount': redGreenCount,
       'totalColorCount': totalColorCount,
     },
