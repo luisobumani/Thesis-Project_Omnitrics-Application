@@ -1,10 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:omnitrics_thesis/assesment/intro/intro_hue.dart';
+import 'package:omnitrics_thesis/assesment/ishihara/data/ishihara_test_model.dart';
 import 'package:omnitrics_thesis/assesment/ishihara/data/plates_config.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:omnitrics_thesis/assesment/ishihara/services/firestore_service.dart';
 
 class IshiharaTest12 extends StatefulWidget {
-  const IshiharaTest12({Key? key}) : super(key: key);
+  final IshiharaTestModel testModel;
+  const IshiharaTest12({Key? key, required this.testModel}) : super(key: key);
 
   @override
   _IshiharaTest12State createState() => _IshiharaTest12State();
@@ -23,7 +26,7 @@ class _IshiharaTest12State extends State<IshiharaTest12> {
     });
   }
 
-  void _handleNextTap() {
+  void _handleNextTap() async {
     if (selectedOption == -1 || answerSubmitted) return;
 
     setState(() {
@@ -34,6 +37,14 @@ class _IshiharaTest12State extends State<IshiharaTest12> {
         nextButtonColor = Colors.red;
       }
     });
+    //Update model
+    widget.testModel.updateAnswer(plateIndex: 11, selectedOption: selectedOption);
+
+    //Wait for user feedback
+    await Future.delayed(const Duration(seconds: 1));
+
+    //Evaluate and save to firestore
+    await evaluateAndSaveIshiharaTest(widget.testModel);
 
     Future.delayed(const Duration(seconds: 1), () {
       Navigator.push(

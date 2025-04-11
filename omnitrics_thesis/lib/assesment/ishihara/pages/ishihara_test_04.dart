@@ -42,7 +42,7 @@ class _IshiharaTest04State extends State<IshiharaTest04> {
     Future.delayed(const Duration(seconds: 1), () {
       Navigator.push(
         context,
-        MaterialPageRoute(builder: (context) => IshiharaTest05()),
+        MaterialPageRoute(builder: (context) => IshiharaTest05(testModel: widget.testModel)),
       );
     });
   }
