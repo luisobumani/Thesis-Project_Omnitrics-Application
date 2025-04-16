@@ -13,9 +13,8 @@ class FilteredImagePage extends StatefulWidget {
 
 class _FilteredImagePageState extends State<FilteredImagePage> {
   final ImagePicker _picker = ImagePicker();
-
   File? _originalImage;
-  File? _filteredImage;
+  Future<File>? _filterFuture;
 
   // 4x5 matrices for the three filters.
   final List<double> _deuteranopiaMatrix = [
@@ -46,50 +45,56 @@ class _FilteredImagePageState extends State<FilteredImagePage> {
     _pickImage();
   }
 
-  /// Let the user select an image from the gallery.
+  /// Lets the user select an image from the gallery.
   Future<void> _pickImage() async {
     final XFile? pickedFile =
         await _picker.pickImage(source: ImageSource.gallery);
     if (pickedFile != null) {
       setState(() {
         _originalImage = File(pickedFile.path);
-        _filteredImage = null; // Reset any previous filtered image.
+        _filterFuture = null; // Reset any previous filtering.
       });
     }
   }
 
-  /// Applies a local filter using the given color matrix.
-  Future<void> _applyLocalFilter(List<double> matrix) async {
-    if (_originalImage == null) return;
-    setState(() {
-      _filteredImage = null; // Clear previous filtered image.
-    });
-    try {
-      // Read and decode the image.
-      final bytes = await _originalImage!.readAsBytes();
-      img.Image? decoded = img.decodeImage(bytes);
-      if (decoded == null) return;
-
-      // Apply the color matrix.
-      decoded = _applyColorMatrix(decoded, matrix);
-
-      // Encode the filtered image as PNG.
-      final filteredBytes = img.encodePng(decoded);
-
-      // Save the result to a temporary file with a unique name.
-      final tempDir = await getTemporaryDirectory();
-      final tempPath = tempDir.path;
-      final file = File('$tempPath/filtered_${DateTime.now().millisecondsSinceEpoch}.png');
-      await file.writeAsBytes(filteredBytes);
-
-      // Update UI with the new filtered image.
-      setState(() {
-        _filteredImage = file;
-      });
-    } catch (e) {
-      ScaffoldMessenger.of(context)
-          .showSnackBar(SnackBar(content: Text('Error: $e')));
+  /// Applies a local filter using the given color matrix and returns a filtered image file.
+  Future<File> _applyLocalFilter(List<double> matrix) async {
+    if (_originalImage == null) {
+      throw Exception('No image selected.');
     }
+
+    // Read and decode the image.
+    final bytes = await _originalImage!.readAsBytes();
+    img.Image? decoded = img.decodeImage(bytes);
+    if (decoded == null) {
+      throw Exception('Failed to decode image.');
+    }
+
+    // Apply the color matrix.
+    decoded = _applyColorMatrix(decoded, matrix);
+
+    // Encode the filtered image as PNG.
+    final filteredBytes = img.encodePng(decoded);
+
+    // Save the result to a temporary file with a unique name.
+    final tempDir = await getTemporaryDirectory();
+    final tempPath = tempDir.path;
+    final file = File(
+        '$tempPath/filtered_${DateTime.now().millisecondsSinceEpoch}.png');
+    await file.writeAsBytes(filteredBytes);
+    return file;
+  }
+
+  /// Wrapper around _applyLocalFilter that ensures at least a 3-second delay.
+  Future<File> _applyLocalFilterWithDelay(List<double> matrix) async {
+    final startTime = DateTime.now();
+    final filteredFile = await _applyLocalFilter(matrix);
+    final elapsed = DateTime.now().difference(startTime);
+    const delay = Duration(seconds: 3);
+    if (elapsed < delay) {
+      await Future.delayed(delay - elapsed);
+    }
+    return filteredFile;
   }
 
   /// Applies the given 4x5 color matrix to each pixel of the image.
@@ -122,60 +127,158 @@ class _FilteredImagePageState extends State<FilteredImagePage> {
     return src;
   }
 
+  ButtonStyle _buttonStyle() {
+    return ButtonStyle(
+      backgroundColor: WidgetStateProperty.resolveWith<Color>(
+        (states) {
+          if (states.contains(WidgetState.pressed)) {
+            return Colors.deepPurple.shade900;
+          }
+          return Colors.deepPurple.shade400;
+        },
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
+    Widget content;
+
+    // If no image has been selected, display only the prompt.
+    if (_originalImage == null) {
+      content = const Center(
+        child: Text(
+          'Please select an image from the gallery...',
+          style: TextStyle(fontWeight: FontWeight.bold, fontSize: 15),
+          textAlign: TextAlign.center,
+        ),
+      );
+    } else {
+      // If an image is selected, show the filtering UI.
+      Widget imageDisplay;
+      if (_filterFuture != null) {
+        imageDisplay = FutureBuilder<File>(
+          future: _filterFuture,
+          builder: (context, snapshot) {
+            if (snapshot.connectionState == ConnectionState.waiting) {
+              return SizedBox(
+                height: 300,
+                child: Center(
+                  child: CircularProgressIndicator(
+                    valueColor: AlwaysStoppedAnimation<Color>(
+                        Colors.deepPurple.shade400),
+                  ),
+                ),
+              );
+            } else if (snapshot.hasError) {
+              return Text('Error: ${snapshot.error}');
+            } else if (snapshot.hasData) {
+              return Image.file(snapshot.data!);
+            }
+            return const SizedBox();
+          },
+        );
+      } else {
+        imageDisplay = Image.file(_originalImage!);
+      }
+
+      content = SingleChildScrollView(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            imageDisplay,
+            const SizedBox(height: 20),
+            // Row of filter buttons.
+            Wrap(
+              spacing: 10,
+              alignment: WrapAlignment.center,
+              children: [
+                ElevatedButton(
+                  onPressed: () {
+                    setState(() {
+                      _filterFuture =
+                          _applyLocalFilterWithDelay(_deuteranopiaMatrix);
+                    });
+                  },
+                  style: _buttonStyle(),
+                  child: const Text(
+                    'Deuteranopia',
+                    style: TextStyle(color: Colors.white),
+                  ),
+                ),
+                ElevatedButton(
+                  onPressed: () {
+                    setState(() {
+                      _filterFuture =
+                          _applyLocalFilterWithDelay(_protanopiaMatrix);
+                    });
+                  },
+                  style: _buttonStyle(),
+                  child: const Text(
+                    'Protanopia',
+                    style: TextStyle(color: Colors.white),
+                  ),
+                ),
+                ElevatedButton(
+                  onPressed: () {
+                    setState(() {
+                      _filterFuture =
+                          _applyLocalFilterWithDelay(_tritanopiaMatrix);
+                    });
+                  },
+                  style: _buttonStyle(),
+                  child: const Text(
+                    'Tritanopia',
+                    style: TextStyle(color: Colors.white),
+                  ),
+                ),
+              ],
+            ),
+            const SizedBox(height: 20),
+            // Button to pick a new image.
+            ElevatedButton(
+              onPressed: _pickImage,
+              style: _buttonStyle(),
+              child: const Text(
+                'Pick Another Image',
+                style: TextStyle(color: Colors.white),
+              ),
+            ),
+          ],
+        ),
+      );
+    }
+
     return Scaffold(
+      backgroundColor: Colors.white,
       appBar: AppBar(
-        title: const Text('Color Blindness Filters'),
+        title: const Text(
+          'Color Blindness Filters',
+          style: TextStyle(
+              color: Colors.white, fontSize: 25, fontWeight: FontWeight.bold),
+        ),
+        centerTitle: true,
         leading: IconButton(
-          icon: const Icon(Icons.arrow_back),
+          icon: const Icon(
+            Icons.arrow_back,
+            color: Colors.white,
+          ),
           onPressed: () => Navigator.of(context).pop(),
         ),
+        flexibleSpace: Container(
+          decoration: BoxDecoration(
+            gradient: LinearGradient(
+              colors: [
+                Colors.deepPurple.shade700,
+                Colors.deepPurple.shade400,
+              ],
+              begin: Alignment.topLeft,
+              end: Alignment.bottomRight,
+            ),
+          ),
+        ),
       ),
-      body: Center(
-        child: _originalImage == null
-            ? const Text('Please select an image from the gallery...')
-            : SingleChildScrollView(
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    // Display the filtered image if available; otherwise, display the original.
-                    _filteredImage != null
-                        ? Image.file(_filteredImage!)
-                        : Image.file(_originalImage!),
-                    const SizedBox(height: 20),
-                    // Row of filter buttons for Deuteranopia, Protanopia, and Tritanopia.
-                    Wrap(
-                      spacing: 10,
-                      alignment: WrapAlignment.center,
-                      children: [
-                        ElevatedButton(
-                          onPressed: () =>
-                              _applyLocalFilter(_deuteranopiaMatrix),
-                          child: const Text('Deuteranopia'),
-                        ),
-                        ElevatedButton(
-                          onPressed: () =>
-                              _applyLocalFilter(_protanopiaMatrix),
-                          child: const Text('Protanopia'),
-                        ),
-                        ElevatedButton(
-                          onPressed: () =>
-                              _applyLocalFilter(_tritanopiaMatrix),
-                          child: const Text('Tritanopia'),
-                        ),
-                      ],
-                    ),
-                    const SizedBox(height: 20),
-                    // Button to let the user pick another image.
-                    ElevatedButton(
-                      onPressed: _pickImage,
-                      child: const Text('Pick Another Image'),
-                    ),
-                  ],
-                ),
-              ),
-      ),
+      body: Center(child: content),
     );
   }
 }
