@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 DrawerHeader drawerHeader() {
   return DrawerHeader(
@@ -9,12 +10,12 @@ DrawerHeader drawerHeader() {
             end: Alignment.bottomRight,
           ), // Deep purple header background
         ),
-        child: const Text(
+        child: Text(
           'About',
           style: TextStyle(
             color: Colors.white,
             fontWeight: FontWeight.bold,
-            fontSize: 30,
+            fontSize: 30.sp,
           ),
         ),
       );
