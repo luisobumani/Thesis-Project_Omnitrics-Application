@@ -16,7 +16,7 @@ class ContinueButton extends StatelessWidget {
           backgroundColor: Colors.deepPurple,
           foregroundColor: Colors.white,
           padding: EdgeInsets.symmetric(vertical: 16.h),
-          elevation: 10, // Increased elevation for a more raised appearance
+          elevation: 10.h, // Increased elevation for a more raised appearance
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(8.r),
           ),
