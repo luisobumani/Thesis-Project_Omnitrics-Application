@@ -26,23 +26,21 @@ class MyApp extends StatelessWidget {
       splitScreenMode: true,
       builder: (context, child) {
         return MaterialApp(
-      title: 'OmniTrics',
-      debugShowCheckedModeBanner: false,
-      // Animated splash screen
-      home: AnimatedSplashScreen(
-        splash: 'assets/gifs/omnitrics_logo_gif.gif',
-        splashIconSize: 300.0,
-        centered: true,
-        nextScreen: const AuthRedirect(), // Navigate to Home after the splash
-        backgroundColor: Colors.deepPurple,
-        duration: 3000,
-      ),
-      theme: ThemeData(
-        fontFamily: 'Inter',
-      )
-    );
+            title: 'OmniTrics',
+            debugShowCheckedModeBanner: false,
+            // Animated splash screen
+            home: AnimatedSplashScreen(
+              splash: 'assets/gifs/omnitrics_logo_gif.gif',
+              splashIconSize: 300.0,
+              centered: true,
+              nextScreen: AuthRedirect(), // Navigate to Home after the splash
+              backgroundColor: Colors.deepPurple,
+              duration: 3000,
+            ),
+            theme: ThemeData(
+              fontFamily: 'Inter',
+            ));
       },
     );
   }
-
 }
