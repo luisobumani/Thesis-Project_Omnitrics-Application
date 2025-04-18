@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class BirthdateField extends StatelessWidget {
   final TextEditingController controller;
@@ -29,18 +30,18 @@ class BirthdateField extends StatelessWidget {
       onTap: () => _selectDate(context),
       decoration: InputDecoration(
         border: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(8),
+          borderRadius: BorderRadius.circular(8.r),
           borderSide: const BorderSide(color: Colors.grey),
         ),
         enabledBorder: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(8),
+                        borderRadius: BorderRadius.circular(8.r),
                         borderSide: BorderSide(
                           color: Colors.grey.shade300,
                         ),
                       ),
-        contentPadding: const EdgeInsets.symmetric(
-          vertical: 14.0,
-          horizontal: 12.0,
+        contentPadding: EdgeInsets.symmetric(
+          vertical: 14.0.h,
+          horizontal: 12.0.w,
         ),
         hintText: 'MM/DD/YYYY',
       ),
