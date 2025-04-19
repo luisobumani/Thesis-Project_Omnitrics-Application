@@ -2,6 +2,7 @@ import 'dart:math' as math;
 import 'package:flutter/material.dart';
 import 'package:omnitrics_thesis/assesment/hue/hue_result_page.dart';
 import 'package:omnitrics_thesis/assesment/hue/services/d15_test_service.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class ColorVisionApp extends StatelessWidget {
   const ColorVisionApp({Key? key}) : super(key: key);
@@ -170,110 +171,183 @@ class _ColorTestPageState extends State<ColorTestPage> {
 
   @override
   Widget build(BuildContext context) {
-    // available caps in shuffled order
     final available = palette.where((c) => !placed.contains(c)).toList();
+
     return Scaffold(
+      backgroundColor: Colors.white,
       appBar: AppBar(
-        title: const Text('D-15 Color Vision Test'),
+        title: const Text(
+          'D-15 Color Vision Test',
+          style: TextStyle(
+            color: Colors.white,
+            fontWeight: FontWeight.bold,
+          ),
+        ),
+        flexibleSpace: Container(
+          decoration: BoxDecoration(
+            gradient: LinearGradient(colors: [
+              Colors.deepPurple.shade700,
+              Colors.deepPurple.shade400,
+            ],
+            begin: Alignment.topLeft,
+            end: Alignment.bottomRight),
+          ),
+        ),
       ),
       body: Padding(
-        padding: const EdgeInsets.all(16),
+        padding: EdgeInsets.all(16.h),
         child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Row(
-              children: [
-                const Text('Pilot:',
-                    style: TextStyle(fontWeight: FontWeight.bold)),
-                const SizedBox(width: 8),
-                Container(
-                  width: 40,
-                  height: 40,
-                  decoration: BoxDecoration(
-                    color: pilotColor,
-                    shape: BoxShape.circle,
-                    border: Border.all(color: Colors.black),
-                  ),
-                ),
-              ],
+            Text(
+              'First Item:',
+              style: TextStyle(fontWeight: FontWeight.bold),
             ),
-            const SizedBox(height: 16),
-            SingleChildScrollView(
-              scrollDirection: Axis.horizontal,
-              child: Row(
-                children: List.generate(15, (i) {
-                  return DragTarget<int>(
-                    onAccept: (c) {
-                      if (!_submitted) {
-                        setState(() {
-                          placed[i] = c;
-                        });
-                      }
-                    },
-                    builder: (ctx, cand, rj) {
-                      final cap = placed[i];
-                      final color =
-                          cap == null ? Colors.grey[300] : capColors[cap - 1];
-                      return Container(
-                        margin: const EdgeInsets.symmetric(horizontal: 4),
-                        width: 40,
-                        height: 40,
-                        decoration: BoxDecoration(
-                          color: color,
-                          border: Border.all(color: Colors.black),
-                        ),
-                      );
-                    },
-                  );
-                }),
+            SizedBox(height: 8.h),
+            Container(
+              width: 40.w,
+              height: 40.h,
+              decoration: BoxDecoration(
+                color: pilotColor,
+                border: Border.all(color: Colors.black),
               ),
             ),
-            const SizedBox(height: 24),
-            Wrap(
-              spacing: 8,
-              children: available.map((c) {
-                return Draggable<int>(
-                  data: c,
-                  feedback: Container(
-                    width: 40,
-                    height: 40,
-                    decoration: BoxDecoration(
-                      color: capColors[c - 1],
-                      shape: BoxShape.circle,
-                      border: Border.all(color: Colors.black),
+            SizedBox(height: 24.h),
+            Expanded(
+              child: Row(
+                children: [
+                  Expanded(
+                    child: SingleChildScrollView(
+                      child: Column(
+                        children: List.generate(15, (i) {
+                          return Padding(
+                            padding: EdgeInsets.symmetric(vertical: 4.h),
+                            child: DragTarget<int>(
+                              onAccept: (c) {
+                                if (!_submitted) {
+                                  setState(() => placed[i] = c);
+                                }
+                              },
+                              builder: (ctx, cand, rj) {
+                                final cap = placed[i];
+                                final color = cap == null
+                                    ? Colors.grey[300]
+                                    : capColors[cap - 1];
+                                return Container(
+                                  width: 40.w,
+                                  height: 40.h,
+                                  decoration: BoxDecoration(
+                                    color: color,
+                                    border: Border.all(color: Colors.black),
+                                  ),
+                                );
+                              },
+                            ),
+                          );
+                        }),
+                      ),
                     ),
                   ),
-                  childWhenDragging: Container(
-                    width: 40,
-                    height: 40,
-                    color: Colors.grey[200],
-                  ),
-                  child: Container(
-                    width: 40,
-                    height: 40,
-                    decoration: BoxDecoration(
-                      color: capColors[c - 1],
-                      shape: BoxShape.circle,
-                      border: Border.all(color: Colors.black),
+
+                  SizedBox(width: 16.w),
+
+                  // Right: Draggable palette column
+                  Expanded(
+                    child: SingleChildScrollView(
+                      child: Column(
+                        children: available.map((c) {
+                          return Padding(
+                            padding: EdgeInsets.symmetric(vertical: 4.h),
+                            child: Draggable<int>(
+                              data: c,
+                              feedback: Container(
+                                width: 40.w,
+                                height: 40.h,
+                                decoration: BoxDecoration(
+                                  color: capColors[c - 1],
+                                  border: Border.all(color: Colors.black),
+                                ),
+                              ),
+                              childWhenDragging: Container(
+                                width: 40.w,
+                                height: 40.h,
+                                color: Colors.grey[200],
+                              ),
+                              child: Container(
+                                width: 40.w,
+                                height: 40.h,
+                                decoration: BoxDecoration(
+                                  color: capColors[c - 1],
+                                  border: Border.all(color: Colors.black),
+                                ),
+                              ),
+                            ),
+                          );
+                        }).toList(),
+                      ),
                     ),
                   ),
-                );
-              }).toList(),
+                ],
+              ),
             ),
-            const SizedBox(height: 24),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              children: [
-                ElevatedButton(
-                  onPressed: _resetTest,
-                  child: const Text('Reset'),
-                ),
-                ElevatedButton(
-                  onPressed: _submit,
-                  child: const Text('Submit'),
-                ),
-              ],
+            SizedBox(height: 24.h),
+            Center(
+              child: Row(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  ElevatedButton(
+                    style: ButtonStyle(
+                      backgroundColor: WidgetStateProperty.resolveWith<Color>(
+                          (Set<WidgetState> states) {
+                        if (states.contains(WidgetState.pressed)) {
+                          return Colors.red.shade900;
+                        }
+                        return Colors.red;
+                      }),
+                      foregroundColor: WidgetStateProperty.all(Colors.white),
+                      elevation: WidgetStateProperty.all<double>(10.0.h),
+                      shape: WidgetStateProperty.all(
+                        RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(12.r),
+                        ),
+                      ),
+                    ),
+                    onPressed: _resetTest,
+                    child: Text('Reset',
+                    style: TextStyle(
+                      fontSize: 15.sp,
+                      fontWeight: FontWeight.bold
+                    ),),
+                  ),
+                  SizedBox(width: 70.w),
+                  ElevatedButton(
+                    style: ButtonStyle(
+                      backgroundColor: WidgetStateProperty.resolveWith<Color>(
+                          (Set<WidgetState> states) {
+                        if (states.contains(WidgetState.pressed)) {
+                          return Colors.deepPurple.shade900;
+                        }
+                        return Colors.deepPurple.shade400;
+                      }),
+                      foregroundColor: WidgetStateProperty.all(Colors.white),
+                      elevation: WidgetStateProperty.all<double>(10.0.h),
+                      shape: WidgetStateProperty.all(
+                        RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(12.r),
+                        ),
+                      ),
+                    ),
+                    onPressed: _submit,
+                    child: Text('Submit',
+                    style: TextStyle(
+                      fontSize: 15.sp,
+                      fontWeight: FontWeight.bold
+                    )),
+                  ),
+                ],
+              ),
             ),
-            const SizedBox(height: 24),
+            SizedBox(height: 24.h),
             if (_submitted && Cindex != null) ...[
               Text('Angle: ${angleDeg!.toStringAsFixed(1)}°'),
               Text('C-index: ${Cindex!.toStringAsFixed(2)}'),
