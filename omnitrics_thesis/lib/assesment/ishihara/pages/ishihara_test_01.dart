@@ -3,13 +3,14 @@ import 'package:omnitrics_thesis/assesment/ishihara/data/ishihara_test_model.dar
 import 'package:omnitrics_thesis/assesment/ishihara/data/plates_config.dart';
 import 'package:omnitrics_thesis/assesment/ishihara/pages/ishihara_test_02.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+
+const int _thisPageIndex = 0;
 
 class IshiharaTest01 extends StatefulWidget {
   final IshiharaTestModel testModel;
 
-  const IshiharaTest01(
-      {Key? key, required this.testModel})
-      : super(key: key);
+  const IshiharaTest01({Key? key, required this.testModel}) : super(key: key);
 
   @override
   _IshiharaTestPageState createState() => _IshiharaTestPageState();
@@ -28,7 +29,7 @@ class _IshiharaTestPageState extends State<IshiharaTest01> {
     });
   }
 
-  void _handleNextTap() {
+  void _handleNextTap() async {
     if (selectedOption == -1 || answerSubmitted) return;
 
     setState(() {
@@ -42,7 +43,12 @@ class _IshiharaTestPageState extends State<IshiharaTest01> {
     });
 
     // Record the selected answer.
-    widget.testModel.updateAnswer(plateIndex: 0, selectedOption: selectedOption);
+    widget.testModel
+        .updateAnswer(plateIndex: 0, selectedOption: selectedOption);
+
+    final prefs = await SharedPreferences.getInstance();
+    // config.index is 0 for page1, 1 for page2, etc.
+    await prefs.setInt('ishiharaLastPage', _thisPageIndex + 1);
 
     Future.delayed(const Duration(seconds: 1), () {
       Navigator.pushReplacement(
@@ -53,7 +59,7 @@ class _IshiharaTestPageState extends State<IshiharaTest01> {
       );
     });
   }
-  
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
