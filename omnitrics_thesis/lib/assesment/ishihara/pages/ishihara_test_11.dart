@@ -3,6 +3,9 @@ import 'package:omnitrics_thesis/assesment/ishihara/data/ishihara_test_model.dar
 import 'package:omnitrics_thesis/assesment/ishihara/data/plates_config.dart';
 import 'package:omnitrics_thesis/assesment/ishihara/pages/ishihara_test_12.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+
+const int _thisPageIndex = 10; 
 
 class IshiharaTest11 extends StatefulWidget {
   final IshiharaTestModel testModel;
@@ -25,7 +28,7 @@ class _IshiharaTest11State extends State<IshiharaTest11> {
     });
   }
 
-  void _handleNextTap() {
+  Future<void> _handleNextTap() async {
     if (selectedOption == -1 || answerSubmitted) return;
 
     setState(() {
@@ -38,6 +41,10 @@ class _IshiharaTest11State extends State<IshiharaTest11> {
     });
     //Update model
     widget.testModel.updateAnswer(plateIndex: 10, selectedOption: selectedOption);
+
+    final prefs = await SharedPreferences.getInstance();
+    // config.index is 0 for page1, 1 for page2, etc.
+    await prefs.setInt('ishiharaLastPage', _thisPageIndex + 1);
 
     Future.delayed(const Duration(seconds: 1), () {
       Navigator.push(
