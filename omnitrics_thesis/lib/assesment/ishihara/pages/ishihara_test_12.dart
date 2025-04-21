@@ -4,6 +4,9 @@ import 'package:omnitrics_thesis/assesment/ishihara/data/ishihara_test_model.dar
 import 'package:omnitrics_thesis/assesment/ishihara/data/plates_config.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:omnitrics_thesis/assesment/ishihara/services/firestore_service.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+
+const int _thisPageIndex = 11; 
 
 class IshiharaTest12 extends StatefulWidget {
   final IshiharaTestModel testModel;
@@ -45,6 +48,10 @@ class _IshiharaTest12State extends State<IshiharaTest12> {
 
     //Evaluate and save to firestore
     await evaluateAndSaveIshiharaTest(widget.testModel);
+
+    final prefs = await SharedPreferences.getInstance();
+    // config.index is 0 for page1, 1 for page2, etc.
+    await prefs.setInt('ishiharaLastPage', _thisPageIndex + 1);
 
     Future.delayed(const Duration(seconds: 1), () {
       Navigator.push(
