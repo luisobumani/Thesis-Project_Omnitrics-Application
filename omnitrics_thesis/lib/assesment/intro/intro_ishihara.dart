@@ -70,7 +70,7 @@ class _IntroIshiharaState extends State<IntroIshihara>
               child: SlideTransition(
                   position: _slideText,
                   child: Container(
-                    margin: EdgeInsets.only(top: 350.h),
+                    margin: EdgeInsets.only(top: 400.h),
                     child: textIshihara(),
                   )),
             ),
@@ -79,7 +79,7 @@ class _IntroIshiharaState extends State<IntroIshihara>
               child: SlideTransition(
                   position: _slideText,
                   child: Container(
-                    margin: EdgeInsets.only(top: 350.h),
+                    margin: EdgeInsets.only(top: 300.h),
                     child: Container(
                       margin: EdgeInsets.only(right: 25.w),
                       alignment: Alignment.bottomRight,
@@ -89,7 +89,7 @@ class _IntroIshiharaState extends State<IntroIshihara>
                                 WidgetStateProperty.resolveWith<Color>(
                               (Set<WidgetState> states) {
                                 if (states.contains(WidgetState.pressed)) {
-                                  return Colors.green;
+                                  return Colors.deepPurple.shade900;
                                 }
                                 return Colors.white;
                               },
@@ -108,7 +108,7 @@ class _IntroIshiharaState extends State<IntroIshihara>
                             'Start →',
                             style: TextStyle(
                                 fontWeight: FontWeight.bold,
-                                color: Colors.white,
+                                fontStyle: FontStyle.italic,
                                 fontSize: 30.sp),
                           )),
                     ),
