@@ -28,6 +28,7 @@ class ColorTestPage extends StatefulWidget {
 class _ColorTestPageState extends State<ColorTestPage> {
   // Fixed pilot cap color and coordinates
   final Color pilotColor = const Color.fromRGBO(55, 129, 193, 1);
+  final Color lastColor = const Color.fromRGBO(128, 115, 178, 1);
   static const Offset pilotUV = Offset(-21.54, -38.39);
 
   // CIE L*u*v* coordinates for caps 1-15
@@ -183,6 +184,7 @@ class _ColorTestPageState extends State<ColorTestPage> {
             fontWeight: FontWeight.bold,
           ),
         ),
+        centerTitle: true,
         flexibleSpace: Container(
           decoration: BoxDecoration(
             gradient: LinearGradient(colors: [
@@ -199,18 +201,46 @@ class _ColorTestPageState extends State<ColorTestPage> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text(
-              'First Item:',
-              style: TextStyle(fontWeight: FontWeight.bold),
-            ),
-            SizedBox(height: 8.h),
-            Container(
-              width: 40.w,
-              height: 40.h,
-              decoration: BoxDecoration(
-                color: pilotColor,
-                border: Border.all(color: Colors.black),
-              ),
+            Row(
+              children: [
+                Column(
+                  children: [
+                    Text(
+                      'First Item:',
+                      style: TextStyle(fontWeight: FontWeight.bold),
+                    ),
+                    SizedBox(height: 8.h),
+                    Container(
+                      width: 40.w,
+                      height: 40.h,
+                      decoration: BoxDecoration(
+                        color: pilotColor,
+                        border: Border.all(color: Colors.black),
+                      ),
+                    ),
+                  ],
+                ),
+                SizedBox(
+                  width: 220.w,
+                ),
+                Column(
+                  children: [
+                    Text(
+                      'Last Item:',
+                      style: TextStyle(fontWeight: FontWeight.bold),
+                    ),
+                    SizedBox(height: 8.h),
+                    Container(
+                      width: 40.w,
+                      height: 40.h,
+                      decoration: BoxDecoration(
+                        color: lastColor,
+                        border: Border.all(color: Colors.black),
+                      ),
+                    ),
+                  ],
+                )
+              ],
             ),
             SizedBox(height: 24.h),
             Expanded(

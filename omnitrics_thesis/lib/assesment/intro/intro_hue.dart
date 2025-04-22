@@ -62,7 +62,7 @@ class _IntroHueState extends State<IntroHue>
               child: SlideTransition(
                   position: _slideText,
                   child: Container(
-                    margin: EdgeInsets.only(top: 350.h),
+                    margin: EdgeInsets.only(top: 400.h),
                     child: textHue(),
                   )),
             ),
@@ -71,7 +71,7 @@ class _IntroHueState extends State<IntroHue>
               child: SlideTransition(
                   position: _slideText,
                   child: Container(
-                    margin: EdgeInsets.only(top: 350.h),
+                    margin: EdgeInsets.only(top: 300.h),
                     child: Container(
                       margin: EdgeInsets.only(right: 25.w),
                       alignment: Alignment.bottomRight,
@@ -81,7 +81,7 @@ class _IntroHueState extends State<IntroHue>
                                 WidgetStateProperty.resolveWith<Color>(
                               (Set<WidgetState> states) {
                                 if (states.contains(WidgetState.pressed)) {
-                                  return Colors.green;
+                                  return Colors.deepPurple.shade900;
                                 }
                                 return Colors.white;
                               },
@@ -97,8 +97,8 @@ class _IntroHueState extends State<IntroHue>
                             'Start →',
                             style: TextStyle(
                                 fontWeight: FontWeight.bold,
-                                color: Colors.white,
-                                fontSize: 30.sp),
+                                fontSize: 30.sp,
+                                fontStyle: FontStyle.italic),
                           )),
                     ),
                   )),
