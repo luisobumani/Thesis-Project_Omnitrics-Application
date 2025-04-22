@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
-class getStartedButton extends StatelessWidget {
+class NextButton1 extends StatelessWidget {
   final VoidCallback onPressed;
-  const getStartedButton({super.key, required this.onPressed});
+  const NextButton1({super.key, required this.onPressed});
 
   @override
   Widget build(BuildContext context) {
@@ -32,7 +32,7 @@ class getStartedButton extends StatelessWidget {
         ),
       ),
       child: Text(
-        'Get Started',
+        'Next',
         style: TextStyle(
           fontSize: 16.sp,
           color: Colors.white,

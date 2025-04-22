@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:omnitrics_thesis/getStarted/Widget/button.dart';
+import 'package:omnitrics_thesis/getStarted/Widget/get_started_button.dart';
 import '../auth/sign-in/login.dart';
 
 class GetStarted extends StatelessWidget {
@@ -27,7 +27,7 @@ class GetStarted extends StatelessWidget {
                 ),
               ),
               const Spacer(),
-              // BUTTON
+                            // BUTTON
               getStartedButton(
                 onPressed: () {
                   Navigator.pushReplacement(
