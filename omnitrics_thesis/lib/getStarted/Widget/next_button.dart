@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
-class NextButton1 extends StatelessWidget {
+class NextButton extends StatelessWidget {
   final VoidCallback onPressed;
-  const NextButton1({super.key, required this.onPressed});
+  const NextButton({super.key, required this.onPressed});
 
   @override
   Widget build(BuildContext context) {
@@ -26,7 +26,7 @@ class NextButton1 extends StatelessWidget {
         ),
         padding: WidgetStateProperty.all<EdgeInsetsGeometry>(
           EdgeInsets.symmetric(
-            horizontal: 120.w,
+            horizontal: 90.w,
             vertical: 16.h,
           ),
         ),

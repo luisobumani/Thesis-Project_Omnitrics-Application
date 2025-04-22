@@ -12,22 +12,20 @@ class MainGetStarted extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: const Color.fromARGB(255, 255, 255, 255),
+      backgroundColor: Colors.white,
       body: SafeArea(
         child: Column(
           children: [
-            // PageView takes up the available space.
             Expanded(
               child: PageView(
                 controller: _controller,
-                children: const [
-                  GetStarted(),
-                  MainGetStartedInfo(),
-                  Disclaimer(),
+                children: [
+                  GetStarted(controller: _controller), 
+                  MainGetStartedInfo(controller: _controller),
+                  const Disclaimer(),
                 ],
               ),
             ),
-            // Dot Indicator with responsive padding
             Padding(
               padding: EdgeInsets.all(23.w),
               child: SmoothPageIndicator(
