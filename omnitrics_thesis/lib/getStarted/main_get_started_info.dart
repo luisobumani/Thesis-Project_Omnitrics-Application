@@ -1,15 +1,15 @@
 import 'package:flutter/material.dart';
-import 'dart:ui'; // For ImageFilter
+import 'dart:ui';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
-class Disclaimer extends StatefulWidget {
-  const Disclaimer({Key? key}) : super(key: key);
+class MainGetStartedInfo extends StatefulWidget {
+  const MainGetStartedInfo({Key? key}) : super(key: key);
 
   @override
-  _DisclaimerState createState() => _DisclaimerState();
+  _MainGetStartedInfoState createState() => _MainGetStartedInfoState();
 }
 
-class _DisclaimerState extends State<Disclaimer> {
+class _MainGetStartedInfoState extends State<MainGetStartedInfo> {
   double _opacity = 0.0;
 
   @override
@@ -70,14 +70,14 @@ class _DisclaimerState extends State<Disclaimer> {
                       children: [
                         // Optional icon at the top
                         Icon(
-                          Icons.warning_amber_rounded,
+                          Icons.info,
                           size: 100.sp,
-                          color: const Color.fromARGB(255, 235, 17, 17),
+                          color: const Color.fromARGB(255, 255, 255, 255),
                         ),
                         SizedBox(height: 16.h),
                         // Disclaimer title in the middle (centered)
                         Text(
-                          'DISCLAIMER',
+                          'INFORMATION',
                           textAlign: TextAlign.center,
                           style: TextStyle(
                             fontSize: 30.sp,
@@ -88,7 +88,7 @@ class _DisclaimerState extends State<Disclaimer> {
                         SizedBox(height: 8.h),
                         // New body text (justified)
                         Text(
-                          '''This app is designed to aid individuals with color blindness by enhancing color perception. However, it's not a medical device and should not replace professional eye care. It does not cure or reverse color blindness. Results may vary based on individual vision and environmental factors. Consult an optometrist or ophthalmologist for diagnosis and treatment. Use this app as a supplementary tool to improve color differentiation, not as a definitive medical solution.
+                          '''At Omnitrics, we created a mobile application that empowers individuals with color vision deficiency to experience the world in a new way. Our app simulates different types of color blindness, offers real-time color detection, and provides color correction assistance using specialized red filters. Whether for better daily living, education, or work, Omnitrics ensures that colors remain accessible and meaningful to everyone.
                           ''',
                           textAlign: TextAlign.justify,
                           style: TextStyle(
