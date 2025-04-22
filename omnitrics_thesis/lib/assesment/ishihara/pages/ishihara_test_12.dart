@@ -53,12 +53,54 @@ class _IshiharaTest12State extends State<IshiharaTest12> {
     // config.index is 0 for page1, 1 for page2, etc.
     await prefs.setInt('ishiharaLastPage', _thisPageIndex + 1);
 
-    Future.delayed(const Duration(seconds: 1), () {
-      Navigator.push(
-        context,
-        MaterialPageRoute(builder: (context) => IntroHue()),
-      );
-    });
+    showDialog(
+        context: context,
+        barrierDismissible: false,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(20.0.r),
+              side: BorderSide(color: Colors.deepPurple, width: 1.w),
+            ),
+            insetPadding: EdgeInsets.all(20.0.h),
+            title: Text(
+              'Result',
+              style: TextStyle(
+                  color: Colors.deepPurple, fontWeight: FontWeight.bold),
+            ),
+            content: Text(selectedOption == config.correctAnswerIndex
+                ? 'Your answer is correct! Continue to D15 Hue Test'
+                : 'The correct answer is 42. Continue to D15 Hue Test'),
+            actions: [
+              ElevatedButton(
+                onPressed: () {
+                  Navigator.of(context).pop();
+                  Navigator.pushReplacement(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) =>
+                          IntroHue()
+                    ),
+                  );
+                },
+                style: ButtonStyle(
+                    foregroundColor:
+                        WidgetStateProperty.all<Color>(Colors.white),
+                    backgroundColor: WidgetStateProperty.resolveWith<Color>(
+                        (Set<WidgetState> states) {
+                      if (states.contains(WidgetState.pressed)) {
+                        return Colors.deepPurple.shade900;
+                      }
+                      return Colors.deepPurple;
+                    }),
+                    shape: WidgetStateProperty.all<RoundedRectangleBorder>(
+                        RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(8.r)))),
+                child: Text('Finish Ishihara Test'),
+              )
+            ],
+          );
+        });
   }
 
   @override
@@ -73,6 +115,7 @@ class _IshiharaTest12State extends State<IshiharaTest12> {
             fontWeight: FontWeight.bold,
           ),
         ),
+        centerTitle: true,
         flexibleSpace: Container(
           decoration: BoxDecoration(
             gradient: LinearGradient(
