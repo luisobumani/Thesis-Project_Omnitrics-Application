@@ -138,7 +138,7 @@ class _IntroAssessmentState extends State<IntroAssessment>
                     child: disclaimerText(),
                   ),
                 ),
-                SizedBox(height: 60.h),
+                SizedBox(height: 100.h),
                 FadeTransition(
                   opacity: _fadeDisclaimer,
                   child: SlideTransition(
