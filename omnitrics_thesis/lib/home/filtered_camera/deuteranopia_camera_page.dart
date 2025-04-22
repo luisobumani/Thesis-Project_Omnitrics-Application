@@ -27,10 +27,10 @@ class _DeuteranopiaCameraPageState extends State<DeuteranopiaCameraPage>
 
  // Color Correction Filter Matrix
   final List<double> _correctionMatrix = [
-  1, 0, 0, 0, 0,
-  0, 0, 0, 0, 0,
-  0, 0, 0, 0, 0,
-  0, 0, 0, 1, 0 
+    1, 0, 0, 0, 0,
+    0, 0, 0, 0, 0,
+    0, 0, 0, 0, 0,
+    0, 0, 0, 1, 0 
   ];
 
   // Deuteranopia Color Filter Matrix
