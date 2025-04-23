@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:omnitrics_thesis/about/faqs/faqpage.dart';
 
-ListTile faqS() {
+ListTile faqS(BuildContext context) {
   return ListTile(
         leading: const Icon(
           Icons.question_mark_sharp,
@@ -14,7 +15,9 @@ ListTile faqS() {
           ),
         ),
         onTap: () {
-          // Add your onTap functionality here
+          Navigator.push(
+            context,
+            MaterialPageRoute(builder: (context) => FAQPage()));
         },
       );
 }
