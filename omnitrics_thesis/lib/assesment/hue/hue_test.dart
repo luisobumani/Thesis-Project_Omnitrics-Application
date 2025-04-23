@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:omnitrics_thesis/assesment/hue/hue_result_page.dart';
 import 'package:omnitrics_thesis/assesment/hue/services/d15_test_service.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class ColorVisionApp extends StatelessWidget {
   const ColorVisionApp({Key? key}) : super(key: key);
@@ -29,6 +30,25 @@ class _ColorTestPageState extends State<ColorTestPage> {
   // Fixed pilot cap
   static const Offset pilotUV = Offset(-21.54, -38.39);
   final Color pilotColor = const Color.fromRGBO(55, 129, 193, 1);
+  final Color lastColor = const Color.fromRGBO(128, 115, 178, 1);
+
+  Future<void> _saveTestState() async {
+    final prefs = await SharedPreferences.getInstance();
+    // Saving the 'placed' list as a comma-separated string
+    await prefs.setString('placed', placed.join(','));
+  }
+
+  // Function to load the test state from SharedPreferences
+  Future<void> _loadTestState() async {
+    final prefs = await SharedPreferences.getInstance();
+    final placedString = prefs.getString('placed');
+    if (placedString != null) {
+      placed = placedString.split(',').map((e) => e == 'null' ? null : int.parse(e)).toList();
+      setState(() {});  // Trigger UI update after loading the state
+    }
+  }
+
+
 
   // L*u*v* for caps 1–15
   final List<Offset> uvCoords = const [
@@ -79,7 +99,14 @@ class _ColorTestPageState extends State<ColorTestPage> {
   @override
   void initState() {
     super.initState();
+    _loadTestState(); 
     _resetPalette();
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+    _saveTestState(); // Save state when the user exits the app
   }
 
   void _resetPalette() {
@@ -158,6 +185,7 @@ class _ColorTestPageState extends State<ColorTestPage> {
       protanError = deutanError = tritanError = null;
       _resetPalette();
     });
+     _saveTestState();
   }
 
   Future<void> _submit() async {
@@ -219,6 +247,7 @@ class _ColorTestPageState extends State<ColorTestPage> {
           'D-15 Color Vision Test',
           style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
         ),
+        centerTitle: true,
         flexibleSpace: Container(
           decoration: BoxDecoration(
             gradient: LinearGradient(
@@ -234,17 +263,47 @@ class _ColorTestPageState extends State<ColorTestPage> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            const Text('First Item:',
-                style: TextStyle(fontWeight: FontWeight.bold)),
-            SizedBox(height: 8.h),
-            Container(
-              width: 40.w,
-              height: 40.h,
-              decoration: BoxDecoration(
-                color: pilotColor,
-                border: Border.all(color: Colors.black),
-              ),
-            ),
+            Row(
+               children: [
+                 Column(
+                   children: [
+                     Text(
+                       'First Item:',
+                       style: TextStyle(fontWeight: FontWeight.bold),
+                     ),
+                     SizedBox(height: 8.h),
+                     Container(
+                       width: 40.w,
+                       height: 40.h,
+                       decoration: BoxDecoration(
+                         color: pilotColor,
+                         border: Border.all(color: Colors.black),
+                       ),
+                     ),
+                   ],
+                 ),
+                 SizedBox(
+                   width: 220.w,
+                 ),
+                 Column(
+                   children: [
+                     Text(
+                       'Last Item:',
+                       style: TextStyle(fontWeight: FontWeight.bold),
+                     ),
+                     SizedBox(height: 8.h),
+                     Container(
+                       width: 40.w,
+                       height: 40.h,
+                       decoration: BoxDecoration(
+                         color: lastColor,
+                         border: Border.all(color: Colors.black),
+                       ),
+                     ),
+                   ],
+                 )
+               ],
+             ),
             SizedBox(height: 24.h),
             Expanded(
               child: Row(
@@ -330,6 +389,9 @@ class _ColorTestPageState extends State<ColorTestPage> {
                             ? Colors.red.shade900
                             : Colors.red,
                       ),
+                      foregroundColor: MaterialStateProperty.all<Color>(
+                        Colors.white
+                      ),
                       elevation: MaterialStateProperty.all(10.0.h),
                       shape: MaterialStateProperty.all(
                         RoundedRectangleBorder(
@@ -351,6 +413,9 @@ class _ColorTestPageState extends State<ColorTestPage> {
                         (states) => states.contains(MaterialState.pressed)
                             ? Colors.deepPurple.shade900
                             : Colors.deepPurple.shade400,
+                      ),
+                      foregroundColor: MaterialStateProperty.all<Color>(
+                        Colors.white
                       ),
                       elevation: MaterialStateProperty.all(10.0.h),
                       shape: MaterialStateProperty.all(
