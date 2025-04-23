@@ -3,7 +3,6 @@ import 'package:omnitrics_thesis/about/drawer.dart';
 import 'package:omnitrics_thesis/home/Widget/adjustcolorWidget.dart';
 import 'package:omnitrics_thesis/home/Widget/appBar.dart';
 import 'package:omnitrics_thesis/home/Widget/colormodesWidget.dart';
-// Import the file that contains your AnimatedCameraButton widget.
 import 'package:omnitrics_thesis/home/Widget/generalcamBtn.dart';
 import 'package:omnitrics_thesis/home/data_table/userdata_table.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -38,7 +37,7 @@ class HomePage extends StatelessWidget {
                 colorSettingsText(context),
                 adjustColorTiles(context),
                 userDataText(context),
-                userData(),
+                UserDataChart(),
                 // Sufficient space at the bottom for scrolling
                 SizedBox(height: 10.h),
               ],
