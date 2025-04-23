@@ -17,7 +17,6 @@ class _DisclaimerState extends State<Disclaimer> {
   @override
   void initState() {
     super.initState();
-    // Delay for 1 second before starting the fade-in animation.
     Future.delayed(const Duration(seconds: 1), () {
       setState(() {
         _opacity = 1.0;
@@ -101,14 +100,56 @@ class _DisclaimerState extends State<Disclaimer> {
                     ),
                   ),
                 ),
-
-                SizedBox(height: 30.h),
-                getStartedButton(
-                  onPressed: () {
-                    Navigator.pushReplacement(
-                      context,
-                      MaterialPageRoute(builder: (context) => const LoginScreen()),
-                    );
+                  const Spacer(),
+                  getStartedButton(
+                    onPressed: () {
+                      showDialog(
+                        context: context, 
+                        builder: (BuildContext context) {
+                          return AlertDialog(
+                            shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(20.r),
+                            side: BorderSide(color: Colors.deepPurple, width: 1.w)
+                          ),
+                          insetPadding: EdgeInsets.all(20.0.h),
+                          title: Text('Disclaimer',
+                           style: TextStyle(
+                            color: Colors.red,
+                            fontWeight: FontWeight.bold
+                           ),),
+                          content: Text('''This app is designed to aid individuals with color blindness by enhancing color perception. However, it's not a medical device and should not replace professional eye care. It does not cure or reverse color blindness. Results may vary based on individual vision and environmental factors. Consult an optometrist or ophthalmologist for diagnosis and treatment. Use this app as a supplementary tool to improve color differentiation, not as a definitive medical solution.''',
+                          textAlign: TextAlign.justify,
+                          style: TextStyle(
+                            fontSize: 14.sp
+                          ),),
+                          actions: [
+                            ElevatedButton(
+                              onPressed: () {
+                                Navigator.pushReplacement(
+                                context,
+                                  MaterialPageRoute(builder: (context) => const LoginScreen()),
+                                );
+                              }, 
+                              style: ButtonStyle(
+                                foregroundColor: WidgetStateProperty.all<Color>(
+                                  Colors.white
+                                ),
+                                backgroundColor: WidgetStateProperty.resolveWith<Color>(
+                                  (Set<WidgetState> states) {
+                                    if (states.contains(WidgetState.pressed)) {
+                                      return Colors.deepPurple.shade900;
+                                    }
+                                    return Colors.deepPurple;
+                                  }
+                                ),
+                                shape: WidgetStateProperty.all<RoundedRectangleBorder>(
+                                  RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(8.r)))
+                              ),
+                              child: Text('I understand'))
+                          ],
+                          );
+                        });
                   },
                 ),
               ],

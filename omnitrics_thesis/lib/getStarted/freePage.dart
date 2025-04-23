@@ -1,10 +1,29 @@
+import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:omnitrics_thesis/getStarted/Widget/next_button.dart';
 
-class GetStarted extends StatelessWidget {
+class Freepage extends StatefulWidget{
+  const Freepage({super.key, required this.controller});
+
   final PageController controller;
-  const GetStarted({super.key, required this.controller});
+
+  @override
+  _FreepageState createState() => _FreepageState();
+}
+
+class _FreepageState extends State<Freepage> {
+  double _opacity = 0.0;
+
+  @override
+  void initState() {
+    super.initState();
+    Future.delayed(const Duration(seconds: 1), () {
+      setState(() {
+        _opacity = 1.0;
+      });
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -22,22 +41,21 @@ class GetStarted extends StatelessWidget {
                 alignment: Alignment.center,
                 children: [
                   Image.asset(
-                    'assets/logos/omnitrics_logo (black_eye).png',
-                    width: 250.w,
+                    'assets/logos/omnitrics_app_freeapp_logo.png',
+                    width: 450.w,
                     height: 600.h,
                     fit: BoxFit.contain,
                   ),
                   Positioned(
-                    bottom: 120.h,
+                    bottom: 90.h,
                     child: SizedBox(
                       width: 300.w, 
                       child: Text(
-                        '"All Lights are Visible"',
+                        'Free Color Detection & Correction',
                         style: TextStyle(
                           color: Colors.deepPurple,
                           fontSize: 0.05.sw,
                           fontWeight: FontWeight.bold,
-                          fontStyle: FontStyle.italic,
                           shadows: [
                             Shadow(
                               color: Colors.black45,
@@ -54,16 +72,16 @@ class GetStarted extends StatelessWidget {
                   Positioned(
                       bottom: 0.h,                
                       child: SizedBox(
-                        width: 250.w,              
+                        width: 350.w,              
                         child: Text(
-                          'OMNI means ‘all’ and TRICS comes from optometrics, reflecting our all-inclusive vision focus.',
+                          'Our free app instantly detects and corrects colors for vibrant, true-to-life hues—no subscription needed.',
                           style: TextStyle(
                             color: Colors.deepPurple,
                             fontSize: 0.04.sw,
                             fontWeight: FontWeight.w500,
                           ),
                           textAlign: TextAlign.center,
-                   
+                          softWrap: true,     
                         ),
                       ),
                     ),
@@ -72,7 +90,7 @@ class GetStarted extends StatelessWidget {
               const Spacer(),
               NextButton(
                 onPressed: () {
-                  controller.nextPage(
+                  widget.controller.nextPage(
                     duration: const Duration(milliseconds: 400),
                     curve: Curves.ease,
                   );
