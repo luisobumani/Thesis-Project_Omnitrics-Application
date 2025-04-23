@@ -16,7 +16,7 @@ Drawer drawerHome(BuildContext context) {
         privacyPolicy(context),
         contactUs(),
         shareApp(),
-        faqS(),
+        faqS(context),
         SurveyTile(),
       ],
     ),
