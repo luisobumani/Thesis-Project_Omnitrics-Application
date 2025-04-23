@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'dart:ui'; 
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:omnitrics_thesis/getStarted/Widget/next_button.dart';
-import 'package:omnitrics_thesis/getStarted/disclaimer.dart';
 
 class MainGetStartedInfo extends StatefulWidget {
 
