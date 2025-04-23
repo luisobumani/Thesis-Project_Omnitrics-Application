@@ -11,6 +11,7 @@ class D15ResultsPage extends StatelessWidget {
   final double protanError;
   final double deutanError;
   final double tritanError;
+  final String diagnosis;
 
   const D15ResultsPage({
     Key? key,
@@ -21,21 +22,8 @@ class D15ResultsPage extends StatelessWidget {
     required this.protanError,
     required this.deutanError,
     required this.tritanError,
+    required this.diagnosis,
   }) : super(key: key);
-
-  /// 1) Compute a simple diagnosis string
-  String get diagnosis {
-    if (cIndex < 1.2) {
-      return 'Normal color vision';
-    }
-    if (protanError >= deutanError && protanError >= tritanError) {
-      return 'Protan-type confusion';
-    }
-    if (deutanError >= protanError && deutanError >= tritanError) {
-      return 'Deutan-type confusion';
-    }
-    return 'Tritan-type confusion';
-  }
 
   @override
   Widget build(BuildContext context) {

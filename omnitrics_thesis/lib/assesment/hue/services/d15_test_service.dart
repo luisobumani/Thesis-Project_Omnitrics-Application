@@ -12,6 +12,7 @@ class D15TestService {
     required double protanError,
     required double deutanError,
     required double tritanError,
+    required String diagnosis,
   }) async {
     final user = FirebaseAuth.instance.currentUser;
     if (user == null) {
@@ -36,6 +37,7 @@ class D15TestService {
       'protanError' : protanError,
       'deutanError' : deutanError,
       'tritanError' : tritanError,
+      'diagnosis' : diagnosis,
     });
   }
 }
