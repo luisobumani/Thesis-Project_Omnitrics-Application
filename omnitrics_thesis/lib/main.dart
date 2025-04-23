@@ -1,8 +1,10 @@
+import 'package:camera/camera.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:animated_splash_screen/animated_splash_screen.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:omnitrics_thesis/auth/Services/auth_redirect.dart';
+
 
 void main() async {
   // Ensure Flutter bindings are initialized
@@ -10,6 +12,8 @@ void main() async {
 
   // Initialize Firebase
   await Firebase.initializeApp();
+
+  await availableCameras();
 
   // Run the app
   runApp(const MyApp());
