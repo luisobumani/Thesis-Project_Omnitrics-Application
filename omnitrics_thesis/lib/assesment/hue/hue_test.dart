@@ -85,7 +85,7 @@ class _ColorTestPageState extends State<ColorTestPage> {
   void _resetPalette() {
     // Always generate in order for testing; shuffle() is commented out
     palette = List<int>.generate(15, (i) => i + 1);
-    // ..shuffle();
+    palette.shuffle();
   }
 
   void _computeScores() {
@@ -165,6 +165,17 @@ class _ColorTestPageState extends State<ColorTestPage> {
 
     _computeScores();
 
+    late String diagnosis;
+    if (Cindex! < 1.2) {
+      diagnosis = 'Normal color vision';
+    } else if (protanError! >= deutanError! && protanError! >= tritanError!) {
+      diagnosis = 'Protan-type confusion';
+    } else if (deutanError! >= protanError! && deutanError! >= tritanError!) {
+      diagnosis = 'Deutan-type confusion';
+    } else {
+      diagnosis = 'Tritan-type confusion';
+    }
+
     try {
       await D15TestService.saveTestResult(
         angleDeg: angleDeg!,
@@ -174,20 +185,21 @@ class _ColorTestPageState extends State<ColorTestPage> {
         protanError: protanError!,
         deutanError: deutanError!,
         tritanError: tritanError!,
+        diagnosis: diagnosis,
       );
 
       if (!mounted) return;
       Navigator.of(context).push(
         MaterialPageRoute(
           builder: (context) => D15ResultsPage(
-            angleDeg: angleDeg!,
-            tes: TES!,
-            cIndex: Cindex!,
-            sIndex: Sindex!,
-            protanError: protanError!,
-            deutanError: deutanError!,
-            tritanError: tritanError!,
-          ),
+              angleDeg: angleDeg!,
+              tes: TES!,
+              cIndex: Cindex!,
+              sIndex: Sindex!,
+              protanError: protanError!,
+              deutanError: deutanError!,
+              tritanError: tritanError!,
+              diagnosis: diagnosis),
         ),
       );
     } catch (e) {
@@ -362,6 +374,3 @@ class _ColorTestPageState extends State<ColorTestPage> {
     );
   }
 }
-
-
-
