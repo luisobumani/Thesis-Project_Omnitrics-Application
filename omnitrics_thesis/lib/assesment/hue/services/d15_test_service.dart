@@ -9,6 +9,9 @@ class D15TestService {
     required double tes,
     required double cIndex,
     required double sIndex,
+    required double protanError,
+    required double deutanError,
+    required double tritanError,
   }) async {
     final user = FirebaseAuth.instance.currentUser;
     if (user == null) {
@@ -30,6 +33,9 @@ class D15TestService {
       'tes': tes,
       'cIndex': cIndex,
       'sIndex': sIndex,
+      'protanError' : protanError,
+      'deutanError' : deutanError,
+      'tritanError' : tritanError,
     });
   }
 }

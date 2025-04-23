@@ -1,8 +1,8 @@
 import 'dart:math' as math;
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:omnitrics_thesis/assesment/hue/hue_result_page.dart';
 import 'package:omnitrics_thesis/assesment/hue/services/d15_test_service.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class ColorVisionApp extends StatelessWidget {
   const ColorVisionApp({Key? key}) : super(key: key);
@@ -26,12 +26,11 @@ class ColorTestPage extends StatefulWidget {
 }
 
 class _ColorTestPageState extends State<ColorTestPage> {
-  // Fixed pilot cap color and coordinates
-  final Color pilotColor = const Color.fromRGBO(55, 129, 193, 1);
-  final Color lastColor = const Color.fromRGBO(128, 115, 178, 1);
+  // Fixed pilot cap
   static const Offset pilotUV = Offset(-21.54, -38.39);
+  final Color pilotColor = const Color.fromRGBO(55, 129, 193, 1);
 
-  // CIE L*u*v* coordinates for caps 1-15
+  // L*u*v* for caps 1–15
   final List<Offset> uvCoords = const [
     Offset(-23.26, -25.56),
     Offset(-22.41, -15.53),
@@ -50,34 +49,32 @@ class _ColorTestPageState extends State<ColorTestPage> {
     Offset(11.20, -24.61),
   ];
 
-  // Display colors for caps 1-15
   final List<Color> capColors = const [
-    const Color.fromRGBO(53, 131, 180, 1),
-    const Color.fromRGBO(59, 132, 167, 1),
-    const Color.fromRGBO(57, 133, 156, 1),
-    const Color.fromRGBO(59, 134, 144, 1),
-    const Color.fromRGBO(63, 135, 130, 1),
-    const Color.fromRGBO(88, 132, 115, 1),
-    const Color.fromRGBO(108, 129, 100, 1),
-    const Color.fromRGBO(131, 123, 93, 1),
-    const Color.fromRGBO(144, 118, 96, 1),
-    const Color.fromRGBO(158, 110, 111, 1),
-    const Color.fromRGBO(159, 109, 124, 1),
-    const Color.fromRGBO(156, 109, 137, 1),
-    const Color.fromRGBO(146, 112, 153, 1),
-    const Color.fromRGBO(143, 111, 164, 1),
-    const Color.fromRGBO(128, 115, 178, 1),
+    Color.fromRGBO(53, 131, 180, 1),
+    Color.fromRGBO(59, 132, 167, 1),
+    Color.fromRGBO(57, 133, 156, 1),
+    Color.fromRGBO(59, 134, 144, 1),
+    Color.fromRGBO(63, 135, 130, 1),
+    Color.fromRGBO(88, 132, 115, 1),
+    Color.fromRGBO(108, 129, 100, 1),
+    Color.fromRGBO(131, 123, 93, 1),
+    Color.fromRGBO(144, 118, 96, 1),
+    Color.fromRGBO(158, 110, 111, 1),
+    Color.fromRGBO(159, 109, 124, 1),
+    Color.fromRGBO(156, 109, 137, 1),
+    Color.fromRGBO(146, 112, 153, 1),
+    Color.fromRGBO(143, 111, 164, 1),
+    Color.fromRGBO(128, 115, 178, 1),
   ];
 
-  // Slots for caps 1-15
   List<int?> placed = List<int?>.filled(15, null);
-
-  // Shuffled palette order
   late List<int> palette;
 
-  // Scoring results
+  // Standard D-15 metrics
   double? angleDeg, Rmaj, Rmin, TES, Sindex, Cindex;
-  bool _submitted = false;
+
+  // Receptor-axis errors (method 2)
+  double? protanError, deutanError, tritanError;
 
   @override
   void initState() {
@@ -86,26 +83,34 @@ class _ColorTestPageState extends State<ColorTestPage> {
   }
 
   void _resetPalette() {
-    // generate and shuffle palette 1-15
+    // Always generate in order for testing; shuffle() is commented out
     palette = List<int>.generate(15, (i) => i + 1);
-    palette.shuffle();
+    // ..shuffle();
   }
 
   void _computeScores() {
-    final order =
-        <Offset>[pilotUV] + placed.map((c) => uvCoords[c! - 1]).toList();
-    final deltaU = <double>[];
-    final deltaV = <double>[];
+    // 1) Build list
+    final order = <Offset>[pilotUV]
+      ..addAll(placed.map((c) => uvCoords[c! - 1]));
+
+    // 2) Δu, Δv
+    final deltaU = <double>[], deltaV = <double>[];
     for (var i = 1; i < order.length; i++) {
       deltaU.add(order[i].dx - order[i - 1].dx);
       deltaV.add(order[i].dy - order[i - 1].dy);
     }
-    final U2 = deltaU.fold<double>(0, (s, du) => s + du * du);
-    final V2 = deltaV.fold<double>(0, (s, dv) => s + dv * dv);
-    double UV = 0;
-    for (var i = 0; i < deltaU.length; i++) UV += deltaU[i] * deltaV[i];
-    final theta = 0.5 * math.atan2(2 * UV, U2 - V2);
+
+    // 3) S1, S2, S3
+    final S1 = deltaU.fold(0.0, (s, du) => s + du * du);
+    final S2 = deltaV.fold(0.0, (s, dv) => s + dv * dv);
+    final S3 = List.generate(deltaU.length, (i) => deltaU[i] * deltaV[i])
+        .fold(0.0, (s, v) => s + v);
+
+    // 4) θ
+    final theta = 0.5 * math.atan2(2 * S3, S1 - S2);
     angleDeg = theta * 180 / math.pi;
+
+    // 5) TES, S-index, C-index
     double moment(double phi) {
       var sum = 0.0;
       for (var i = 0; i < deltaU.length; i++) {
@@ -115,27 +120,42 @@ class _ColorTestPageState extends State<ColorTestPage> {
       return sum;
     }
 
-    var Imaj = moment(theta);
-    var Imin = moment(theta + math.pi / 2);
-    if (Imin > Imaj) {
-      final t = Imaj;
-      Imaj = Imin;
-      Imin = t;
-    }
+    var Imaj = moment(theta), Imin = moment(theta + math.pi / 2);
+    if (Imin > Imaj) Imaj = Imaj + Imin - (Imin = Imaj);
     final H = deltaU.length;
     Rmaj = math.sqrt(Imaj / H);
     Rmin = math.sqrt(Imin / H);
     TES = math.sqrt(Rmaj! * Rmaj! + Rmin! * Rmin!);
     Sindex = Rmaj! / Rmin!;
-    const perfect = 9.234669;
-    Cindex = Rmaj! / perfect;
+    const perfectMaj = 9.234669;
+    Cindex = Rmaj! / perfectMaj;
+
+    // 6) Projection axes
+    const pDeg = 9.7, dDeg = -8.8, tDeg = -86.8;
+    final pA = pDeg * math.pi / 180;
+    final dA = dDeg * math.pi / 180;
+    final tA = tDeg * math.pi / 180;
+
+    final wP = (math.cos(theta - pA)).abs();
+    final wD = (math.cos(theta - dA)).abs();
+    final wT = (math.cos(theta - tA)).abs();
+    final sumW = wP + wD + wT;
+
+    // 7) Gate on C-index < 1.2
+    if (Cindex! < 1.2 || sumW == 0.0) {
+      protanError = deutanError = tritanError = 0.0;
+    } else {
+      protanError = 100 * wP / sumW;
+      deutanError = 100 * wD / sumW;
+      tritanError = 100 * wT / sumW;
+    }
   }
 
   void _resetTest() {
     setState(() {
       placed = List<int?>.filled(15, null);
       angleDeg = Rmaj = Rmin = TES = Sindex = Cindex = null;
-      _submitted = false;
+      protanError = deutanError = tritanError = null;
       _resetPalette();
     });
   }
@@ -151,22 +171,28 @@ class _ColorTestPageState extends State<ColorTestPage> {
         tes: TES!,
         cIndex: Cindex!,
         sIndex: Sindex!,
+        protanError: protanError!,
+        deutanError: deutanError!,
+        tritanError: tritanError!,
       );
 
       if (!mounted) return;
       Navigator.of(context).push(
-        MaterialPageRoute(builder: (_) => D15ResultsPage(
-        angleDeg: angleDeg!, 
-        tes: TES!, 
-        cIndex: Cindex!, 
-        sIndex: Sindex!,
-        )
-      )
-    );
-    } catch (e) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Error Saving Results')),
+        MaterialPageRoute(
+          builder: (context) => D15ResultsPage(
+            angleDeg: angleDeg!,
+            tes: TES!,
+            cIndex: Cindex!,
+            sIndex: Sindex!,
+            protanError: protanError!,
+            deutanError: deutanError!,
+            tritanError: tritanError!,
+          ),
+        ),
       );
+    } catch (e) {
+      ScaffoldMessenger.of(context)
+          .showSnackBar(const SnackBar(content: Text('Error saving results')));
     }
   }
 
@@ -179,20 +205,15 @@ class _ColorTestPageState extends State<ColorTestPage> {
       appBar: AppBar(
         title: const Text(
           'D-15 Color Vision Test',
-          style: TextStyle(
-            color: Colors.white,
-            fontWeight: FontWeight.bold,
-          ),
+          style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
         ),
-        centerTitle: true,
         flexibleSpace: Container(
           decoration: BoxDecoration(
-            gradient: LinearGradient(colors: [
-              Colors.deepPurple.shade700,
-              Colors.deepPurple.shade400,
-            ],
-            begin: Alignment.topLeft,
-            end: Alignment.bottomRight),
+            gradient: LinearGradient(
+              colors: [Colors.deepPurple.shade700, Colors.deepPurple.shade400],
+              begin: Alignment.topLeft,
+              end: Alignment.bottomRight,
+            ),
           ),
         ),
       ),
@@ -201,51 +222,22 @@ class _ColorTestPageState extends State<ColorTestPage> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Row(
-              children: [
-                Column(
-                  children: [
-                    Text(
-                      'First Item:',
-                      style: TextStyle(fontWeight: FontWeight.bold),
-                    ),
-                    SizedBox(height: 8.h),
-                    Container(
-                      width: 40.w,
-                      height: 40.h,
-                      decoration: BoxDecoration(
-                        color: pilotColor,
-                        border: Border.all(color: Colors.black),
-                      ),
-                    ),
-                  ],
-                ),
-                SizedBox(
-                  width: 220.w,
-                ),
-                Column(
-                  children: [
-                    Text(
-                      'Last Item:',
-                      style: TextStyle(fontWeight: FontWeight.bold),
-                    ),
-                    SizedBox(height: 8.h),
-                    Container(
-                      width: 40.w,
-                      height: 40.h,
-                      decoration: BoxDecoration(
-                        color: lastColor,
-                        border: Border.all(color: Colors.black),
-                      ),
-                    ),
-                  ],
-                )
-              ],
+            const Text('First Item:',
+                style: TextStyle(fontWeight: FontWeight.bold)),
+            SizedBox(height: 8.h),
+            Container(
+              width: 40.w,
+              height: 40.h,
+              decoration: BoxDecoration(
+                color: pilotColor,
+                border: Border.all(color: Colors.black),
+              ),
             ),
             SizedBox(height: 24.h),
             Expanded(
               child: Row(
                 children: [
+                  // slots
                   Expanded(
                     child: SingleChildScrollView(
                       child: Column(
@@ -253,21 +245,16 @@ class _ColorTestPageState extends State<ColorTestPage> {
                           return Padding(
                             padding: EdgeInsets.symmetric(vertical: 4.h),
                             child: DragTarget<int>(
-                              onAccept: (c) {
-                                if (!_submitted) {
-                                  setState(() => placed[i] = c);
-                                }
-                              },
-                              builder: (ctx, cand, rj) {
+                              onAccept: (c) => setState(() => placed[i] = c),
+                              builder: (_, __, ___) {
                                 final cap = placed[i];
-                                final color = cap == null
-                                    ? Colors.grey[300]
-                                    : capColors[cap - 1];
                                 return Container(
                                   width: 40.w,
                                   height: 40.h,
                                   decoration: BoxDecoration(
-                                    color: color,
+                                    color: cap == null
+                                        ? Colors.grey[300]
+                                        : capColors[cap - 1],
                                     border: Border.all(color: Colors.black),
                                   ),
                                 );
@@ -278,10 +265,8 @@ class _ColorTestPageState extends State<ColorTestPage> {
                       ),
                     ),
                   ),
-
                   SizedBox(width: 16.w),
-
-                  // Right: Draggable palette column
+                  // palette
                   Expanded(
                     child: SingleChildScrollView(
                       child: Column(
@@ -326,67 +311,57 @@ class _ColorTestPageState extends State<ColorTestPage> {
                 mainAxisSize: MainAxisSize.min,
                 children: [
                   ElevatedButton(
+                    onPressed: _resetTest,
                     style: ButtonStyle(
-                      backgroundColor: WidgetStateProperty.resolveWith<Color>(
-                          (Set<WidgetState> states) {
-                        if (states.contains(WidgetState.pressed)) {
-                          return Colors.red.shade900;
-                        }
-                        return Colors.red;
-                      }),
-                      foregroundColor: WidgetStateProperty.all(Colors.white),
-                      elevation: WidgetStateProperty.all<double>(10.0.h),
-                      shape: WidgetStateProperty.all(
+                      backgroundColor: MaterialStateProperty.resolveWith(
+                        (states) => states.contains(MaterialState.pressed)
+                            ? Colors.red.shade900
+                            : Colors.red,
+                      ),
+                      elevation: MaterialStateProperty.all(10.0.h),
+                      shape: MaterialStateProperty.all(
                         RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(12.r),
                         ),
                       ),
                     ),
-                    onPressed: _resetTest,
-                    child: Text('Reset',
-                    style: TextStyle(
-                      fontSize: 15.sp,
-                      fontWeight: FontWeight.bold
-                    ),),
+                    child: Text(
+                      'Reset',
+                      style: TextStyle(
+                          fontSize: 15.sp, fontWeight: FontWeight.bold),
+                    ),
                   ),
                   SizedBox(width: 70.w),
                   ElevatedButton(
+                    onPressed: _submit,
                     style: ButtonStyle(
-                      backgroundColor: WidgetStateProperty.resolveWith<Color>(
-                          (Set<WidgetState> states) {
-                        if (states.contains(WidgetState.pressed)) {
-                          return Colors.deepPurple.shade900;
-                        }
-                        return Colors.deepPurple.shade400;
-                      }),
-                      foregroundColor: WidgetStateProperty.all(Colors.white),
-                      elevation: WidgetStateProperty.all<double>(10.0.h),
-                      shape: WidgetStateProperty.all(
+                      backgroundColor: MaterialStateProperty.resolveWith(
+                        (states) => states.contains(MaterialState.pressed)
+                            ? Colors.deepPurple.shade900
+                            : Colors.deepPurple.shade400,
+                      ),
+                      elevation: MaterialStateProperty.all(10.0.h),
+                      shape: MaterialStateProperty.all(
                         RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(12.r),
                         ),
                       ),
                     ),
-                    onPressed: _submit,
-                    child: Text('Submit',
-                    style: TextStyle(
-                      fontSize: 15.sp,
-                      fontWeight: FontWeight.bold
-                    )),
+                    child: Text(
+                      'Submit',
+                      style: TextStyle(
+                          fontSize: 15.sp, fontWeight: FontWeight.bold),
+                    ),
                   ),
                 ],
               ),
             ),
-            SizedBox(height: 24.h),
-            if (_submitted && Cindex != null) ...[
-              Text('Angle: ${angleDeg!.toStringAsFixed(1)}°'),
-              Text('C-index: ${Cindex!.toStringAsFixed(2)}'),
-              Text('S-index: ${Sindex!.toStringAsFixed(2)}'),
-              Text('Total Error: ${TES!.toStringAsFixed(1)}'),
-            ],
           ],
         ),
       ),
     );
   }
 }
+
+
+

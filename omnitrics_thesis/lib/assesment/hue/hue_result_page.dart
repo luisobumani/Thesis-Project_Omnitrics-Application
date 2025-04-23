@@ -8,6 +8,9 @@ class D15ResultsPage extends StatelessWidget {
   final double tes;
   final double cIndex;
   final double sIndex;
+  final double protanError;
+  final double deutanError;
+  final double tritanError;
 
   const D15ResultsPage({
     Key? key,
@@ -15,7 +18,24 @@ class D15ResultsPage extends StatelessWidget {
     required this.tes,
     required this.cIndex,
     required this.sIndex,
+    required this.protanError,
+    required this.deutanError,
+    required this.tritanError,
   }) : super(key: key);
+
+  /// 1) Compute a simple diagnosis string
+  String get diagnosis {
+    if (cIndex < 1.2) {
+      return 'Normal color vision';
+    }
+    if (protanError >= deutanError && protanError >= tritanError) {
+      return 'Protan-type confusion';
+    }
+    if (deutanError >= protanError && deutanError >= tritanError) {
+      return 'Deutan-type confusion';
+    }
+    return 'Tritan-type confusion';
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -49,15 +69,32 @@ class D15ResultsPage extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 SizedBox(height: 50.h),
-                Text('Your D‑15 Color Vision Results',
-                    style: TextStyle(
-                      fontSize: 24.sp,
-                      fontWeight: FontWeight.bold,
-                    )),
+                Text(
+                  'Your D-15 Color Vision Results',
+                  style: TextStyle(
+                    fontSize: 24.sp,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
                 SizedBox(height: 4.h),
-                Text('Below are the scores from your recent test.',
-                    style:
-                        TextStyle(fontSize: 14.sp, color: Colors.grey.shade600)),
+                Text(
+                  'Below are the scores from your recent test.',
+                  style: TextStyle(
+                    fontSize: 14.sp,
+                    color: Colors.grey.shade600,
+                  ),
+                ),
+
+                // 2) Show diagnosis right under the intro
+                SizedBox(height: 12.h),
+                Text(
+                  'Diagnosis: $diagnosis',
+                  style: TextStyle(
+                    fontSize: 16.sp,
+                    fontWeight: FontWeight.w600,
+                    color: Colors.deepPurple,
+                  ),
+                ),
               ],
             ),
           ),
@@ -79,15 +116,18 @@ class D15ResultsPage extends StatelessWidget {
                   Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      const Icon(Icons.compare_sharp,
-                          size: 28, color: Colors.deepPurple),
+                      const Icon(
+                        Icons.compare_sharp,
+                        size: 28,
+                        color: Colors.deepPurple,
+                      ),
                       SizedBox(width: 8.w),
                       Text(
                         '${angleDeg.toStringAsFixed(1)}°',
                         style: TextStyle(
                           fontSize: 28.sp,
-                          fontWeight: FontWeight.bold
-                        )
+                          fontWeight: FontWeight.bold,
+                        ),
                       ),
                     ],
                   ),
@@ -120,8 +160,8 @@ class D15ResultsPage extends StatelessWidget {
                               tes.toStringAsFixed(1),
                               style: TextStyle(
                                 fontSize: 16.sp,
-                                fontWeight: FontWeight.bold
-                              )
+                                fontWeight: FontWeight.bold,
+                              ),
                             ),
                           ],
                         ),
@@ -130,19 +170,19 @@ class D15ResultsPage extends StatelessWidget {
                   ),
                   SizedBox(height: 30.h),
 
-                  // C‑Index & S‑Index
+                  // C-Index & S-Index
                   Row(
                     children: [
                       Expanded(
                         child: _StatTile(
-                          label: 'C‑Index',
+                          label: 'C-Index',
                           value: cIndex.toStringAsFixed(2),
                         ),
                       ),
                       SizedBox(width: 16.w),
                       Expanded(
                         child: _StatTile(
-                          label: 'S‑Index',
+                          label: 'S-Index',
                           value: sIndex.toStringAsFixed(2),
                         ),
                       ),
@@ -153,36 +193,32 @@ class D15ResultsPage extends StatelessWidget {
             ),
           ),
 
-          SizedBox(
-            height: 75.h,
-          ),
+          SizedBox(height: 75.h),
 
           ElevatedButton(
             style: ButtonStyle(
-              foregroundColor: WidgetStateProperty.all(Colors.white),
-              backgroundColor: WidgetStateProperty.resolveWith<Color>(
-                  (Set<WidgetState> states) {
-                if (states.contains(WidgetState.pressed)) {
-                  return Colors.deepPurple.shade900;
-                }
-                return Colors.deepPurple.shade400;
-              }),
-              elevation: WidgetStateProperty.all<double>(10.0.h),
-              shape: WidgetStateProperty.all(
+              foregroundColor: MaterialStateProperty.all(Colors.white),
+              backgroundColor: MaterialStateProperty.resolveWith<Color>(
+                (states) => states.contains(MaterialState.pressed)
+                    ? Colors.deepPurple.shade900
+                    : Colors.deepPurple.shade400,
+              ),
+              elevation: MaterialStateProperty.all<double>(10.0.h),
+              shape: MaterialStateProperty.all(
                 RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(12.r),
                 ),
               ),
-              padding: WidgetStateProperty.all<EdgeInsetsGeometry>(
-                EdgeInsets.symmetric(horizontal: 16.w, vertical: 12.h)
-              )
+              padding: MaterialStateProperty.all<EdgeInsetsGeometry>(
+                EdgeInsets.symmetric(horizontal: 16.w, vertical: 12.h),
+              ),
             ),
             onPressed: () {
-              Navigator.push(
-                  context, MaterialPageRoute(builder: (context) => HomePage()));
+              Navigator.push(context,
+                  MaterialPageRoute(builder: (context) => const HomePage()));
             },
-            child: Text('Continue to Home'),
-          )
+            child: const Text('Continue to Home'),
+          ),
         ],
       ),
     );
@@ -206,17 +242,12 @@ class _StatTile extends StatelessWidget {
       children: [
         Text(
           label.toUpperCase(),
-          style: TextStyle(
-            fontSize: 12.sp
-          )
+          style: TextStyle(fontSize: 12.sp),
         ),
         SizedBox(height: 4.h),
         Text(
           value,
-          style: TextStyle(
-            fontSize: 24.sp,
-            fontWeight: FontWeight.bold
-          )
+          style: TextStyle(fontSize: 24.sp, fontWeight: FontWeight.bold),
         ),
       ],
     );
