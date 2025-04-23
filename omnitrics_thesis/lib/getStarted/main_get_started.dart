@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:omnitrics_thesis/getStarted/disclaimer.dart';
+import 'package:omnitrics_thesis/getStarted/freePage.dart';
 import 'package:omnitrics_thesis/getStarted/get_started.dart';
-import 'package:omnitrics_thesis/getStarted/main_get_started_info.dart';
+import 'package:omnitrics_thesis/getStarted/get_started_info.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 
 class MainGetStarted extends StatelessWidget {
@@ -21,6 +22,7 @@ class MainGetStarted extends StatelessWidget {
                 controller: _controller,
                 children: [
                   GetStarted(controller: _controller), 
+                  Freepage(controller: _controller),
                   MainGetStartedInfo(controller: _controller),
                   const Disclaimer(),
                 ],
@@ -33,7 +35,7 @@ class MainGetStarted extends StatelessWidget {
                 count: 3,
                 effect: ExpandingDotsEffect(
                   activeDotColor: Colors.deepPurple,
-                  dotHeight: 20.h,
+                  dotHeight: 10.h,
                   dotWidth: 20.w,
                 ),
               ),
