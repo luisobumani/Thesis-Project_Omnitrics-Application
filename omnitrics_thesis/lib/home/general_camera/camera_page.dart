@@ -67,8 +67,6 @@ class _CameraPageState extends State<CameraPage> with WidgetsBindingObserver {
     NamedColor('Silver', Color(0xFFC0C0C0)),
   ];
 
-  get _switchCamera => null;
-
   @override
   void initState() {
     super.initState();
@@ -349,11 +347,6 @@ class _CameraPageState extends State<CameraPage> with WidgetsBindingObserver {
                     icon: Icon(_isFlashOn ? Icons.flash_on : Icons.flash_off, color: Colors.white),
                     iconSize: 32.sp,
                     onPressed: _toggleFlash,
-                  ),
-                  IconButton(
-                    icon: const Icon(Icons.switch_camera, color: Colors.white),
-                    iconSize: 32.sp,
-                    onPressed: _switchCamera,
                   ),
                 ],
               ),
