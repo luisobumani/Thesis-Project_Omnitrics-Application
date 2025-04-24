@@ -4,6 +4,7 @@ import 'dart:math';
 import 'package:camera/camera.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class NamedColor {
   final String name;
@@ -150,21 +151,34 @@ class _CameraPageState extends State<CameraPage> with WidgetsBindingObserver {
     return Color.fromARGB(255, (sumR ~/ count), (sumG ~/ count), (sumB ~/ count));
   }
 
-  Color _getColorFromYUV(CameraImage img, int x, int y) {
-    final Plane yP = img.planes[0], uP = img.planes[1], vP = img.planes[2];
-    final int Y = yP.bytes[y * yP.bytesPerRow + x];
-    final int uvX = x ~/ 2, uvY = y ~/ 2;
-    final int U = uP.bytes[uvY * uP.bytesPerRow + uvX];
-    final int V = vP.bytes[uvY * vP.bytesPerRow + uvX];
+   Color _getColorFromYUV(CameraImage img, int x, int y) {
+  // 1) Read luma (Y) from plane 0
+  final Plane yPlane = img.planes[0];
+  final int Y = yPlane.bytes[y * yPlane.bytesPerRow + x];
 
-    final double yf = Y.toDouble(), uf = U.toDouble(), vf = V.toDouble();
-    final int r = (1.164 * (yf - 16) + 1.596 * (vf - 128)).clamp(0, 255).toInt();
-    final int g = (1.164 * (yf - 16) - 0.813 * (vf - 128) - 0.391 * (uf - 128)).clamp(0, 255).toInt();
-    final int b = (1.164 * (yf - 16) + 2.018 * (uf - 128)).clamp(0, 255).toInt();
+  // 2) Read chroma (U & V) from separate planes
+  final Plane uPlane = img.planes[1];
+  final Plane vPlane = img.planes[2];
+  final int uvX = x ~/ 2;
+  final int uvY = y ~/ 2;
 
-    return Color.fromARGB(255, r, g, b);
-  }
+  // If available, use pixelStride:
+  final int uPixelStride = uPlane.bytesPerPixel!;
+  final int vPixelStride = vPlane.bytesPerPixel!;
+  final int U = uPlane.bytes[uvY * uPlane.bytesPerRow + uvX * uPixelStride];
+  final int V = vPlane.bytes[uvY * vPlane.bytesPerRow + uvX * vPixelStride];
 
+  // 3) Convert with correct offsets
+  final double yf = (Y - 16).toDouble();
+  final double uf = (U - 128).toDouble();
+  final double vf = (V - 128).toDouble();
+
+  final int r = (1.164 * yf + 1.596 * vf).clamp(0, 255).toInt();
+  final int g = (1.164 * yf - 0.813 * vf - 0.391 * uf).clamp(0, 255).toInt();
+  final int b = (1.164 * yf + 2.018 * uf).clamp(0, 255).toInt();
+
+  return Color.fromARGB(255, r, g, b);
+}
   String _toHex(Color c) =>
       '#${(c.value & 0xFFFFFF).toRadixString(16).padLeft(6, '0').toUpperCase()}';
 
@@ -240,8 +254,8 @@ class _CameraPageState extends State<CameraPage> with WidgetsBindingObserver {
             Positioned.fill(
               child: Center(
                 child: Container(
-                  width: 6,
-                  height: 6,
+                  width: 6.w,
+                  height: 6.h,
                   decoration: const BoxDecoration(
                     color: Colors.red,
                     shape: BoxShape.circle,
@@ -254,14 +268,14 @@ class _CameraPageState extends State<CameraPage> with WidgetsBindingObserver {
             Positioned.fill(
               child: Center(
                 child: SizedBox(
-                  width: 100,
-                  height: 100,
+                  width: 100.w,
+                  height: 100.h,
                   child: Stack(
                     children: [
-                      Positioned(top: 0, left: 49, right: 49, child: Container(height: 40, width: 1.5, color: Colors.black)),
-                      Positioned(bottom: 0, left: 49, right: 49, child: Container(height: 40, width: 1.5, color: Colors.black)),
-                      Positioned(left: 0, top: 49, bottom: 49, child: Container(width: 40, height: 1.5, color: Colors.black)),
-                      Positioned(right: 0, top: 49, bottom: 49, child: Container(width: 40, height: 1.5, color: Colors.black)),
+                      Positioned(top: 0.h, left: 49.w, right: 49.w, child: Container(height: 40.h, width: 1.5.w, color: Colors.black)),
+                      Positioned(bottom: 0.h, left: 49.w, right: 49.w, child: Container(height: 40.h, width: 1.5.w, color: Colors.black)),
+                      Positioned(left: 0.w, top: 49.h, bottom: 49.h, child: Container(width: 40.w, height: 1.5.h, color: Colors.black)),
+                      Positioned(right: 0.w, top: 49.h, bottom: 49.h, child: Container(width: 40.w, height: 1.5.h, color: Colors.black)),
                     ],
                   ),
                 ),
@@ -283,14 +297,14 @@ class _CameraPageState extends State<CameraPage> with WidgetsBindingObserver {
                   }
                 },
                 child: Container(
-                  height: 60,
+                  height: 60.h,
                   color: _centerColor,
                   alignment: Alignment.center,
                   child: Text(
                     'RGB: (${_centerColor.red}, ${_centerColor.green}, ${_centerColor.blue})   $hex   $name',
                     style: TextStyle(
                       color: isDark(_centerColor) ? Colors.white : Colors.black,
-                      fontSize: 16,
+                      fontSize: 16.sp,
                     ),
                     textAlign: TextAlign.center,
                   ),
@@ -300,15 +314,15 @@ class _CameraPageState extends State<CameraPage> with WidgetsBindingObserver {
 
             // Capture/Unfreeze Button
             Positioned(
-              bottom: 80,
-              left: 0,
-              right: 0,
+              bottom: 80.h,
+              left: 0.w,
+              right: 0.w,
               child: Center(
                 child: FloatingActionButton(
                   onPressed: _onToggleCapture,
                   child: Icon(
                     _isCaptured ? Icons.arrow_back : Icons.camera_alt,
-                    size: 32,
+                    size: 32.sp,
                   ),
                 ),
               ),
@@ -316,29 +330,29 @@ class _CameraPageState extends State<CameraPage> with WidgetsBindingObserver {
 
             // Close Button
             Positioned(
-              top: 16,
-              left: 16,
+              top: 16.h,
+              left: 16.w,
               child: IconButton(
                 icon: const Icon(Icons.close, color: Colors.white),
-                iconSize: 32,
+                iconSize: 32.sp,
                 onPressed: () => Navigator.of(context).pop(),
               ),
             ),
 
             // Flash and Camera Flip
             Positioned(
-              top: 16,
-              right: 16,
+              top: 16.h,
+              right: 16.w,
               child: Column(
                 children: [
                   IconButton(
                     icon: Icon(_isFlashOn ? Icons.flash_on : Icons.flash_off, color: Colors.white),
-                    iconSize: 32,
+                    iconSize: 32.sp,
                     onPressed: _toggleFlash,
                   ),
                   IconButton(
                     icon: const Icon(Icons.switch_camera, color: Colors.white),
-                    iconSize: 32,
+                    iconSize: 32.sp,
                     onPressed: _switchCamera,
                   ),
                 ],
