@@ -51,7 +51,7 @@ class _FAQPageState extends State<FAQPage> {
       answer: 'Restart your device.'),
     _FAQItem(
       question: 'Who can I contact for feedback or support?', 
-      answer: 'Email us at support@omnitrics.app or tap Help & Feedback in the app’s main menu. We welcome bug reports, feature requests, and general feedback!'),
+      answer: 'Email us at omnitrics.db@gmail.com or tap Help & Feedback in the app’s main menu. We welcome bug reports, feature requests, and general feedback!'),
   ];
 
   @override
