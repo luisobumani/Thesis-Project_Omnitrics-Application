@@ -43,33 +43,32 @@ class AuthRedirect extends StatelessWidget {
   }
 
   Future<bool> isHueComplete(User user) async {
-    // Fetch all documents in the 'd15Tests' collection for the current user
-    final querySnapshot = await FirebaseFirestore.instance
-        .collection("users")
-        .doc(user.uid) // Get the document for the current user
-        .collection('d15Tests') // Get the subcollection 'd15Tests'
-        .get(); // Get all documents in the collection
-
-    // Check if there are any documents in the 'd15Tests' collection
-    if (querySnapshot.docs.isEmpty) return false;
-
-    // Iterate through all the documents to find if any contains a valid 'diagnosis'
-    for (var doc in querySnapshot.docs) {
-      final data = doc.data();
-      if (data != null &&
-          data['diagnosis'] != null &&
-          (data['diagnosis'] as String).isNotEmpty) {
-        return true; // Return true if a valid diagnosis is found
-      }
-    }
-
-    // If no valid diagnosis is found, return false
-    return false;
+    final qs = await FirebaseFirestore.instance
+      .collection("users")
+      .doc(user.uid)
+      .collection('d15Tests')
+      .get();
+    return qs.docs.any((d) {
+      final diag = (d.data()['diagnosis'] as String?) ?? '';
+      return diag.isNotEmpty;
+    });
   }
 
-  Future<void> _resetTestState() async {
-    final prefs = await SharedPreferences.getInstance();
-    await prefs.remove('d15TestState'); // Reset the saved D-15 test state
+  Future<bool> isIshiharaComplete(User user) async {
+    final qs = await FirebaseFirestore.instance
+      .collection("users")
+      .doc(user.uid)
+      .collection('ishiharaTests')
+      .get();
+    return qs.docs.any((d) {
+      final diag = (d.data()['diagnosis'] as String?) ?? '';
+      return diag.isNotEmpty;
+    });
+  }
+
+  Future<void> _clearIshiharaState() async {
+    final p = await SharedPreferences.getInstance();
+    await p.remove('ishiharaLastPage');
   }
 
   @override
@@ -88,90 +87,84 @@ class AuthRedirect extends StatelessWidget {
         if (!snapshot.hasData) {
           return MainGetStarted();
         }
-
         final user = snapshot.data!;
-        // Email not verified yet
         if (!user.emailVerified) {
           return const VerificationScreen();
         }
 
-        // Profile check
         return FutureBuilder<bool>(
           future: isProfileComplete(user),
-          builder: (context, profileSnap) {
-            if (profileSnap.connectionState != ConnectionState.done) {
-              return const Scaffold(
-                body: Center(child: CircularProgressIndicator()),
-              );
+          builder: (context, profSnap) {
+            if (profSnap.connectionState != ConnectionState.done) {
+              return const Scaffold(body: Center(child: CircularProgressIndicator()));
             }
-            if (profileSnap.hasData && profileSnap.data == true) {
-              // Profile is complete → now decide: start Ishihara test
-              return FutureBuilder<int>(
-                future: _loadLastIshiharaPage(),
-                builder: (context, pageSnap) {
-                  if (pageSnap.connectionState != ConnectionState.done) {
-                    return const Scaffold(
-                      body: Center(child: CircularProgressIndicator()),
-                    );
-                  }
-                  final lastPage = pageSnap.data ?? 0;
-                  final model = IshiharaTestModel();
-
-                  // If Ishihara test is not complete, proceed to Ishihara test page
-                  if (lastPage >= 0 && lastPage < 12) {
-                    switch (lastPage) {
-                      case 0:
-                        return IshiharaTest01(testModel: model);
-                      case 1:
-                        return IshiharaTest02(testModel: model);
-                      case 2:
-                        return IshiharaTest03(testModel: model);
-                      case 3:
-                        return IshiharaTest04(testModel: model);
-                      case 4:
-                        return IshiharaTest05(testModel: model);
-                      case 5:
-                        return IshiharaTest06(testModel: model);
-                      case 6:
-                        return IshiharaTest07(testModel: model);
-                      case 7:
-                        return IshiharaTest08(testModel: model);
-                      case 8:
-                        return IshiharaTest09(testModel: model);
-                      case 9:
-                        return IshiharaTest10(testModel: model);
-                      case 10:
-                        return IshiharaTest11(testModel: model);
-                      case 11:
-                        return IshiharaTest12(testModel: model);
-                    }
-                  }
-
-                  // After completing Ishihara tests, move to Hue Test
-                  return FutureBuilder<bool>(
-                    future: isHueComplete(user),
-                    builder: (context, hueSnap) {
-                      if (hueSnap.connectionState != ConnectionState.done) {
-                        return const Scaffold(
-                          body: Center(child: CircularProgressIndicator()),
-                        );
-                      }
-
-                      if (hueSnap.hasData && hueSnap.data == true) {
-                        // Hue test complete, go to HomePage
-                        return HomePage();
-                      } else {
-                        // If Hue test not complete, go to Hue Intro
-                        return const ColorVisionApp();
-                      }
-                    },
-                  );
-                },
-              );
-            } else {
-              // Profile incomplete → profile form
+            if (profSnap.data != true) {
               return const ProfileForm();
             }
+
+            // Profile is complete → now check Ishihara diagnosis in DB
+            return FutureBuilder<bool>(
+              future: isIshiharaComplete(user),
+              builder: (context, ishSnap) {
+                if (ishSnap.connectionState != ConnectionState.done) {
+                  return const Scaffold(body: Center(child: CircularProgressIndicator()));
+                }
+
+                if (ishSnap.data == true) {
+                  // Already diagnosed → clear local state & move on to Hue
+                  _clearIshiharaState();
+                  return FutureBuilder<bool>(
+                    future: isHueComplete(user),
+                    builder: (ctx, hueSnap) {
+                      if (hueSnap.connectionState != ConnectionState.done) {
+                        return const Scaffold(body: Center(child: CircularProgressIndicator()));
+                      }
+                      return hueSnap.data == true
+                        ? HomePage()                   
+                        : const ColorVisionApp();    
+                    },
+                  );
+                }
+
+                // No Ishihara diagnosis yet → resume Ishihara flow
+                return FutureBuilder<int>(
+                  future: _loadLastIshiharaPage(),
+                  builder: (ctx, pageSnap) {
+                    if (pageSnap.connectionState != ConnectionState.done) {
+                      return const Scaffold(body: Center(child: CircularProgressIndicator()));
+                    }
+                    final last = pageSnap.data!;
+                    final model = IshiharaTestModel();
+                    switch (last) {
+                      case 0:  return IshiharaTest01(testModel: model);
+                      case 1:  return IshiharaTest02(testModel: model);
+                      case 2:  return IshiharaTest03(testModel: model);
+                      case 3:  return IshiharaTest04(testModel: model);
+                      case 4:  return IshiharaTest05(testModel: model);
+                      case 5:  return IshiharaTest06(testModel: model);
+                      case 6:  return IshiharaTest07(testModel: model);
+                      case 7:  return IshiharaTest08(testModel: model);
+                      case 8:  return IshiharaTest09(testModel: model);
+                      case 9:  return IshiharaTest10(testModel: model);
+                      case 10: return IshiharaTest11(testModel: model);
+                      case 11: return IshiharaTest12(testModel: model);
+                      default: // last >= 12 or invalid
+                        return FutureBuilder<bool>(
+                          future: isHueComplete(user),
+                          builder: (c, hueSnap2) {
+                            if (hueSnap2.connectionState != ConnectionState.done) {
+                              return const Scaffold(body: Center(child: CircularProgressIndicator()));
+                            }
+                            return hueSnap2.data == true
+                              ? HomePage()
+                              : const ColorVisionApp();
+                          },
+                        );
+                    }
+                  },
+                );
+              },
+            );
           },
         );
       },

@@ -71,6 +71,15 @@ class _IntroHueState extends State<IntroHue>
               child: SlideTransition(
                   position: _slideText,
                   child: Container(
+                    margin: EdgeInsets.only(top: 20.h),
+                    child: instructionsText(),
+                  )),
+            ),
+            FadeTransition(
+              opacity: _fadeText,
+              child: SlideTransition(
+                  position: _slideText,
+                  child: Container(
                     margin: EdgeInsets.only(top: 300.h),
                     child: Container(
                       margin: EdgeInsets.only(right: 25.w),
@@ -118,6 +127,21 @@ class _IntroHueState extends State<IntroHue>
         fontWeight: FontWeight.bold,
         color: Colors.white,
       ),
+    );
+  }
+
+  Container instructionsText() {
+    return Container(
+      margin: EdgeInsets.symmetric(horizontal: 20.w), // Add margin to control position
+      child: Text(
+        'You will be shown 12 color plates, each containing a number or shape. Choose the correct answer from the four options below each plate, then press "Next" to proceed to the next plate.',
+        textAlign: TextAlign.center,
+        style: TextStyle(
+          fontSize: 18.sp,
+          fontWeight: FontWeight.normal,
+          color: Colors.white,
+        ),
+      )
     );
   }
 }
