@@ -1,43 +1,50 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
-class GenderSelector extends StatelessWidget {
-  final String? selectedGender;
-  final ValueChanged<String?> onChanged;
-
-  const GenderSelector({
-    super.key,
-    required this.selectedGender,
-    required this.onChanged,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    final List<String> genderOptions = [
-      'Male',
-      'Female',
-    ];
-
-    return Column(
-      children: genderOptions.map((option) {
-        return Padding(
-          padding: EdgeInsets.only(bottom: 0.0.h),
-          child: Row(
-            children: [
-              Radio<String>(
-                value: option,
-                groupValue: selectedGender,
-                onChanged: onChanged,
-              ),
-              Text(
-                option,
-                style: TextStyle(fontSize: 14.sp,
-                fontWeight: FontWeight.w500,),
-              ),
-            ],
+class GenderSelector extends FormField<String> {
+  GenderSelector({
+    Key? key,
+    String? initialValue,
+    FormFieldSetter<String>? onSaved,
+    FormFieldValidator<String>? validator,
+    required ValueChanged<String?> onChanged,
+  }) : super(
+    key: key,
+    initialValue: initialValue,
+    onSaved: onSaved,
+    validator: validator,
+    builder: (state) {
+      return Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Row(
+            children: ['Male', 'Female'].map((option) {
+              return Expanded(
+                child: RadioListTile<String>(
+                  title: Text(
+                    option,
+                    style: TextStyle(fontSize: 14.sp, fontWeight: FontWeight.w500),
+                  ),
+                  value: option,
+                  groupValue: state.value,
+                  onChanged: (value) {
+                    state.didChange(value);
+                    onChanged(value);
+                  },
+                ),
+              );
+            }).toList(),
           ),
-        );
-      }).toList(),
-    );
-  }
+          if (state.hasError)
+            Padding(
+              padding: EdgeInsets.only(left: 12.0),
+              child: Text(
+                state.errorText!,
+                style: TextStyle(color: Colors.red, fontSize: 12.sp),
+              ),
+            ),
+        ],
+      );
+    },
+  );
 }

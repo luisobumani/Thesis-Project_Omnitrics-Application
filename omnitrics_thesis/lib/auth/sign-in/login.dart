@@ -35,7 +35,7 @@ class _LoginScreenState extends State<LoginScreen> {
   void userLogin() async {
     if (emailController.text.isEmpty || passwordController.text.isEmpty) {
       showSnackBar(context, "Please fill all the fields.");
-      return;
+      return; 
     }
     // Attempt to log in
     String res = await AuthServices().userLogin(
