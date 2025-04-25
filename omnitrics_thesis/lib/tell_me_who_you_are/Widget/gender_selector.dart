@@ -17,13 +17,13 @@ class GenderSelector extends FormField<String> {
       return Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Row(
+          Column(
             children: ['Male', 'Female'].map((option) {
               return Expanded(
                 child: RadioListTile<String>(
                   title: Text(
                     option,
-                    style: TextStyle(fontSize: 14.sp, fontWeight: FontWeight.w500),
+                    style: TextStyle(fontSize: 13.sp, fontWeight: FontWeight.w500),
                   ),
                   value: option,
                   groupValue: state.value,

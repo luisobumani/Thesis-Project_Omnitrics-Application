@@ -1,14 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:omnitrics_thesis/home/image_adj/filtered_image_page.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 Widget adjustColorTiles(BuildContext context) {
-  final double screenWidth = MediaQuery.of(context).size.width;
-  final double horizontalPadding = screenWidth * (10 / 375);
-  final double verticalPadding = screenWidth * (5 / 375);
-  final double fontSize = screenWidth * (14 / 375);
 
   return Container(
-    margin: const EdgeInsets.only(top: 16),
+    margin: EdgeInsets.only(top: 16.h),
     child: Center(
       child: ElevatedButton(
         onPressed: () {
@@ -17,20 +14,34 @@ Widget adjustColorTiles(BuildContext context) {
             MaterialPageRoute(builder: (ctx) => const FilteredImagePage()),
           );
         },
-        style: ElevatedButton.styleFrom(
-          backgroundColor: Colors.deepPurple,
-          padding: EdgeInsets.symmetric(
-            horizontal: horizontalPadding * 2,
-            vertical: verticalPadding,
+        style: ButtonStyle(
+          foregroundColor: WidgetStateProperty.all<Color>(
+            Colors.white
           ),
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(15),
+          backgroundColor: WidgetStateProperty.resolveWith<Color>(
+            (Set<WidgetState> states) {
+              if (states.contains(WidgetState.pressed)) {
+                return Colors.deepPurple.shade900;
+              }
+              return Colors.deepPurple;
+            }
           ),
+          padding: WidgetStateProperty.all<EdgeInsetsGeometry>(
+            EdgeInsets.symmetric(
+              horizontal: 100.w,
+              vertical: 20.h,
+            )
+          ),
+          shape: WidgetStateProperty.all<RoundedRectangleBorder>(
+            RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(15.r)
+            )
+          )
         ),
         child: Text(
-          'Adjust Colors',
+          'Apply Filter to Image',
           style: TextStyle(
-            fontSize: fontSize,
+            fontSize: 17.sp,
             color: Colors.white,
             fontWeight: FontWeight.bold,
           ),

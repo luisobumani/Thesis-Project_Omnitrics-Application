@@ -70,7 +70,7 @@ class _IntroIshiharaState extends State<IntroIshihara>
               child: SlideTransition(
                   position: _slideText,
                   child: Container(
-                    margin: EdgeInsets.only(top: 400.h),
+                    margin: EdgeInsets.only(top: 300.h),
                     child: textIshihara(),
                   )),
             ),

@@ -24,9 +24,6 @@ class ProfDetailsMain extends StatelessWidget {
         ? "$firstName $lastName"
         : data['name']?.toString() ?? "No Name";
 
-    // Static condition text.
-    const String condition = "Deuteranopia";
-
     return Container(
       margin: EdgeInsets.only(top: 10.h, bottom: 10.h, right: 10.w, left: 10.w),
       child: Row(
@@ -47,14 +44,6 @@ class ProfDetailsMain extends StatelessWidget {
                   ),
                 ),
                 SizedBox(height: 5.h),
-                Text(
-                  condition,
-                  style: TextStyle(
-                    color: Colors.green,
-                    fontWeight: FontWeight.bold,
-                    fontSize: 16.sp,
-                  ),
-                ),
               ],
             ),
           ),

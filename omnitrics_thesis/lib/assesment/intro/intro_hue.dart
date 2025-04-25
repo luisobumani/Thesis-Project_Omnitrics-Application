@@ -62,7 +62,7 @@ class _IntroHueState extends State<IntroHue>
               child: SlideTransition(
                   position: _slideText,
                   child: Container(
-                    margin: EdgeInsets.only(top: 400.h),
+                    margin: EdgeInsets.only(top: 250.h),
                     child: textHue(),
                   )),
             ),
@@ -80,7 +80,7 @@ class _IntroHueState extends State<IntroHue>
               child: SlideTransition(
                   position: _slideText,
                   child: Container(
-                    margin: EdgeInsets.only(top: 300.h),
+                    margin: EdgeInsets.only(top: 150.h),
                     child: Container(
                       margin: EdgeInsets.only(right: 25.w),
                       alignment: Alignment.bottomRight,
@@ -134,7 +134,7 @@ class _IntroHueState extends State<IntroHue>
     return Container(
       margin: EdgeInsets.symmetric(horizontal: 20.w), // Add margin to control position
       child: Text(
-        'You will be shown 12 color plates, each containing a number or shape. Choose the correct answer from the four options below each plate, then press "Next" to proceed to the next plate.',
+        'In this Hue Test, you will be given 15 color tiles that need to be arranged in the correct hue order. Use the first and last tiles as your guide to determine the hue sequence. Drag each tile across the page and place it in the correct position according to the color gradient. Once you have arranged all the tiles in the proper order, press "Submit" to finalize your results. Take your time to ensure the hues are ordered correctly.',
         textAlign: TextAlign.center,
         style: TextStyle(
           fontSize: 18.sp,

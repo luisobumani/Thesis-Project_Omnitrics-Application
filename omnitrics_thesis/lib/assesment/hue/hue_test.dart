@@ -43,12 +43,13 @@ class _ColorTestPageState extends State<ColorTestPage> {
     final prefs = await SharedPreferences.getInstance();
     final placedString = prefs.getString('placed');
     if (placedString != null) {
-      placed = placedString.split(',').map((e) => e == 'null' ? null : int.parse(e)).toList();
-      setState(() {});  // Trigger UI update after loading the state
+      placed = placedString
+          .split(',')
+          .map((e) => e == 'null' ? null : int.parse(e))
+          .toList();
+      setState(() {}); // Trigger UI update after loading the state
     }
   }
-
-
 
   // L*u*v* for caps 1–15
   final List<Offset> uvCoords = const [
@@ -99,7 +100,7 @@ class _ColorTestPageState extends State<ColorTestPage> {
   @override
   void initState() {
     super.initState();
-    _loadTestState(); 
+    _loadTestState();
     _resetPalette();
   }
 
@@ -185,7 +186,7 @@ class _ColorTestPageState extends State<ColorTestPage> {
       protanError = deutanError = tritanError = null;
       _resetPalette();
     });
-     _saveTestState();
+    _saveTestState();
   }
 
   Future<void> _submit() async {
@@ -264,46 +265,46 @@ class _ColorTestPageState extends State<ColorTestPage> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Row(
-               children: [
-                 Column(
-                   children: [
-                     Text(
-                       'First Item:',
-                       style: TextStyle(fontWeight: FontWeight.bold),
-                     ),
-                     SizedBox(height: 8.h),
-                     Container(
-                       width: 40.w,
-                       height: 40.h,
-                       decoration: BoxDecoration(
-                         color: pilotColor,
-                         border: Border.all(color: Colors.black),
-                       ),
-                     ),
-                   ],
-                 ),
-                 SizedBox(
-                   width: 220.w,
-                 ),
-                 Column(
-                   children: [
-                     Text(
-                       'Last Item:',
-                       style: TextStyle(fontWeight: FontWeight.bold),
-                     ),
-                     SizedBox(height: 8.h),
-                     Container(
-                       width: 40.w,
-                       height: 40.h,
-                       decoration: BoxDecoration(
-                         color: lastColor,
-                         border: Border.all(color: Colors.black),
-                       ),
-                     ),
-                   ],
-                 )
-               ],
-             ),
+              children: [
+                Column(
+                  children: [
+                    Text(
+                      'First Item:',
+                      style: TextStyle(fontWeight: FontWeight.bold),
+                    ),
+                    SizedBox(height: 8.h),
+                    Container(
+                      width: 40.w,
+                      height: 40.h,
+                      decoration: BoxDecoration(
+                        color: pilotColor,
+                        border: Border.all(color: Colors.black),
+                      ),
+                    ),
+                  ],
+                ),
+                SizedBox(
+                  width: 220.w,
+                ),
+                Column(
+                  children: [
+                    Text(
+                      'Last Item:',
+                      style: TextStyle(fontWeight: FontWeight.bold),
+                    ),
+                    SizedBox(height: 8.h),
+                    Container(
+                      width: 40.w,
+                      height: 40.h,
+                      decoration: BoxDecoration(
+                        color: lastColor,
+                        border: Border.all(color: Colors.black),
+                      ),
+                    ),
+                  ],
+                )
+              ],
+            ),
             SizedBox(height: 24.h),
             Expanded(
               child: Row(
@@ -312,28 +313,51 @@ class _ColorTestPageState extends State<ColorTestPage> {
                   Expanded(
                     child: SingleChildScrollView(
                       child: Column(
-                        children: List.generate(15, (i) {
-                          return Padding(
-                            padding: EdgeInsets.symmetric(vertical: 4.h),
-                            child: DragTarget<int>(
-                              onAccept: (c) => setState(() => placed[i] = c),
-                              builder: (_, __, ___) {
-                                final cap = placed[i];
-                                return Container(
+                          children: List.generate(15, (i) {
+                        return Padding(
+                          padding: EdgeInsets.symmetric(vertical: 4.h),
+                          child: DragTarget<int>(
+                            onAccept: (c) => setState(() => placed[i] = c),
+                            builder: (_, __, ___) {
+                              final cap = placed[i];
+                              // build the colored/empty box
+                              final slotBox = Container(
+                                width: 40.w,
+                                height: 40.h,
+                                decoration: BoxDecoration(
+                                  color: cap == null
+                                      ? Colors.grey[300]
+                                      : capColors[cap - 1],
+                                  border: Border.all(color: Colors.black),
+                                ),
+                              );
+
+                              // if nothing is there, just show the empty box
+                              if (cap == null) {
+                                return slotBox;
+                              }
+
+                              // otherwise wrap it in a Draggable so it can be picked up again
+                              return Draggable<int>(
+                                data: cap,
+                                feedback:
+                                    slotBox, // what you see under the finger
+                                childWhenDragging: Container(
+                                  // placeholder while dragging
                                   width: 40.w,
                                   height: 40.h,
-                                  decoration: BoxDecoration(
-                                    color: cap == null
-                                        ? Colors.grey[300]
-                                        : capColors[cap - 1],
-                                    border: Border.all(color: Colors.black),
-                                  ),
-                                );
-                              },
-                            ),
-                          );
-                        }),
-                      ),
+                                  color: Colors.grey[200],
+                                ),
+                                child: slotBox, // what you normally see
+                                onDragCompleted: () =>
+                                    setState(() => placed[i] = null),
+                                onDraggableCanceled: (_, __) =>
+                                    setState(() => placed[i] = null),
+                              );
+                            },
+                          ),
+                        );
+                      })),
                     ),
                   ),
                   SizedBox(width: 16.w),
@@ -389,9 +413,8 @@ class _ColorTestPageState extends State<ColorTestPage> {
                             ? Colors.red.shade900
                             : Colors.red,
                       ),
-                      foregroundColor: MaterialStateProperty.all<Color>(
-                        Colors.white
-                      ),
+                      foregroundColor:
+                          MaterialStateProperty.all<Color>(Colors.white),
                       elevation: MaterialStateProperty.all(10.0.h),
                       shape: MaterialStateProperty.all(
                         RoundedRectangleBorder(
@@ -414,9 +437,8 @@ class _ColorTestPageState extends State<ColorTestPage> {
                             ? Colors.deepPurple.shade900
                             : Colors.deepPurple.shade400,
                       ),
-                      foregroundColor: MaterialStateProperty.all<Color>(
-                        Colors.white
-                      ),
+                      foregroundColor:
+                          MaterialStateProperty.all<Color>(Colors.white),
                       elevation: MaterialStateProperty.all(10.0.h),
                       shape: MaterialStateProperty.all(
                         RoundedRectangleBorder(

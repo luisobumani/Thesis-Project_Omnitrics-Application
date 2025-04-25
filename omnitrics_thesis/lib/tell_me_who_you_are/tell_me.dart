@@ -16,8 +16,6 @@ class TellMe extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // Initialize ScreenUtil if you haven't already in main():
-    ScreenUtil.init(context);
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       title: 'Profile Form',
