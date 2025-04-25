@@ -1,9 +1,8 @@
 import 'package:flutter/material.dart';
-import 'dart:ui'; // For ImageFilter
+import 'dart:ui'; 
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:omnitrics_thesis/getStarted/Widget/get_started_button.dart'; // for getStartedButton
-import '../auth/sign-in/login.dart'; // for LoginScreen
-
+import 'package:omnitrics_thesis/getStarted/Widget/get_started_button.dart'; 
+import '../auth/sign-in/login.dart'; 
 class Disclaimer extends StatefulWidget {
   const Disclaimer({Key? key}) : super(key: key);
 
@@ -32,7 +31,7 @@ class _DisclaimerState extends State<Disclaimer> {
         fit: StackFit.expand,
         children: [
           BackdropFilter(
-            filter: ImageFilter.blur(sigmaX: 5, sigmaY: 5),
+            filter: ImageFilter.blur(sigmaX: 0, sigmaY: 0),
             child: Container(
               color: Colors.black.withOpacity(0), // Required child for BackdropFilter.
             ),

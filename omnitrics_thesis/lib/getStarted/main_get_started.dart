@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:omnitrics_thesis/getStarted/disclaimer.dart';
 import 'package:omnitrics_thesis/getStarted/freePage.dart';
 import 'package:omnitrics_thesis/getStarted/get_started.dart';
 import 'package:omnitrics_thesis/getStarted/get_started_info.dart';
@@ -24,7 +23,6 @@ class MainGetStarted extends StatelessWidget {
                   GetStarted(controller: _controller), 
                   Freepage(controller: _controller),
                   MainGetStartedInfo(controller: _controller),
-                  const Disclaimer(),
                 ],
               ),
             ),
