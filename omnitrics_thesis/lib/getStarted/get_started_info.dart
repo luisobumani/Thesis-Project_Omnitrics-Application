@@ -34,7 +34,7 @@ class _MainGetStartedInfoState extends State<MainGetStartedInfo> {
         fit: StackFit.expand,
         children: [
           BackdropFilter(
-            filter: ImageFilter.blur(sigmaX: 5, sigmaY: 5),
+            filter: ImageFilter.blur(sigmaX: 0, sigmaY: 0),
             child: Container(
               color: Colors.black.withOpacity(0),
             ),
