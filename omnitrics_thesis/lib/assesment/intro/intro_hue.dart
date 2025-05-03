@@ -97,10 +97,10 @@ class _IntroHueState extends State<IntroHue>
                             ),
                           ),
                           onPressed: () {
-                            Navigator.push(
+                            Navigator.pushAndRemoveUntil(
                                 context,
                                 MaterialPageRoute(
-                                    builder: (context) => ColorVisionApp()));
+                                    builder: (context) => ColorVisionApp()), (route) => false);
                           },
                           child: Text(
                             'Start →',
