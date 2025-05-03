@@ -10,6 +10,8 @@ import 'package:omnitrics_thesis/home/Widget/colormodesWidget.dart';
 import 'package:omnitrics_thesis/home/Widget/generalcamBtn.dart';
 import 'package:omnitrics_thesis/home/data_table/userdata_table.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'dart:io';
+import 'package:flutter/services.dart';   
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -48,9 +50,46 @@ class _HomePageState extends State<HomePage> {
     }
   }
 
+  Future<bool> _onPop() async {
+  final shouldExit = await showDialog<bool>(
+    context: context,
+    barrierDismissible: false, // disallow tapping outside
+    builder: (_) => WillPopScope(
+      onWillPop: () async {
+        return false;
+      },
+      child: AlertDialog(
+        title: const Text('Exit OmniTrics?'),
+        content: const Text('Are you sure you want to exit the app?'),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(_, false),
+            child: const Text('No'),
+          ),
+          TextButton(
+            onPressed: () => Navigator.pop(_, true),
+            child: const Text('Yes'),
+          ),
+        ],
+      ),
+    ),
+  ) ?? false;
+
+  if (shouldExit) {
+    if (Platform.isAndroid) {
+      SystemNavigator.pop();
+    } else {
+      exit(0);
+    }
+  }
+  return false; // never pop the underlying route
+}
+
+
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
+    return WillPopScope(
+      child: Scaffold(
       appBar: appBarHome(
         context,
         menuKey: _menuKey,
@@ -179,6 +218,7 @@ class _HomePageState extends State<HomePage> {
         child: const AnimatedCameraButton(),
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
-    );
+    ), 
+    onWillPop: _onPop);
   }
 }

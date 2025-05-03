@@ -16,7 +16,7 @@ ListTile shareApp() {
     ),
     onTap: () {
       Share.share(
-          'Check out this awesome app https://github.com/Ram-Delos-Santos/Thesis-Project_Omnitrics-Application',
+          'Check out this awesome app https://drive.google.com/drive/folders/1Ac92QPdgWq1aaMFfqi7MYcljBRTUgqFH?usp=sharing',
           subject: 'OmniTrics Mobile App');
     },
   );
