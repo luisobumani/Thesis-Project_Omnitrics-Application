@@ -14,7 +14,7 @@ Future<void> evaluateAndSaveIshiharaTest(IshiharaTestModel testModel) async {
     final config = testConfigs[i];
     final answer = testModel.answers[i];
 
-    if(config == config.correctAnswerIndex){
+    if(answer == config.correctAnswerIndex){
       correctCount++;
     }
 
