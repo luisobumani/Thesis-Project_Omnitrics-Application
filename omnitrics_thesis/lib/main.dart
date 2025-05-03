@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:animated_splash_screen/animated_splash_screen.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:showcaseview/showcaseview.dart';               // ← ensure this is imported
+import 'package:showcaseview/showcaseview.dart';               
 import 'package:omnitrics_thesis/auth/Services/auth_redirect.dart';
 
 void main() async {
