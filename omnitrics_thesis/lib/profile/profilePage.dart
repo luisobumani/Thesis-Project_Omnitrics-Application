@@ -6,6 +6,8 @@ import 'package:omnitrics_thesis/profile/Widget/logoutBtn.dart';
 import 'package:omnitrics_thesis/profile/Widget/prof_details_main.dart';
 import 'package:omnitrics_thesis/profile/Widget/prof_info.dart';
 
+import '../home/homepage.dart';
+
 class ProfilePage extends StatelessWidget {
   const ProfilePage({super.key});
 
@@ -16,7 +18,7 @@ class ProfilePage extends StatelessWidget {
 
     return Scaffold(
       backgroundColor: Colors.white,
-      appBar: appBarProf(),
+      appBar: appBarProf(context),
       body: SafeArea(
         child: FutureBuilder<DocumentSnapshot>(
           future:
@@ -51,9 +53,17 @@ class ProfilePage extends StatelessWidget {
     );
   }
 
-  AppBar appBarProf() {
+  AppBar appBarProf(BuildContext context) {
     return AppBar(
-      iconTheme: const IconThemeData(color: Colors.white),
+      leading: IconButton(
+      icon: const Icon(Icons.arrow_back, color: Colors.white),
+      onPressed: () {
+        // Navigate to HomePage (or any route you want)
+        Navigator.of(context).pushReplacement(
+          MaterialPageRoute(builder: (_) => const HomePage()),
+        );
+      },
+    ),
       title: const Text(
         'My Profile',
         style: TextStyle(
