@@ -2,6 +2,8 @@ import 'dart:async';
 import 'dart:io';
 import 'package:camera/camera.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/foundation.dart' show kIsWeb, Uint8List;
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:gallery_saver_plus/gallery_saver.dart';
 import 'package:open_file/open_file.dart';
 import 'package:path/path.dart' as path;
@@ -71,6 +73,22 @@ class _TritanopiaCameraPageState extends State<TritanopiaCameraPage>
     }
   }
 
+  @override
+  void _showWebPreview(XFile file) {
+  showDialog(
+    context: context,
+    builder: (_) => Dialog(
+      backgroundColor: Colors.black,
+      child: ColorFiltered(
+        colorFilter: ColorFilter.matrix(
+          _simulateTritanopia ? _tritanopiaMatrix : _correctionMatrix,
+        ),
+        child: Image.network(file.path),
+      ),
+    ),
+  );
+}
+
   Future<void> _initializeCamera() async {
     try {
       _cameras = await availableCameras();
@@ -121,25 +139,39 @@ class _TritanopiaCameraPageState extends State<TritanopiaCameraPage>
   }
 
   Future<void> _takePicture() async {
-    if (!_controller!.value.isInitialized ||
-        _controller!.value.isTakingPicture) return;
-    final Directory appDir = await getApplicationDocumentsDirectory();
-    final String fileName =
-        'photo_${DateTime.now().millisecondsSinceEpoch}.png';
-    final String filePath = path.join(appDir.path, fileName);
-    try {
-      final XFile rawFile = await _controller!.takePicture();
-      final File savedImage = await File(rawFile.path).copy(filePath);
-      // Apply the currently active filter when saving the image.
-      final File filteredFile = await _applyFilterToImage(savedImage);
-      await GallerySaver.saveImage(filteredFile.path);
-      setState(() {
-        _capturedImage = XFile(filteredFile.path);
-      });
-    } catch (e) {
-      print('Error taking picture: $e');
+  if (_controller == null || !_controller!.value.isInitialized) return;
+
+  try {
+    final XFile rawFile = await _controller!.takePicture();
+
+    if (kIsWeb) {
+      final bytes = await rawFile.readAsBytes();
+      setState(() => _capturedImage = rawFile);
+      _showFilteredPreview(_simulateTritanopia
+          ? await _applyFilterToBytes(bytes)
+          : bytes);
+      return;
     }
+
+    final Directory appDir = await getApplicationDocumentsDirectory();
+    final String fileName = 'photo_${DateTime.now().millisecondsSinceEpoch}.png';
+    final File savedImage = await File(rawFile.path).copy('${appDir.path}/$fileName');
+    final File filteredImage = await _applyFilterToImage(savedImage);
+
+    await GallerySaver.saveImage(filteredImage.path);
+    setState(() => _capturedImage = XFile(filteredImage.path));
+  } catch (e) {
+    print('[!] Error: $e');
   }
+}
+
+Future<Uint8List> _applyFilterToBytes(Uint8List bytes) async {
+  final image = img.decodeImage(bytes);
+  if (image == null) return bytes;
+  final filtered = _applyColorMatrix(image);
+  return Uint8List.fromList(img.encodePng(filtered));
+}
+
 
   Future<File> _applyFilterToImage(File imageFile) async {
     try {
@@ -187,29 +219,41 @@ class _TritanopiaCameraPageState extends State<TritanopiaCameraPage>
   }
 
   Widget _thumbnailPreview() {
-    return GestureDetector(
-      onTap: () async {
-        if (_capturedImage != null &&
-            File(_capturedImage!.path).existsSync()) {
-          await OpenFile.open(_capturedImage!.path);
-        }
-      },
-      child: Container(
-        width: 60,
-        height: 60,
-        decoration: BoxDecoration(
-          shape: BoxShape.circle,
-          border: Border.all(color: Colors.white, width: 2),
-        ),
-        child: ClipOval(
-          child: _capturedImage != null &&
-                  File(_capturedImage!.path).existsSync()
-              ? Image.file(File(_capturedImage!.path), fit: BoxFit.cover)
-              : Container(color: Colors.black),
-        ),
+  if (_capturedImage == null) return _placeholderThumb();
+
+  return GestureDetector(
+    onTap: () {
+      if (kIsWeb) {
+        _showFilteredPreview(null); // No file system
+      } else {
+        _showFilteredPreview(File(_capturedImage!.path));
+      }
+    },
+    child: Container(
+      width: 60.w,
+      height: 60.h,
+      decoration: BoxDecoration(
+        shape: BoxShape.circle,
+        border: Border.all(color: Colors.white, width: 2.w),
+      ),
+      child: ClipOval(
+        child: kIsWeb
+            ? Image.network(_capturedImage!.path, fit: BoxFit.cover)
+            : Image.file(File(_capturedImage!.path), fit: BoxFit.cover),
+      ),
+    ),
+  );
+}
+
+Widget _placeholderThumb() => Container(
+      width: 60.w,
+      height: 60.h,
+      decoration: BoxDecoration(
+        shape: BoxShape.circle,
+        border: Border.all(color: Colors.white, width: 2.w),
+        color: Colors.grey,
       ),
     );
-  }
 
   // Bottom control row: thumbnail preview (left), capture button (center), and eye icon (right) to toggle simulation.
   Widget _cameraControlButtons() {
@@ -218,27 +262,27 @@ class _TritanopiaCameraPageState extends State<TritanopiaCameraPage>
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
         Padding(
-          padding: const EdgeInsets.all(20.0),
+          padding: EdgeInsets.all(20.0.h),
           child: _thumbnailPreview(),
         ),
         Container(
-          width: 70,
-          height: 70,
+          width: 70.w,
+          height: 70.h,
           decoration: BoxDecoration(
             shape: BoxShape.circle,
             color: shutterColor,
-            border: Border.all(color: Colors.white, width: 2),
+            border: Border.all(color: Colors.white, width: 2.w),
           ),
           child: IconButton(
-            icon: const Icon(Icons.camera, size: 40, color: Colors.white),
+            icon: Icon(Icons.camera, size: 40.sp, color: Colors.white),
             onPressed: _takePicture,
           ),
         ),
         Padding(
-          padding: const EdgeInsets.all(20.0),
+          padding: EdgeInsets.all(20.0.h),
           child: IconButton(
             icon:
-                const Icon(Icons.remove_red_eye, size: 32, color: Colors.white),
+                Icon(Icons.remove_red_eye, size: 32.sp, color: Colors.white),
             onPressed: _toggleSimulation,
           ),
         ),
@@ -247,32 +291,64 @@ class _TritanopiaCameraPageState extends State<TritanopiaCameraPage>
   }
 
   
+  void _showFilteredPreview(dynamic fileOrBytes) {
+  final matrix = _simulateTritanopia ? _tritanopiaMatrix : _correctionMatrix;
+
+  showDialog(
+    context: context,
+    builder: (_) => Dialog(
+      backgroundColor: Colors.black,
+      child: kIsWeb
+          ? ColorFiltered(
+              colorFilter: ColorFilter.matrix(matrix),
+              child: Image.memory(fileOrBytes as Uint8List),
+            )
+          : Image.file(fileOrBytes as File),
+    ),
+  );
+}
+
   Widget _cameraPreview() {
     if (!_isCameraReady || _controller == null) {
       return const Center(child: CircularProgressIndicator());
     }
-    final filter = _simulateTritanopia ? _tritanopiaColorFilter : _correctionColorFilter;
-    return ColorFiltered(
-      colorFilter: filter,
-      child: CameraPreview(_controller!),
-    );
+
+    // Only apply live filter on mobile (not web)
+    if (!kIsWeb) {
+      final matrix = _simulateTritanopia ? _tritanopiaMatrix : _correctionMatrix;
+      final filter = ColorFilter.matrix(matrix);
+      return ColorFiltered(
+        colorFilter: filter,
+        child: CameraPreview(_controller!),
+      );
+    }
+
+    return CameraPreview(_controller!);
   }
 
   Widget _cameraControlArea() {
-    return Column(
-      mainAxisAlignment: MainAxisAlignment.center,
+    return SingleChildScrollView(
+    padding: EdgeInsets.only(bottom: 44.h), // Accommodate overflow
+    child: Column(
+      mainAxisSize: MainAxisSize.min,
       children: [
         _cameraControlButtons(),
-        const SizedBox(height: 8),
+        SizedBox(height: 8.h),
         Text(
-          _simulateTritanopia
-              ? 'Tritanopia Simulation Active'
-              : 'Correction Filter Active',
-          style: const TextStyle(
-              color: Colors.white, fontSize: 16, fontWeight: FontWeight.w500),
+          _simulateTritanopia ? 'Tritananopia Mode' : 'Color Correction',
+          style: TextStyle(color: Colors.white, fontSize: 12.sp),
         ),
+        if (kIsWeb)
+          Padding(
+            padding: EdgeInsets.only(top: 4.h),
+            child: Text(
+              'Limited web functionality',
+              style: TextStyle(color: Colors.grey, fontSize: 10.sp),
+            ),
+          ),
       ],
-    );
+    ),
+  );
   }
 
   @override
@@ -296,34 +372,34 @@ class _TritanopiaCameraPageState extends State<TritanopiaCameraPage>
             ),
             // Top-left: Back button.
             Positioned(
-              top: 16,
-              left: 16,
+              top: 16.h,
+              left: 16.w,
               child: IconButton(
                 icon: const Icon(Icons.close, color: Colors.white),
-                iconSize: 32,
+                iconSize: 32.sp,
                 onPressed: () => Navigator.of(context).pop(),
               ),
             ),
             // Top-right: Flash toggle on top, then switch camera button.
             Positioned(
-              top: 16,
-              right: 16,
+              top: 16.h,
+              right: 16.w,
               child: Column(
                 children: [
                   IconButton(
                     icon: Icon(
                       _isFlashOn ? Icons.flash_on : Icons.flash_off,
                       color: Colors.white,
-                      size: 32,
+                      size: 32.sp,
                     ),
                     onPressed: _toggleFlash,
                   ),
-                  const SizedBox(height: 8),
+                  SizedBox(height: 8.h),
                   IconButton(
-                    icon: const Icon(
+                    icon: Icon(
                       Icons.switch_camera,
                       color: Colors.white,
-                      size: 32,
+                      size: 32.sp,
                     ),
                     onPressed: _switchCamera,
                   ),

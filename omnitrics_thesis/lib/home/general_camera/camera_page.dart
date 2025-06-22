@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:io';
 import 'dart:math';
 import 'package:camera/camera.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -237,18 +238,30 @@ class _CameraPageState extends State<CameraPage> with WidgetsBindingObserver {
   }
 
   @override
-  Widget build(BuildContext context) {
-    final String hex = _toHex(_centerColor);
-    final String name = getColorName(_centerColor);
+Widget build(BuildContext context) {
+  final String hex = _toHex(_centerColor);
+  final String name = getColorName(_centerColor);
 
-    return Scaffold(
-      backgroundColor: Colors.black,
-      body: SafeArea(
-        child: Stack(
-          children: [
-            Positioned.fill(child: _cameraPreview()),
+  return Scaffold(
+    backgroundColor: Colors.black,
+    body: SafeArea(
+      child: Stack(
+        children: [
+          // Show either camera or a placeholder for web
+          Positioned.fill(
+            child: kIsWeb
+                ? const Center(
+                    child: Icon(
+                      Icons.videocam_off,
+                      size: 80,
+                      color: Colors.white30,
+                    ),
+                  )
+                : _cameraPreview(),
+          ),
 
-            // Red Center Dot
+          // Red Center Dot (skip on web)
+          if (!kIsWeb)
             Positioned.fill(
               child: Center(
                 child: Container(
@@ -262,7 +275,8 @@ class _CameraPageState extends State<CameraPage> with WidgetsBindingObserver {
               ),
             ),
 
-            // Crosshair Lines
+          // Crosshair (skip on web)
+          if (!kIsWeb)
             Positioned.fill(
               child: Center(
                 child: SizedBox(
@@ -280,37 +294,45 @@ class _CameraPageState extends State<CameraPage> with WidgetsBindingObserver {
               ),
             ),
 
-            // Color Info Bar
-            Positioned(
-              bottom: 0,
-              left: 0,
-              right: 0,
-              child: GestureDetector(
-                onTap: () {
-                  if (_isCaptured) {
-                    Clipboard.setData(ClipboardData(text: hex));
-                    ScaffoldMessenger.of(context).showSnackBar(
-                      SnackBar(content: Text('Copied $hex')),
-                    );
-                  }
-                },
-                child: Container(
-                  height: 60.h,
-                  color: _centerColor,
-                  alignment: Alignment.center,
-                  child: Text(
-                    'RGB: (${_centerColor.red}, ${_centerColor.green}, ${_centerColor.blue})   $hex   $name',
-                    style: TextStyle(
-                      color: isDark(_centerColor) ? Colors.white : Colors.black,
-                      fontSize: 16.sp,
-                    ),
-                    textAlign: TextAlign.center,
+          // Color Info or Web Message
+          Positioned(
+            bottom: 0,
+            left: 0,
+            right: 0,
+            child: GestureDetector(
+              onTap: () {
+                if (!kIsWeb && _isCaptured) {
+                  Clipboard.setData(ClipboardData(text: hex));
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    SnackBar(content: Text('Copied $hex')),
+                  );
+                }
+              },
+              child: Container(
+                height: 60.h,
+                color: kIsWeb ? Colors.redAccent : _centerColor,
+                alignment: Alignment.center,
+                child: Text(
+                  kIsWeb
+                      ? '⚠️ Real-time color detection not supported on web due to Flutter limits.'
+                      : 'RGB: (${_centerColor.red}, ${_centerColor.green}, ${_centerColor.blue})   $hex   $name',
+                  style: TextStyle(
+                    color: kIsWeb
+                        ? Colors.white
+                        : isDark(_centerColor)
+                            ? Colors.white
+                            : Colors.black,
+                    fontSize: 16.sp,
+                    fontWeight: FontWeight.bold,
                   ),
+                  textAlign: TextAlign.center,
                 ),
               ),
             ),
+          ),
 
-            // Capture/Unfreeze Button
+          // Capture Button (hide on web)
+          if (!kIsWeb)
             Positioned(
               bottom: 80.h,
               left: 0.w,
@@ -326,34 +348,34 @@ class _CameraPageState extends State<CameraPage> with WidgetsBindingObserver {
               ),
             ),
 
-            // Close Button
-            Positioned(
-              top: 16.h,
-              left: 16.w,
-              child: IconButton(
-                icon: const Icon(Icons.close, color: Colors.white),
-                iconSize: 32.sp,
-                onPressed: () => Navigator.of(context).pop(),
-              ),
+          // Close Button
+          Positioned(
+            top: 16.h,
+            left: 16.w,
+            child: IconButton(
+              icon: const Icon(Icons.close, color: Colors.white),
+              iconSize: 32.sp,
+              onPressed: () => Navigator.of(context).pop(),
             ),
+          ),
 
-            // Flash and Camera Flip
+          // Flash Toggle (hide on web)
+          if (!kIsWeb)
             Positioned(
               top: 16.h,
               right: 16.w,
-              child: Column(
-                children: [
-                  IconButton(
-                    icon: Icon(_isFlashOn ? Icons.flash_on : Icons.flash_off, color: Colors.white),
-                    iconSize: 32.sp,
-                    onPressed: _toggleFlash,
-                  ),
-                ],
+              child: IconButton(
+                icon: Icon(
+                  _isFlashOn ? Icons.flash_on : Icons.flash_off,
+                  color: Colors.white,
+                ),
+                iconSize: 32.sp,
+                onPressed: _toggleFlash,
               ),
             ),
-          ],
-        ),
+        ],
       ),
-    );
-  }
+    ),
+  );
+}
 }

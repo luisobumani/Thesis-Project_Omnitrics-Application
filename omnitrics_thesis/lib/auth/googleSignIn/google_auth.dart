@@ -1,4 +1,5 @@
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/foundation.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 
 class FirebaseServices {
@@ -37,7 +38,18 @@ class FirebaseServices {
   }
 
   Future<void> googleSignOut() async {
-    await googleLogin.signOut();
-    await auth.signOut();
+  try {
+    if (!kIsWeb) {
+      // Only works on Android/iOS
+      await googleLogin.signOut();
+    }
+
+    // Safe on all platforms
+    if (auth.currentUser != null) {
+      await auth.signOut();
+    }
+  } catch (e) {
+    print('Error during sign out: $e');
   }
+}
 }
