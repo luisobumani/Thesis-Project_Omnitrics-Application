@@ -61,6 +61,7 @@ dependencies:
   flutter_screenutil: ^5.9.3
   neumorphic_ui: ^1.0.1
   showcaseview: ^4.0.1
+  responsive_framework: ^1.5.1
 
 dev_dependencies:
   flutter_test:
